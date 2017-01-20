@@ -1,0 +1,29 @@
+{
+  "name": "happner-client",
+  "version": "1.0.0",
+  "description": "The client for happner-2 and happner cluster services",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test",
+    "test-cover": "istanbul cover _mocha -- test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happner/happner-client.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/happner/happner-client/issues"
+  },
+  "homepage": "https://github.com/happner/happner-client#readme",
+  "dependencies": {
+    "happner-2": "happner/happner-2#new-client-support"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.15",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
+  }
+}
