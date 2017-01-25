@@ -8,12 +8,47 @@ The client for happner-2 and happner cluster services.
 
 ## Usage
 
+### Create client instance.
+
 ```javascript
 var HappnerClient = require('happner-client');
 var client = new HappnerClient();
+```
 
+### Connect
+
+Connect with array of possible servers, randomly selected until successful.
+
+```javascript
+client.connect([
+  {
+    name: 'connectionName1',
+    url: 'https://ip:port',
+    username: 'username',
+    password: 'password',
+    info: {
+      /////////////////////////////////////////////////////////// $origin?
+    }
+  },
+  {
+    name: 'connectionName2',
+    url: 'https://ip:port',
+    username: 'username',
+    password: 'password',
+    info: {}
+  }
+]).then(...).catch(...); // also supports callback
+```
+
+### Events
+
+```javascript
 client.on('connected', function () {
-  // event fired on successful connection/reconnection to server
+  // event fired on successful connection to server
+});
+
+client.on('reconnected', function () {
+  // event fired on successful reconnection to server
 });
 
 client.on('disconnected', function () {
@@ -23,52 +58,49 @@ client.on('disconnected', function () {
 client.on('reconnecting', function () {
   // event fired when attempting to reconnect
 });
+```
 
-// connect with array of possible servers, randomly selected until successful
-client.connect([
-  {
-    name: 'connectionName1',
-    url: 'https://ip:port',
-    username: 'username',
-    password: 'password',
-    info: {}
-  },
-  {
-    name: 'connectionName2',
-    url: 'https://ip:port',
-    username: 'username',
-    password: 'password',
-    info: {}
-  }
-]);
+### Construct your API
 
-// declare model for api construction
+```javascript
 var kitchenModel = {
   fridge: {
     version: '^1.0.0',
-    getTemperature: {
-      params: [
-        {name: 'shelves', type: 'array'}
-      ]
+    methods: {
+      getTemperature: {
+        // optional parameters for clientside validation
+        params: [
+          {name: 'shelves', type: 'array'}
+        ]
+      } 
     }
   }
 };
 
-// create api
 var kitchen = client.construct(kitchenModel);
+```
 
-// use api function call (with callback)
+### Use API functions
+
+```javascript
+// with callback
 kitchen.exchange.fridge.getTemperature(['top', 'middle'], function (e, temps) {});
 
-// use api function call (with promise)
+// with promise
 kitchen.exchange.fridge.getTemperature(['top', 'middle'])
 	.then(function (temps) {})
 	.catch(function (e) {})
+```
 
-// listen to fridge events
+### Listen to API events
+
+```javascript
 kitchen.event.fridge.on('/eventName', function (data) {});
+```
 
-// access data
+### Access data
+
+```javascript
 kitchen.data[set(), get(), etc.] // see happner/happn-3
 ```
 
