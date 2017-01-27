@@ -20,24 +20,29 @@ var client = new HappnerClient();
 Connect with array of possible servers, randomly selected until successful.
 
 ```javascript
+var optionalInfo = {
+  // meta data for login
+  ///////////////////// in $origin
+}
 client.connect([
   {
-    name: 'connectionName1',
-    url: 'https://ip:port',
-    username: 'username',
-    password: 'password',
-    info: {
-      /////////////////////////////////////////////////////////// $origin?
-    }
+    name: 'ConnectionName1',
+    host: 'localhost',
+    port: 55000,
+    protocol: 'https',
+  	username: '_ADMIN',
+    password: 'happn',
+    allowSelfSignedCerts: true
   },
   {
-    name: 'connectionName2',
-    url: 'https://ip:port',
+    name: 'ConnectionName2',
+    host: 'hostname_ip',
+    port: Number,
+    protocol: 'https',
     username: 'username',
     password: 'password',
-    info: {}
   }
-]).then(...).catch(...); // also supports callback
+], optionalInfo).then(...).catch(...); // also supports callback
 ```
 
 ### Events
@@ -57,6 +62,10 @@ client.on('disconnected', function () {
 
 client.on('reconnecting', function () {
   // event fired when attempting to reconnect
+});
+
+client.on('error', function (e) {
+  // includes model verification mismatches
 });
 ```
 
