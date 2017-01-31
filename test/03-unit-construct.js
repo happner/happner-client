@@ -7,11 +7,11 @@ var ConnectionProvider = require('../lib/providers/connection-provider');
 describe('03 - unit - construct', function () {
 
   beforeEach(function () {
-    this.originalRun = OperationsProvider.prototype.run;
+    this.originalRun = OperationsProvider.prototype.request;
   });
 
   afterEach(function () {
-    OperationsProvider.prototype.run = this.originalRun;
+    OperationsProvider.prototype.request = this.originalRun;
   });
 
   context('exchange', function () {
@@ -87,7 +87,7 @@ describe('03 - unit - construct', function () {
     });
 
     it('calls operations provider on calls to exchange functions', function (done) {
-      OperationsProvider.prototype.run = function (component, version, method) {
+      OperationsProvider.prototype.request = function (component, version, method) {
         expect(component).to.be('component1');
         expect(version).to.be('^1.0.0');
         expect(method).to.be('method1');
@@ -110,7 +110,7 @@ describe('03 - unit - construct', function () {
     });
 
     it('supports promises on exchange calls', function (done) {
-      OperationsProvider.prototype.run = function (component, version, method, args, callback) {
+      OperationsProvider.prototype.request = function (component, version, method, args, callback) {
         callback(null, {RE:'SULT'})
       };
 
@@ -134,7 +134,7 @@ describe('03 - unit - construct', function () {
     });
 
     it('supports callbacks on exchange calls', function (done) {
-      OperationsProvider.prototype.run = function (component, version, method, args, callback) {
+      OperationsProvider.prototype.request = function (component, version, method, args, callback) {
         callback(null, {RE:'SULT'});
       };
 
@@ -161,9 +161,13 @@ describe('03 - unit - construct', function () {
 
   context('event', function () {
 
+    it('');
+
   });
 
   context('data', function () {
+
+    it('');
 
   });
 
