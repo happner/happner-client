@@ -88,17 +88,22 @@ describe('03 - unit - construct', function () {
 
     it('calls operations provider on calls to exchange functions', function (done) {
       OperationsProvider.prototype.request = function (component, version, method) {
-        expect(component).to.be('component1');
-        expect(version).to.be('^1.0.0');
-        expect(method).to.be('method1');
-        done();
+        try {
+          expect(component).to.be('component1');
+          expect(version).to.be('^1.0.0');
+          expect(method).to.be('method1');
+          done();
+        } catch (e) {
+          done(e);
+        }
       };
 
       var model = {
         component1: {
           version: '^1.0.0',
           methods: {
-            method1: {}
+            method1: {},
+            method2: {}
           }
         }
       };
@@ -168,14 +173,6 @@ describe('03 - unit - construct', function () {
   context('data', function () {
 
     it('');
-
-  });
-
-  context('model validation', function () {
-
-    it('checks the model against existing description');
-
-    it('checks the model against pending description');
 
   });
 

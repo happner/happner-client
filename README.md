@@ -12,7 +12,10 @@ The client for happner-2 and happner cluster services.
 
 ```javascript
 var HappnerClient = require('happner-client');
-var client = new HappnerClient();
+var client = new HappnerClient({
+  requestTimeout: 10 * 1000, // milliseconds timeout on api request (set ack)
+  responseTimeout: 20 * 1000 // timeout awaiting response
+});
 ```
 
 ### Connect
@@ -34,14 +37,15 @@ client.connect([
     password: 'happn',
     allowSelfSignedCerts: true
   },
-  {
-    name: 'ConnectionName2',
-    host: 'hostname_ip',
-    port: Number,
-    protocol: 'https',
-    username: 'username',
-    password: 'password',
-  }
+  // multiple connections not yet supported
+  //{
+  //  name: 'ConnectionName2',
+  //  host: 'hostname_ip',
+  //  port: Number,
+  //  protocol: 'https',
+  //  username: 'username',
+  //  password: 'password',
+  //}
 ], optionalInfo).then(...).catch(...); // also supports callback
 ```
 
