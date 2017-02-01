@@ -417,7 +417,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', ['ARGS'], function () {
-      })
+        })
         .catch(function (e) {
           expect(e.message).to.be('Not connected');
           done();
@@ -436,7 +436,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', ['ARGS'], function () {
-      })
+        })
         .catch(done);
 
     });
@@ -460,7 +460,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
+        })
         .catch(done);
 
     });
@@ -471,7 +471,7 @@ describe('04 - unit - operation provider', function () {
         expect(data).to.eql({
           callbackAddress: '/_exchange/responses/SESSION_ID/DOMAIN_NAME/component/method/1',
           args: [
-            { params: 1 }
+            {params: 1}
           ],
           origin: {
             id: 'SESSION_ID'
@@ -486,7 +486,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
+        })
         .catch(done);
 
     });
@@ -508,7 +508,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
+        })
         .catch(done);
 
     });
@@ -522,7 +522,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
+        })
         .catch(function (e) {
           expect(e.message).to.be('failed to set');
           done();
@@ -540,7 +540,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
+        })
         .then(function () {
           done();
         })
@@ -557,7 +557,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
+        })
         .then(function () {
           expect(o.awaitingResponses).to.have.key('1');
           expect(o.awaitingResponses[1]).to.have.key('callback');
@@ -589,5 +589,105 @@ describe('04 - unit - operation provider', function () {
     });
 
   });
+
+  context('response()', function () {
+
+    // sample response data:
+    // non-error: {status: 'ok', args: [null, {params: 1}]}
+    // error: {status: 'error', args: [{message: 'xxx', name: 'Error'}]}
+
+    it('handles no such waiting caller', function (done) {
+
+      var o = new OperationsProvider({}, {}, {});
+
+      var testData = {status: 'ok', args: [null, {params: 1}]};
+      var testMeta = {path: 'abc/def/ghi/18'};
+
+      o.response(testData, testMeta);
+
+      done();
+    });
+
+    it('clears the request timeout', function (done) {
+
+      var o = new OperationsProvider({}, {}, {});
+
+      o.awaitingResponses[18] = {
+        callback: function () {
+        },
+        timeout: setTimeout(function () {
+          clearTimeout(passTimeout);
+          done(new Error('Should not time out'));
+        }, 50)
+      };
+
+      var testData = {status: 'ok', args: [null, {params: 1}]};
+      var testMeta = {path: 'abc/def/ghi/18'};
+
+      o.response(testData, testMeta);
+
+      var passTimeout = setTimeout(function () {
+        done();
+      }, 100);
+
+    });
+
+    it('deletes the awaiting response', function (done) {
+
+      var o = new OperationsProvider({}, {}, {});
+
+      o.awaitingResponses[18] = {
+        callback: function () {
+        },
+        timeout: null
+      };
+
+      var testData = {status: 'ok', args: [null, {params: 1}]};
+      var testMeta = {path: 'abc/def/ghi/18'};
+
+      o.response(testData, testMeta);
+      expect(o.awaitingResponses[18]).to.be(undefined);
+      done();
+    });
+
+    it('calls back on status OK to the waiting caller', function(done){
+
+      var o = new OperationsProvider({}, {}, {});
+
+      o.awaitingResponses[18] = {
+        callback: function (e, param1, param2) {
+          expect(param1).to.eql({params: 1});
+          expect(param2).to.eql({params: 2});
+          done();
+        },
+        timeout: null
+      };
+
+      var testData = {status: 'ok', args: [null, {params: 1}, {params: 2}]};
+      var testMeta = {path: 'abc/def/ghi/18'};
+
+      o.response(testData, testMeta);
+
+    });
+
+    it('converts error responses to errors on status error', function(done){
+      var o = new OperationsProvider({}, {}, {});
+
+      o.awaitingResponses[18] = {
+        callback: function (e) {
+          expect(e.message).to.equal('xxx');
+          expect(e.name).to.equal('TypeError');
+          done();
+        },
+        timeout: null
+      };
+
+      var testData = {status: 'error', args: [{message: 'xxx', name: 'TypeError'}]};
+      var testMeta = {path: 'abc/def/ghi/18'};
+
+      o.response(testData, testMeta);
+    });
+
+  })
 
 });
