@@ -5,7 +5,7 @@ var path = require('path');
 
 describe('21 - func - exchange', function () {
 
-  [/*'insecure',*/ 'secure'].forEach(function (mode) {
+  ['insecure', 'secure'].forEach(function (mode) {
 
     context(mode, function () {
 
@@ -82,7 +82,7 @@ describe('21 - func - exchange', function () {
 
       context('callbacks', function () {
 
-        it.only('can call a function which returns one argument', function (done) {
+        it('can call a function which returns one argument', function (done) {
           api.exchange.component1.methodReturningOneArg('arg1', function (e, result) {
             if (e) return done(e);
             expect(result).to.be('arg1');
