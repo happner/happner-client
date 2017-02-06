@@ -417,7 +417,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', ['ARGS'], function () {
-        })
+      })
         .catch(function (e) {
           expect(e.message).to.be('Not connected');
           done();
@@ -436,7 +436,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', ['ARGS'], function () {
-        })
+      })
         .catch(done);
 
     });
@@ -460,7 +460,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-        })
+      })
         .catch(done);
 
     });
@@ -486,7 +486,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-        })
+      })
         .catch(done);
 
     });
@@ -508,7 +508,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-        })
+      })
         .catch(done);
 
     });
@@ -522,7 +522,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-        })
+      })
         .catch(function (e) {
           expect(e.message).to.be('failed to set');
           done();
@@ -540,7 +540,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-        })
+      })
         .then(function () {
           done();
         })
@@ -557,7 +557,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
       o.executeRequest('component', 'method', [{params: 1}], function () {
-        })
+      })
         .then(function () {
           expect(o.awaitingResponses).to.have.key('1');
           expect(o.awaitingResponses[1]).to.have.key('callback');
@@ -650,7 +650,7 @@ describe('04 - unit - operation provider', function () {
       done();
     });
 
-    it('calls back on status OK to the waiting caller', function(done){
+    it('calls back on status OK to the waiting caller', function (done) {
 
       var o = new OperationsProvider({}, {}, {});
 
@@ -670,7 +670,7 @@ describe('04 - unit - operation provider', function () {
 
     });
 
-    it('converts error responses to errors on status error', function(done){
+    it('converts error responses to errors on status error', function (done) {
       var o = new OperationsProvider({}, {}, {});
 
       o.awaitingResponses[18] = {
@@ -688,6 +688,130 @@ describe('04 - unit - operation provider', function () {
       o.response(testData, testMeta);
     });
 
-  })
+  });
+
+  context('subscribe()', function () {
+
+    var mockConnection, mockImplementators;
+
+    before(function () {
+
+      mockConnection = {
+        connected: true
+      };
+
+      mockImplementators = {
+        getDescriptions: function () {
+          this.domain = 'DOMAIN_NAME';
+          return Promise.resolve();
+        }
+      };
+
+    });
+
+    it('does the subscribe on correct path and options', function (done) {
+
+      var o = new OperationsProvider({}, mockConnection, mockImplementators);
+
+      var component = 'componentName';
+      var version = '1.0.0';
+      var key = 'event/name';
+      var mockHandler = function (data, meta) {};
+
+      mockConnection.client = {
+        on: function(path, parameters, handler, callback) {
+          expect(path).to.be('/_events/DOMAIN_NAME/componentName/event/name');
+          expect(parameters).to.eql({
+            event_type: 'set'
+          });
+          expect(handler).to.be(mockHandler);
+          callback();
+        }
+      };
+
+      o.subscribe(component, version, key, mockHandler, function (e) {
+        if (e) return done(e);
+        done();
+      });
+
+    });
+
+  });
+
+  context('unsubscribe()', function () {
+
+    var mockConnection;
+
+    before(function () {
+
+      mockConnection = {
+        connected: true
+      };
+
+    });
+
+    it('unsubscribes with id', function (done) {
+
+      mockConnection.client = {
+        off: function(id, callback) {
+          expect(id).to.be('EVENT_ID');
+          callback();
+        }
+      };
+
+      var o = new OperationsProvider({}, mockConnection, {});
+
+      o.unsubscribe('EVENT_ID', function (e) {
+        if (e) return done(e);
+        done();
+      });
+
+    });
+
+  });
+
+  context('unsubscribePath()', function () {
+
+    var mockConnection, mockImplementators;
+
+    before(function () {
+
+      mockConnection = {
+        connected: true
+      };
+
+      mockImplementators = {
+        getDescriptions: function () {
+          this.domain = 'DOMAIN_NAME';
+          return Promise.resolve();
+        }
+      };
+
+    });
+
+    it('does the unsubscribe on correct path', function (done) {
+
+      mockConnection.client = {
+        offPath: function(path, callback) {
+          expect(path).to.be('/_events/DOMAIN_NAME/component/event/name');
+          callback();
+        }
+      };
+
+      var o = new OperationsProvider({}, mockConnection, mockImplementators);
+
+      var component = 'component';
+      var key = 'event/name';
+
+      console.log(o.unsubscribePath.toString());
+
+      o.unsubscribePath(component, key, function (e) {
+        if (e) return done(e);
+        done();
+      });
+
+    });
+
+  });
 
 });

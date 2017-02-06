@@ -10,12 +10,14 @@ describe('03 - unit - construct', function () {
     this.originalRequest = OperationsProvider.prototype.request;
     this.originalSubscribe = OperationsProvider.prototype.subscribe;
     this.originalUnsubscribe = OperationsProvider.prototype.unsubscribe;
+    this.originalUnsubscribePath = OperationsProvider.prototype.unsubscribePath;
   });
 
   afterEach(function () {
     OperationsProvider.prototype.request = this.originalRequest;
     OperationsProvider.prototype.subscribe = this.originalSubscribe;
     OperationsProvider.prototype.unsubscribe = this.originalUnsubscribe;
+    OperationsProvider.prototype.unsubscribePath = this.originalUnsubscribePath;
   });
 
 
@@ -36,27 +38,6 @@ describe('03 - unit - construct', function () {
       var api = c.construct(model);
     } catch (e) {
       expect(e.message).to.be('Missing version');
-      done();
-    }
-  });
-
-  it('errors on model without methods declared', function (done) {
-    var model = {
-      component1: {
-        version: '^1.0.0',
-        // methods: {
-        //   method1: {},
-        //   method2: {}
-        // }
-      }
-    };
-
-    var c = new HappnerClient();
-
-    try {
-      var api = c.construct(model);
-    } catch (e) {
-      expect(e.message).to.be('Missing methods');
       done();
     }
   });
