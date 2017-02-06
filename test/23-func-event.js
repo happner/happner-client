@@ -1,7 +1,6 @@
 var Happner = require('happner-2');
 var HappnerClient = require('..');
 var path = require('path');
-var once = require('once');
 var expect = require('expect.js');
 
 describe('23 - func - event', function () {
@@ -13,10 +12,14 @@ describe('23 - func - event', function () {
       modules: {
         'component1': {
           path: __dirname + path.sep + 'lib' + path.sep + '23-component-1'
+        },
+        'component2': {
+          path: __dirname + path.sep + 'lib' + path.sep + '23-component-2'
         }
       },
       components: {
-        'component1': {
+        'component1': {},
+        'component2': {
           startMethod: 'start',
           stopMethod: 'stop'
         }
@@ -33,7 +36,16 @@ describe('23 - func - event', function () {
     var client = new HappnerClient();
     var model = {
       component1: {
-        version: '^1.0.0'
+        version: '^1.0.0',
+        methods: {
+          causeEvent: {}
+        }
+      },
+      component2: {
+        version: '^1.0.0', // <------------- wrong version
+        methods: {
+          causeEvent: {}
+        }
       }
     };
     api = client.construct(model);
@@ -52,64 +64,79 @@ describe('23 - func - event', function () {
 
   it('can subscribe to events', function (done) {
 
-    var Done = once(done);
-
     api.event.component1.on('event/one', function (data, meta) {
-      expect(data).to.eql({event: 1});
-      Done();
-    })
-
-  });
-
-  it('can unsubscribe by eventId', function (done) {
-
-    var count = 0;
-
-    api.event.component1.on('event/two', function (data, meta) {
-      count++;
-    }, function (e, eventId) {
+      expect(data).to.eql({DATA: 1});
+      done();
+    }, function (e) {
       if (e) return done(e);
 
-      api.event.component1.off(eventId, function (e) {
+      api.exchange.component1.causeEvent('event/one', function (e) {
         if (e) return done(e);
-
-        setTimeout(function () {
-          if (count > 1) {
-            return done(new Error('did not unsubscribe'));
-          }
-          done();
-        }, 500);
-
       });
-
     });
 
   });
 
+
+  it('can unsubscribe by eventId', function (done) {
+
+    var eventId;
+    var timeout;
+
+    api.event.component1.on('event/two', function (data, meta) {
+
+      clearTimeout(timeout);
+      return done(new Error('should be unsubscribed'));
+
+    }, function (e, _eventId) {
+      if (e) return done(e);
+      eventId = _eventId;
+
+      api.event.component1.off(eventId, function (e) {
+        if (e) return done(e);
+
+        api.exchange.component1.causeEvent('event/two', function (e) {
+          if (e) return done(e);
+        });
+
+        timeout = setTimeout(function () {
+          done();
+        }, 200);
+      });
+    });
+
+  });
+
+
   it('can unsubscribe by path', function (done) {
 
-    var count = 0;
+    var timeout;
 
     api.event.component1.on('event/three', function (data, meta) {
-      count++;
-    }, function (e, eventId) {
+
+      clearTimeout(timeout);
+      return done(new Error('should be unsubscribed'));
+
+    }, function (e) {
       if (e) return done(e);
 
       api.event.component1.on('event/three', function (data, meta) {
-        count++;
-      }, function (e, eventId) {
-        if (e) return done(e);
+
+        clearTimeout(timeout);
+        return done(new Error('should be unsubscribed'));
+
+      }, function (e) {
 
         api.event.component1.offPath('event/three', function (e) {
           if (e) return done(e);
 
-          setTimeout(function () {
-            if (count > 1) {
-              return done(new Error('did not unsubscribe'));
-            }
-            done();
-          }, 500);
+          api.exchange.component1.causeEvent('event/three', function (e) {
+            if (e) return done(e);
+          });
 
+          timeout = setTimeout(function () {
+            done();
+          }, 200);
         });
 
       });
@@ -118,6 +145,24 @@ describe('23 - func - event', function () {
 
   });
 
-  it('does not receive events of wrong version');
+  it('does not receive events of wrong version', function (done) {
+
+    var timeout;
+
+    api.event.component2.on('event/one', function (data, meta) {
+
+      clearTimeout(timeout);
+      return done(new Error('should not receive - wrong version'));
+
+    }, function (e) {
+      if (e) return done(e);
+
+      timeout = setTimeout(function () {
+        done();
+      }, 200);
+
+    });
+
+  });
 
 });
