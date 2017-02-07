@@ -3,18 +3,21 @@ var HappnerClient = require('..');
 var path = require('path');
 var expect = require('expect.js');
 
-describe('23 - func - event', function () {
+describe('22 - func - event', function () {
 
   var server, client, api;
 
   before('start server', function (done) {
     Happner.create({
+      util: {
+        logLevel: process.env.LOG_LEVEL || 'fatal'
+      },
       modules: {
         'component1': {
-          path: __dirname + path.sep + 'lib' + path.sep + '23-component-1'
+          path: __dirname + path.sep + 'lib' + path.sep + '22-component-1'
         },
         'component2': {
-          path: __dirname + path.sep + 'lib' + path.sep + '23-component-2'
+          path: __dirname + path.sep + 'lib' + path.sep + '22-component-2'
         }
       },
       components: {

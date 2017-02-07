@@ -13,8 +13,12 @@ describe('20 - func - connect', function () {
   function startServer(done) {
     if (server) return done();
     Happner.create({
+      util: {
+        logLevel: process.env.LOG_LEVEL || 'fatal'
+      },
       happn: {
         secure: true,
+        adminPassword: 'xxx',
         services: {
           transport: {
             config: {
@@ -58,7 +62,7 @@ describe('20 - func - connect', function () {
       port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }, {in: 'fo'}], function (e) {
       if (e) return done(e);
@@ -76,7 +80,7 @@ describe('20 - func - connect', function () {
       port: 9999,  // <------------------- intentionally wrong
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }])
       .catch(function (e) {
@@ -100,7 +104,7 @@ describe('20 - func - connect', function () {
       // port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
       // info: {}
     }], function (e) {
@@ -120,7 +124,7 @@ describe('20 - func - connect', function () {
       port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }], function (e) {
     });
@@ -134,7 +138,7 @@ describe('20 - func - connect', function () {
       port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }], function (e) {
       if (e) return done(e);
@@ -164,7 +168,7 @@ describe('20 - func - connect', function () {
       port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }], function (e) {
       if (e) return done(e);
@@ -194,7 +198,7 @@ describe('20 - func - connect', function () {
       port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }], function (e) {
       if (e) return done(e);
@@ -225,7 +229,7 @@ describe('20 - func - connect', function () {
       port: 55000,
       protocol: 'https',
       username: '_ADMIN',
-      password: 'happn',
+      password: 'xxx',
       allowSelfSignedCerts: true
     }], function (e) {
       if (e) return done(e);

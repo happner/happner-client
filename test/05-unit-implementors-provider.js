@@ -4,6 +4,14 @@ var ImplementorsProvider = require('../lib/providers/implementors-provider');
 
 describe('05 - unit - implementors provider', function () {
 
+  var mockClient;
+
+  beforeEach(function () {
+    mockClient = {
+      on: function () {}
+    };
+  });
+
   context('getDescriptions()', function () {
 
     var mockConnection;
@@ -30,7 +38,7 @@ describe('05 - unit - implementors provider', function () {
         }
       };
 
-      var i = new ImplementorsProvider({}, mockConnection);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions();
 
     });
@@ -58,7 +66,7 @@ describe('05 - unit - implementors provider', function () {
         callback(null, descriptions.shift());
       };
 
-      var i = new ImplementorsProvider({}, mockConnection);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions();
 
       setTimeout(function () {
@@ -81,7 +89,7 @@ describe('05 - unit - implementors provider', function () {
         }, 100);
       };
 
-      var i = new ImplementorsProvider({}, mockConnection);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions();
       i.getDescriptions().then(function () {
         expect(count).to.be(1);
@@ -97,7 +105,7 @@ describe('05 - unit - implementors provider', function () {
         });
       };
 
-      var i = new ImplementorsProvider({}, mockConnection);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions()
         .then(function () {
           mockConnection.client.get = function (path, callback) {
@@ -120,7 +128,7 @@ describe('05 - unit - implementors provider', function () {
         });
       };
 
-      var i = new ImplementorsProvider({}, mockConnection);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
 
       i.getDescriptions()
         .then(function () {
@@ -135,7 +143,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('reject if no description', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function (e) {
@@ -148,7 +156,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('resolves if already mapped', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{}];
       i.maps['component/version/method'] = [{local: true}];
@@ -163,7 +171,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('resolves in round robin', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{}];
       i.maps['component/version/method'] = [
@@ -194,7 +202,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('creates the implementation map just-in-time', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{
         components: {
@@ -219,7 +227,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('remembers when method not implemented (empty array)', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{}];
       i.maps['component/version/method'] = [];
@@ -235,7 +243,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('rejects if not implemented component', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{
         components: {}
@@ -252,7 +260,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('rejects if not implemented version', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{
         components: {
@@ -277,7 +285,7 @@ describe('05 - unit - implementors provider', function () {
 
     it('rejects if not implemented method', function (done) {
 
-      var i = new ImplementorsProvider({}, {});
+      var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{
         components: {
@@ -300,7 +308,52 @@ describe('05 - unit - implementors provider', function () {
 
     });
 
-    xit('destroys all maps on new description');
+    it('destroys all maps on reconnect', function (done) {
+
+      var i;
+
+      mockClient = {
+        on: function (event, handler) {
+          expect(event).to.be('reconnected');
+          setTimeout(function () {
+            handler();
+
+            expect(i.maps).to.eql({});
+            done();
+
+          }, 200);
+        }
+      };
+
+      i = new ImplementorsProvider(mockClient, {});
+      i.maps = 'EXISTING';
+
+    });
+
+    it('destroys all descriptions on reconnect', function (done) {
+
+      var i;
+
+      mockClient = {
+        on: function (event, handler) {
+          expect(event).to.be('reconnected');
+          setTimeout(function () {
+            handler();
+
+            expect(i.descriptions).to.eql([]);
+            done();
+
+          }, 200);
+        }
+      };
+
+      i = new ImplementorsProvider(mockClient, {});
+      i.descriptions = 'EXISTING';
+
+    });
+
+    xit('destroys all subscriptions on reconnect');
+    // otherwise leaks previous /_response subscriptions with previous session id
 
   });
 

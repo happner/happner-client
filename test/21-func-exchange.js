@@ -16,8 +16,12 @@ describe('21 - func - exchange', function () {
       before('start a server', function (done) {
 
         Happner.create({
+          util: {
+            logLevel: process.env.LOG_LEVEL || 'fatal'
+          },
           happn: {
-            secure: mode == 'secure'
+            secure: mode == 'secure',
+            adminPassword: 'xxx'
           },
           modules: {
             'component1': {
@@ -63,7 +67,7 @@ describe('21 - func - exchange', function () {
         };
 
         api = client.construct(model);
-        client.connect([{username: '_ADMIN', password: 'happn'}], done);
+        client.connect([{username: '_ADMIN', password: 'xxx'}], done);
       });
 
       after('stop client', function (done) {
