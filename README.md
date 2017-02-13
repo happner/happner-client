@@ -14,7 +14,8 @@ The client for happner-2 and happner cluster services.
 var HappnerClient = require('happner-client');
 var client = new HappnerClient({
   requestTimeout: 10 * 1000, // milliseconds timeout on api request (set ack)
-  responseTimeout: 20 * 1000 // timeout awaiting response
+  responseTimeout: 20 * 1000, // timeout awaiting response
+  logger: null // optional happner-logger
 });
 ```
 

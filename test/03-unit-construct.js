@@ -148,6 +148,101 @@ describe('03 - unit - construct', function () {
       });
     });
 
+    it('amends existing happner object where component undefined', function (done) {
+      OperationsProvider.prototype.request = function (component, version, method, args, callback) {
+        callback(null, {RE: 'SULT'});
+      };
+
+      var model = {
+        component1: {
+          version: '^1.0.0',
+          methods: {
+            method1: {}
+          }
+        },
+        component2: {
+          version: '^2.0.0',
+          methods: {
+            method1: {}
+          }
+        }
+      };
+
+      var c = new HappnerClient();
+      var happner = {
+        exchange: {
+          component2: {
+            __version: '2.0.1',
+            method1: function (callback) {
+              callback(null, 'existing component');
+            }
+          }
+        },
+        event: {}
+      };
+
+      c.construct(model, happner);
+
+      happner.exchange.component2.method1(function (e, result) {
+        expect(result).to.be('existing component');
+
+        happner.exchange.component1.method1('ARG1', function (e, result) {
+          if (e) return done(e);
+          expect(result).to.eql({RE: 'SULT'});
+          done();
+        });
+      });
+
+    });
+
+    it('amends existing happner object where component wrong version', function (done) {
+      OperationsProvider.prototype.request = function (component, version, method, args, callback) {
+        callback(null, {RE: 'SULT'});
+      };
+
+      var model = {
+        component1: {
+          version: '^1.0.0',
+          methods: {
+            method1: {}
+          }
+        },
+        component2: {
+          version: '^3.0.0',
+          methods: {
+            method1: {}
+          }
+        }
+      };
+
+      var c = new HappnerClient();
+      var happner = {
+        exchange: {
+          component2: {
+            __version: '2.0.1', // <----------- wrong version, gets replaced
+            method1: function (callback) {
+              callback(null, 'existing component');
+            }
+          }
+        },
+        event: {}
+      };
+
+      c.construct(model, happner);
+
+      happner.exchange.component2.method1(function (e, result) {
+        expect(result).to.not.be('existing component');
+        expect(result).to.eql({RE: 'SULT'});
+
+        happner.exchange.component1.method1('ARG1', function (e, result) {
+          if (e) return done(e);
+          expect(result).to.eql({RE: 'SULT'});
+          done();
+        });
+      });
+
+    });
+
   });
 
   context('event', function () {
@@ -298,6 +393,43 @@ describe('03 - unit - construct', function () {
         expect(e.message).to.be('xxxx');
         done();
       });
+
+    });
+
+    it('adds happner event api where component undefined', function (done) {
+      var count = 0;
+      OperationsProvider.prototype.subscribe = function(component, version, key, handler, callback) {
+        count++;
+        callback();
+      };
+
+      var model = {
+        component1: { // component1 gets amended onto $happner
+          version: '^1.0.0'
+        },
+        component2: { // component2 already exists in $happner but is replaced with version aware subscriber
+          version: '^2.0.0'
+        }
+      };
+
+      var happner = {
+        exchange: {},
+        event: {
+          'component2': {
+            on: function () {}
+          }
+        }
+      };
+
+      var c = new HappnerClient();
+      c.construct(model, happner);
+
+      // both subscriptions should call subscribe stub that increments count
+      happner.event.component1.on('event/xx', function (data) {});
+      happner.event.component2.on('event/yy', function (data) {});
+
+      expect(count).to.be(2);
+      done();
 
     });
 
