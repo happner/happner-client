@@ -16,6 +16,7 @@ describe('21 - func - exchange', function () {
       before('start a server', function (done) {
 
         Happner.create({
+          domain: 'DOMAIN_NAME',
           util: {
             logLevel: process.env.LOG_LEVEL || 'fatal'
           },

@@ -8,7 +8,8 @@ describe('05 - unit - implementors provider', function () {
 
   beforeEach(function () {
     mockClient = {
-      on: function () {}
+      on: function () {
+      }
     };
   });
 
@@ -20,6 +21,12 @@ describe('05 - unit - implementors provider', function () {
       mockConnection = {
         connected: true,
         client: {
+          session: {
+            happn: {
+              name: 'SERVER_NAME',
+              secure: false
+            }
+          },
           get: function (path, callback) {
             callback(null, {});
           }
@@ -137,6 +144,87 @@ describe('05 - unit - implementors provider', function () {
         .then(done).catch(done);
     });
 
+    it('can get descriptions from a list of peers', function (done) {
+
+      delete mockConnection.client;
+
+      mockConnection.clients = {
+        peers: {
+          'NAME_0': {
+            self: true,
+            client: {
+              session: {
+                happn: {
+                  name: 'SERVER_0'
+                }
+              },
+              get: function (path, callback) {
+                callback(null, {
+                  initializing: false,
+                  name: 'DOMAIN_NAME'
+                });
+              }
+            }
+          },
+          'NAME_1': {
+            self: false,
+            client: {
+              session: {
+                happn: {
+                  name: 'SERVER_1'
+                }
+              },
+              get: function (path, callback) {
+                callback(null, {
+                  initializing: false,
+                  name: 'DOMAIN_NAME'
+                });
+              }
+            }
+          },
+          'NAME_2': {
+            self: false,
+            client: {
+              session: {
+                happn: {
+                  name: 'SERVER_2'
+                }
+              },
+              get: function (path, callback) {
+                callback(null, {
+                  initializing: false,
+                  name: 'DOMAIN_NAME'
+                });
+              }
+            }
+          }
+        }
+      };
+
+      var i = new ImplementorsProvider(mockClient, mockConnection);
+
+      i.getDescriptions()
+        .then(function () {
+          expect(i.descriptions).to.eql([
+            {
+              initializing: false,
+              name: 'DOMAIN_NAME',
+              self: false,
+              meshName: 'SERVER_1'
+            },
+            {
+              initializing: false,
+              name: 'DOMAIN_NAME',
+              self: false,
+              meshName: 'SERVER_2'
+            }
+          ]);
+        })
+        .then(done).catch(done);
+
+
+    });
+
   });
 
   context('getNextImplementation()', function () {
@@ -147,7 +235,7 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function (e) {
-          expect(e.message).to.be('Missing description');
+          expect(e.message).to.be('Not implemented');
           done();
         })
         .catch(done);
@@ -205,6 +293,8 @@ describe('05 - unit - implementors provider', function () {
       var i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{
+        meshName: 'SERVER_2',
+        self: true,
         components: {
           component1: {
             name: 'component1',
@@ -218,7 +308,10 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component1', '^1.0.0', 'method1')
         .then(function (result) {
-          expect(result).to.eql({local: true});
+          expect(result).to.eql({
+            local: true,
+            name: 'SERVER_2'
+          });
           done();
         })
         .catch(done);

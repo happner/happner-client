@@ -103,6 +103,7 @@ describe('04 - unit - operation provider', function () {
       };
 
       var mockImplementors = {
+        sessionId: 'SESSION_ID',
         getDescriptions: function () {
           return Promise.resolve();
         },
@@ -140,6 +141,7 @@ describe('04 - unit - operation provider', function () {
       };
 
       var mockImplementors = {
+        sessionId: 'SESSION_ID',
         getDescriptions: function () {
           return Promise.resolve();
         },
@@ -174,6 +176,8 @@ describe('04 - unit - operation provider', function () {
       };
 
       var mockImplementors = {
+        domain: 'DOMAIN_NAME',
+        secure: false,
         getDescriptions: function () {
           return Promise.resolve();
         },
@@ -217,6 +221,9 @@ describe('04 - unit - operation provider', function () {
       };
 
       var mockImplementors = {
+        domain: 'DOMAIN_NAME',
+        sessionId: 'SESSION_ID',
+        secure: true,
         getDescriptions: function () {
           return Promise.resolve();
         },
@@ -288,7 +295,7 @@ describe('04 - unit - operation provider', function () {
           return Promise.resolve();
         },
         getNextImplementation: function () {
-          return Promise.resolve();
+          return Promise.resolve({local: true, name: 'MESH_NAME'});
         }
       };
 
@@ -298,11 +305,16 @@ describe('04 - unit - operation provider', function () {
         return Promise.resolve();
       };
 
-      o.executeRequest = function (component, method, args, callback) {
-        expect(component).to.equal('component');
-        expect(method).to.equal('method');
-        expect(args).to.eql([]);
-        done();
+      o.executeRequest = function (implementation, component, method, args, callback) {
+        try {
+          expect(implementation).to.eql({local: true, name: 'MESH_NAME'});
+          expect(component).to.equal('component');
+          expect(method).to.equal('method');
+          expect(args).to.eql([]);
+          done();
+        } catch (e) {
+          done(e);
+        }
       };
 
       o.request('component', 'version', 'method', [], function (e) {
@@ -382,207 +394,221 @@ describe('04 - unit - operation provider', function () {
 
   context('executeRequest()', function () {
 
-    var mockConnection, mockImplementers;
+    context('on cluster', function () {
 
-    beforeEach(function () {
+      it('handles concurrently departed peer');
 
-      mockConnection = {
-        connected: true,
-        client: {
-          session: {
-            id: 'SESSION_ID',
-            happn: {
-              secure: true
+    });
+
+    context('on local', function () {
+
+      var mockConnection, mockImplementers;
+
+      beforeEach(function () {
+
+        mockConnection = {
+          connected: true,
+          client: {
+            session: {
+              id: 'SESSION_ID',
+              happn: {
+                secure: true
+              },
+              user: {
+                username: '_ADMIN'
+              }
             },
-            user: {
+            set: function (path, data, options, callback) {
+
+            }
+          }
+        };
+
+        mockImplementers = {
+          domain: 'DOMAIN_NAME'
+        }
+
+      });
+
+      it('rejects on not connected', function (done) {
+
+        mockConnection.connected = false;
+
+        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', ['ARGS'], function () {
+        })
+          .catch(function (e) {
+            expect(e.message).to.be('Not connected');
+            done();
+          })
+          .catch(done);
+
+      });
+
+      it('calls set on request path', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          expect(path).to.be('/_exchange/requests/DOMAIN_NAME/component/method');
+          done();
+        };
+
+        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', ['ARGS'], function () {
+        })
+          .catch(done);
+
+      });
+
+      it('calls set with request arguments (secure)', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          expect(data).to.eql({
+            callbackAddress: '/_exchange/responses/DOMAIN_NAME/component/method/SESSION_ID/1',
+            args: [
+              {params: 1}
+            ],
+            origin: {
+              id: 'SESSION_ID',
               username: '_ADMIN'
             }
-          },
-          set: function (path, data, options, callback) {
-
-          }
-        }
-      };
-
-      mockImplementers = {
-        domain: 'DOMAIN_NAME'
-      }
-
-    });
-
-    it('rejects on not connected', function (done) {
-
-      mockConnection.connected = false;
-
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', ['ARGS'], function () {
-      })
-        .catch(function (e) {
-          expect(e.message).to.be('Not connected');
+          });
           done();
+        };
+
+        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function () {
         })
-        .catch(done);
+          .catch(done);
 
-    });
+      });
 
-    it('calls set on request path', function (done) {
+      it('calls set with request arguments (insecure)', function (done) {
 
-      mockConnection.client.set = function (path, data, options, callback) {
-        expect(path).to.be('/_exchange/requests/DOMAIN_NAME/component/method');
-        done();
-      };
+        mockConnection.client.set = function (path, data, options, callback) {
+          expect(data).to.eql({
+            callbackAddress: '/_exchange/responses/SESSION_ID/DOMAIN_NAME/component/method/1',
+            args: [
+              {params: 1}
+            ],
+            origin: {
+              id: 'SESSION_ID'
+            }
+          });
+          done();
+        };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        delete mockConnection.client.session.user;
+        mockConnection.client.session.happn.secure = false;
 
-      o.executeRequest('component', 'method', ['ARGS'], function () {
-      })
-        .catch(done);
+        var o = new OperationsProvider({}, mockConnection, mockImplementers);
 
-    });
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function () {
+        })
+          .catch(done);
 
-    it('calls set with request arguments (secure)', function (done) {
+      });
 
-      mockConnection.client.set = function (path, data, options, callback) {
-        expect(data).to.eql({
-          callbackAddress: '/_exchange/responses/DOMAIN_NAME/component/method/SESSION_ID/1',
-          args: [
-            {params: 1}
-          ],
-          origin: {
-            id: 'SESSION_ID',
-            username: '_ADMIN'
-          }
+      it('calls set with timeout and noStore options', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          expect(options).to.eql({
+            timeout: 10 * 1000,
+            noStore: true
+          });
+          done();
+        };
+
+        var mockHappnerClient = {
+          __requestTimeout: 10 * 1000
+        };
+
+        var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function () {
+        })
+          .catch(done);
+
+      });
+
+      it('rejects on set failure', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          callback(new Error('failed to set'));
+        };
+
+        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function () {
+        })
+          .catch(function (e) {
+            expect(e.message).to.be('failed to set');
+            done();
+          })
+          .catch(done);
+
+      });
+
+      it('resolves on set success', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          callback(null);
+        };
+
+        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function () {
+        })
+          .then(function () {
+            done();
+          })
+          .catch(done);
+
+      });
+
+      it('places callback into reference for reply', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          callback(null);
+        };
+
+        var mockHappnerClient = {
+          __responseTimeout: 100
+        };
+
+        var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function () {
+        })
+          .then(function () {
+            expect(o.awaitingResponses).to.have.key('1');
+            expect(o.awaitingResponses[1]).to.have.key('callback');
+            done();
+          })
+          .catch(done);
+
+      });
+
+      it('sets a timeout for reply', function (done) {
+
+        mockConnection.client.set = function (path, data, options, callback) {
+          callback(null);
+        };
+
+        var mockHappnerClient = {
+          __responseTimeout: 100
+        };
+
+        var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
+
+        o.executeRequest({local: true}, 'component', 'method', [{params: 1}], function (e) {
+
+          expect(e.message).to.equal('Timeout awaiting response');
+          done();
+
         });
-        done();
-      };
-
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
-        .catch(done);
-
-    });
-
-    it('calls set with request arguments (insecure)', function (done) {
-
-      mockConnection.client.set = function (path, data, options, callback) {
-        expect(data).to.eql({
-          callbackAddress: '/_exchange/responses/SESSION_ID/DOMAIN_NAME/component/method/1',
-          args: [
-            {params: 1}
-          ],
-          origin: {
-            id: 'SESSION_ID'
-          }
-        });
-        done();
-      };
-
-      delete mockConnection.client.session.user;
-      mockConnection.client.session.happn.secure = false;
-
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
-        .catch(done);
-
-    });
-
-    it('calls set with timeout and noStore options', function (done) {
-
-      mockConnection.client.set = function (path, data, options, callback) {
-        expect(options).to.eql({
-          timeout: 10 * 1000,
-          noStore: true
-        });
-        done();
-      };
-
-      var mockHappnerClient = {
-        __requestTimeout: 10 * 1000
-      };
-
-      var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
-        .catch(done);
-
-    });
-
-    it('rejects on set failure', function (done) {
-
-      mockConnection.client.set = function (path, data, options, callback) {
-        callback(new Error('failed to set'));
-      };
-
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
-        .catch(function (e) {
-          expect(e.message).to.be('failed to set');
-          done();
-        })
-        .catch(done);
-
-    });
-
-    it('resolves on set success', function (done) {
-
-      mockConnection.client.set = function (path, data, options, callback) {
-        callback(null);
-      };
-
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
-        .then(function () {
-          done();
-        })
-        .catch(done);
-
-    });
-
-    it('places callback into reference for reply', function (done) {
-
-      mockConnection.client.set = function (path, data, options, callback) {
-        callback(null);
-      };
-
-      var o = new OperationsProvider({}, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function () {
-      })
-        .then(function () {
-          expect(o.awaitingResponses).to.have.key('1');
-          expect(o.awaitingResponses[1]).to.have.key('callback');
-          done();
-        })
-        .catch(done);
-
-    });
-
-    it('sets a timeout for reply', function (done) {
-
-      mockConnection.client.set = function (path, data, options, callback) {
-        callback(null);
-      };
-
-      var mockHappnerClient = {
-        __responseTimeout: 100
-      };
-
-      var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
-
-      o.executeRequest('component', 'method', [{params: 1}], function (e) {
-
-        expect(e.message).to.equal('Timeout awaiting response');
-        done();
 
       });
 
@@ -716,10 +742,11 @@ describe('04 - unit - operation provider', function () {
       var component = 'componentName';
       var version = '1.0.0';
       var key = 'event/name';
-      var mockHandler = function (data, meta) {};
+      var mockHandler = function (data, meta) {
+      };
 
       mockConnection.client = {
-        on: function(path, parameters, handler, callback) {
+        on: function (path, parameters, handler, callback) {
           expect(path).to.be('/_events/DOMAIN_NAME/componentName/event/name');
           expect(parameters).to.eql({
             event_type: 'set'
@@ -753,7 +780,7 @@ describe('04 - unit - operation provider', function () {
     it('unsubscribes with id', function (done) {
 
       mockConnection.client = {
-        off: function(id, callback) {
+        off: function (id, callback) {
           expect(id).to.be('EVENT_ID');
           callback();
         }
@@ -792,7 +819,7 @@ describe('04 - unit - operation provider', function () {
     it('does the unsubscribe on correct path', function (done) {
 
       mockConnection.client = {
-        offPath: function(path, callback) {
+        offPath: function (path, callback) {
           expect(path).to.be('/_events/DOMAIN_NAME/component/event/name');
           callback();
         }
