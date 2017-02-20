@@ -445,8 +445,183 @@ describe('05 - unit - implementors provider', function () {
 
     });
 
-    xit('destroys all subscriptions on reconnect');
+    xit('destroys all subscriptions where appropriate');
     // otherwise leaks previous /_response subscriptions with previous session id
+
+    xit('standalone client does not remove all subscriptions any more');
+
+  });
+
+  context('removePeer()', function () {
+
+    var mockClient;
+
+    beforeEach(function () {
+      mockClient = {
+        on: function (event, handler) {
+        }
+      };
+    });
+
+    it('removes implementations and description on peer departure', function (done) {
+
+      var i = new ImplementorsProvider(mockClient, {});
+
+      i.descriptions = [
+        {
+          meshName: 'MESH_2'
+        },
+        {
+          meshName: 'MESH_3'
+        },
+        {
+          meshName: 'MESH_4'
+        }
+      ];
+
+      i.maps = {
+        'remoteComponent3/^1.0.0/method1': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ],
+        'remoteComponent3/^1.0.0/method2': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ]
+      };
+
+      i.removePeer('MESH_3');
+
+      expect(i.descriptions).to.eql([
+        {
+          meshName: 'MESH_2'
+        },
+        {
+          meshName: 'MESH_4'
+        }
+      ]);
+      expect(i.maps).to.eql({
+        'remoteComponent3/^1.0.0/method1': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_4'}
+        ],
+        'remoteComponent3/^1.0.0/method2': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_4'}
+        ]
+      });
+
+      done();
+
+    });
+
+  });
+
+  context('addPeer()', function () {
+
+    var mockClient, mockConnection;
+
+    beforeEach(function () {
+      mockClient = {
+        on: function (event, handler) {
+        }
+      };
+
+      mockConnection = {
+        clients: {
+          peers: {
+            'NAME': {
+              self: false,
+              client: {
+                session: {
+                  happn: {
+                    name: 'NAME',
+                    secure: false
+                  },
+                  id: 'SESSION_ID'
+                },
+                get: function (path, callback) {
+                  if (path != '/mesh/schema/description') return;
+                  callback(null, {
+                    "name": "DOMAIN_NAME",
+                    "initializing": false,
+                    "components": {
+                      "component2": {
+                        "name": "component2",
+                        "version": "1.3.1",
+                        "methods": {
+                          "method1": {},
+                          "method2": {}
+                        }
+                      },
+                      "component3": {
+                        "name": "component3",
+                        "version": "1.30.324",
+                        "methods": {
+                          "method1": {},
+                          "method2": {}
+                        }
+                      }
+                    }
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    it('adds implementations and description on peer arrival', function (done) {
+
+      var i = new ImplementorsProvider(mockClient, mockConnection);
+
+      i.maps = {
+        'component1/^1.0.0/method1': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ],
+        'component2/^1.0.0/method2': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ],
+        'component3/^2.0.0/method1': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ],
+      };
+      i.descriptions = [];
+
+      i.addPeer('NAME');
+
+      expect(i.maps).to.eql({
+        'component1/^1.0.0/method1': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ],
+        'component2/^1.0.0/method2': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'},
+          {local: false, name: 'NAME'}
+        ],
+        'component3/^2.0.0/method1': [
+          {local: false, name: 'MESH_2'},
+          {local: false, name: 'MESH_3'},
+          {local: false, name: 'MESH_4'}
+        ]
+      });
+      expect(i.descriptions.length).to.equal(1);
+
+      done();
+
+    });
 
   });
 
