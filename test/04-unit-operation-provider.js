@@ -398,6 +398,8 @@ describe('04 - unit - operation provider', function () {
 
       it('handles concurrently departed peer');
 
+      it('retries if called peer departed');
+
     });
 
     context('on local', function () {
