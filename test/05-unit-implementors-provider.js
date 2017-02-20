@@ -445,11 +445,6 @@ describe('05 - unit - implementors provider', function () {
 
     });
 
-    xit('destroys all subscriptions where appropriate');
-    // otherwise leaks previous /_response subscriptions with previous session id
-
-    xit('standalone client does not remove all subscriptions any more');
-
   });
 
   context('removePeer()', function () {
