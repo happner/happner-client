@@ -122,7 +122,7 @@ describe('21 - func - exchange', function () {
             try {
               expect(e).to.be.an(Error);
               expect(e.name).to.equal('Error');
-              expect(e.message).to.equal('Not implemented');
+              expect(e.message).to.match(/^Not implemented/);
               done();
             } catch (e) {
               done(e);
@@ -135,7 +135,7 @@ describe('21 - func - exchange', function () {
             try {
               expect(e).to.be.an(Error);
               expect(e.name).to.equal('Error');
-              expect(e.message).to.equal('Not implemented');
+              expect(e.message).to.match(/^Not implemented/);
               done();
             } catch (e) {
               done(e);
@@ -184,7 +184,7 @@ describe('21 - func - exchange', function () {
               try {
                 expect(e).to.be.an(Error);
                 expect(e.name).to.equal('Error');
-                expect(e.message).to.equal('Not implemented');
+                expect(e.message).to.match(/^Not implemented/);
                 done();
               } catch (e) {
                 done(e);
@@ -198,7 +198,7 @@ describe('21 - func - exchange', function () {
               try {
                 expect(e).to.be.an(Error);
                 expect(e.name).to.equal('Error');
-                expect(e.message).to.equal('Not implemented');
+                expect(e.message).to.match(/^Not implemented/);
                 done();
               } catch (e) {
                 done(e);

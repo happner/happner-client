@@ -178,7 +178,7 @@ describe('23 - func - exchange reconnect', function (done) {
 
             api.exchange.component1.method1(function (e) {
               try {
-                expect(e.message).to.be('Not implemented');
+                expect(e.message).to.match(/^Not implemented/);
                 done();
               } catch (e) {
                 done(e);

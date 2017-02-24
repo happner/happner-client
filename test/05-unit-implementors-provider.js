@@ -235,7 +235,7 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function (e) {
-          expect(e.message).to.be('Not implemented');
+          expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -327,7 +327,7 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function (e) {
-          expect(e.message).to.eql('Not implemented');
+          expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -344,7 +344,7 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function (e) {
-          expect(e.message).to.eql('Not implemented');
+          expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -369,7 +369,7 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component1', '^1.0.0', 'method1')
         .catch(function (e) {
-          expect(e.message).to.equal('Not implemented');
+          expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -394,7 +394,7 @@ describe('05 - unit - implementors provider', function () {
 
       i.getNextImplementation('component1', '^1.0.0', 'method2')
         .catch(function (e) {
-          expect(e.message).to.equal('Not implemented');
+          expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
