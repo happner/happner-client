@@ -118,3 +118,72 @@ kitchen.event.fridge.on('/eventName', function (data) {});
 kitchen.data[set(), get(), etc.] // see happner/happn-3
 ```
 
+
+
+## Browser usage
+
+Assuming served from [happner-2](https://github.com/happner/happner-2) packaged `/api/client` script
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  
+  <!-- includes Happner.HappnerClient -->
+  <script src="/api/client"></script>
+
+  </head>
+<body>
+
+  <script>
+
+    var client = new Happner.HappnerClient({
+      requestTimeout: 10 * 1000,
+      responseTimeout: 20 * 1000
+    });
+
+    var model = {
+      'component': {
+        version: '^2.0.0',
+        methods: {
+          method1: {}
+        }
+      }
+    };
+
+    var api = client.construct(model);
+
+    client.connect()
+
+      .then(function () {
+        // subscribe to events (requires connected)
+        api.event.component.on('test/event', function (data, meta) {
+          console.log('EVENT', meta.path);
+        });
+      })
+
+      .catch(function (error) {
+        console.error('connection error', error);
+      });
+    
+    // repeat call on exchange
+    setInterval(function () {
+
+      api.exchange.component.method1()
+        .then(function (reply) {
+          console.log('REPLY', reply);
+        })
+        .catch(function (error) {
+          console.error('ERROR', error);
+        });
+
+    }, 1000);
+
+  </script>
+
+</body>
+</html>
+```
+
