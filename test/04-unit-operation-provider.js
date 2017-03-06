@@ -742,7 +742,7 @@ describe('04 - unit - operation provider', function () {
       var o = new OperationsProvider({}, mockConnection, mockImplementators);
 
       var component = 'componentName';
-      var version = '1.0.0';
+      var version = '^1.0.0';
       var key = 'event/name';
       var mockHandler = function (data, meta) {
       };
@@ -751,7 +751,10 @@ describe('04 - unit - operation provider', function () {
         on: function (path, parameters, handler, callback) {
           expect(path).to.be('/_events/DOMAIN_NAME/componentName/event/name');
           expect(parameters).to.eql({
-            event_type: 'set'
+            event_type: 'set',
+            meta: {
+              componentVersion: '^1.0.0'
+            }
           });
           // expect(handler).to.be(mockHandler); // proxied, impossible test
           callback();
