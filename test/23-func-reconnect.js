@@ -141,7 +141,7 @@ describe('23 - func - exchange reconnect', function (done) {
               } catch (e) {
                 done(e);
               }
-            }, 200);
+            }, 400);
           });
 
           startServer1(function (e) {
@@ -149,7 +149,7 @@ describe('23 - func - exchange reconnect', function (done) {
           });
         });
 
-      }, 200);
+      }, 400);
 
 
     });
