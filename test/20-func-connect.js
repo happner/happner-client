@@ -56,15 +56,18 @@ describe('20 - func - connect', function () {
 
   it('supports callback', function (done) {
     var c = new HappnerClient();
-    c.connect([{
-      name: 'ConnectionName',
-      host: 'localhost',
-      port: 55000,
-      protocol: 'https',
+    c.connect({
+      // config: {
+        host: 'localhost',
+        port: 55000
+      // }
+    }, {
       username: '_ADMIN',
       password: 'xxx',
+      info: 'fo',
+      protocol: 'https',
       allowSelfSignedCerts: true
-    }, {in: 'fo'}], function (e) {
+    }, function (e) {
       if (e) return done(e);
       c.disconnect(done);
     });
@@ -74,16 +77,19 @@ describe('20 - func - connect', function () {
     var c = new HappnerClient();
     c.on('error', function () {
     });
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       host: '127.0.0.1',
-      port: 9999,  // <------------------- intentionally wrong
+      port: 9999  // <------------------- intentionally wrong
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-    }])
+    })
       .catch(function (e) {
+
+        console.log(e);
+
         expect(e.code).to.be('ECONNREFUSED');
       })
       .then(function () {
@@ -98,16 +104,15 @@ describe('20 - func - connect', function () {
   it('defaults', function (done) {
     // inherits happn defaulting
     var c = new HappnerClient();
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       // host: 'localhost',
-      // port: 55000,
+      // port: 55000
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-      // info: {}
-    }], function (e) {
+    }, function (e) {
       if (e) return done(e);
       c.disconnect(done);
     });
@@ -118,29 +123,29 @@ describe('20 - func - connect', function () {
     c.on('connected', function () {
       c.disconnect(done);
     });
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       host: 'localhost',
-      port: 55000,
+      port: 55000
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-    }], function (e) {
+    }, function (e) {
     });
   });
 
   it('emits disconnected on normal disconnect', function (done) {
     var c = new HappnerClient();
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       host: 'localhost',
-      port: 55000,
+      port: 55000
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-    }], function (e) {
+    }, function (e) {
       if (e) return done(e);
 
       c.on('disconnected', function () {
@@ -162,15 +167,15 @@ describe('20 - func - connect', function () {
 
   it('emits disconnected even if server was stopped with reconnect true', function (done) {
     var c = new HappnerClient();
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       host: 'localhost',
-      port: 55000,
+      port: 55000
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-    }], function (e) {
+    }, function (e) {
       if (e) return done(e);
 
       c.on('disconnected', function () {
@@ -192,15 +197,15 @@ describe('20 - func - connect', function () {
 
   it('emits reconnected on reconnect', function (done) {
     var c = new HappnerClient();
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       host: 'localhost',
-      port: 55000,
+      port: 55000
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-    }], function (e) {
+    }, function (e) {
       if (e) return done(e);
 
       c.on('reconnected', function () {
@@ -223,15 +228,15 @@ describe('20 - func - connect', function () {
 
   it('emits reconnecting on reconnecting', function (done) {
     var c = new HappnerClient();
-    c.connect([{
-      name: 'ConnectionName',
+    c.connect({
       host: 'localhost',
-      port: 55000,
+      port: 55000
+    }, {
       protocol: 'https',
       username: '_ADMIN',
       password: 'xxx',
       allowSelfSignedCerts: true
-    }], function (e) {
+    }, function (e) {
       if (e) return done(e);
 
       c.on('reconnecting', function () {

@@ -257,7 +257,7 @@ describe('04 - unit - operation provider', function () {
               secure: true
             }
           },
-          on: function (path, handler, callback) {
+          on: function (path, options, handler, callback) {
             callback(new Error('xxxx'));
           }
         }
@@ -340,7 +340,7 @@ describe('04 - unit - operation provider', function () {
               secure: true
             }
           },
-          on: function (path, handler, callback) {
+          on: function (path, options, handler, callback) {
             setTimeout(function () {
               callback();
             }, 100);

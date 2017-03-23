@@ -68,7 +68,7 @@ describe('21 - func - exchange', function () {
         };
 
         api = client.construct(model);
-        client.connect([{username: '_ADMIN', password: 'xxx'}], done);
+        client.connect(null, {username: '_ADMIN', password: 'xxx'}, done);
       });
 
       after('stop client', function (done) {
