@@ -88,7 +88,7 @@ client.on('error', function (e) {
 ```javascript
 var kitchenModel = {
   fridge: {
-    version: '^1.0.0',
+    version: '^1.0.0', // requires that server has matching version of fridge component
     methods: {
       getTemperature: {
         // optional parameters for clientside validation
@@ -120,14 +120,6 @@ kitchen.exchange.fridge.getTemperature(['top', 'middle'])
 ```javascript
 kitchen.event.fridge.on('/eventName', function (data) {});
 ```
-
-### Access data
-
-```javascript
-kitchen.data[set(), get(), etc.] // see happner/happn-3
-```
-
-
 
 ## Browser usage
 
