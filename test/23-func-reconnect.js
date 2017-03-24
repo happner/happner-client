@@ -74,7 +74,7 @@ describe('23 - func - exchange reconnect', function (done) {
     };
 
     api = _client.construct(model);
-    _client.connect([{username: '_ADMIN', password: 'xxx'}])
+    _client.connect({}, {username: '_ADMIN', password: 'xxx'})
       .then(function () {
         client = _client;
       })

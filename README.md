@@ -13,41 +13,50 @@ The client for happner-2 and happner cluster services.
 ```javascript
 var HappnerClient = require('happner-client');
 var client = new HappnerClient({
-  requestTimeout: 10 * 1000, // milliseconds timeout on api request (set ack)
-  responseTimeout: 20 * 1000, // timeout awaiting response
-  logger: null // optional happner-logger
+  requestTimeout: 10 * 1000, // (default) milliseconds timeout on api request (set ack)
+  responseTimeout: 20 * 1000, // (default) timeout awaiting response
+  logger: null // (defualt) optional happner-logger
 });
 ```
 
 ### Connect
-
-Connect with array of possible servers, randomly selected until successful.
 
 ```javascript
 var optionalInfo = {
   // meta data for login
   ///////////////////// in $origin
 }
-client.connect([
-  {
-    name: 'ConnectionName1',
+client.connect(
+  { // connection
     host: 'localhost',
-    port: 55000,
+    port: 55000
+  },
+  { // options
     protocol: 'https',
   	username: '_ADMIN',
     password: 'happn',
-    allowSelfSignedCerts: true
-  },
-  // multiple connections not yet supported
-  //{
-  //  name: 'ConnectionName2',
-  //  host: 'hostname_ip',
-  //  port: Number,
-  //  protocol: 'https',
-  //  username: 'username',
-  //  password: 'password',
-  //}
-], optionalInfo).then(...).catch(...); // also supports callback
+    allowSelfSignedCerts: true,
+    info: {}
+  }
+).then(...).catch(...); // also supports callback
+
+
+// connection can be defaulted (eg. in browser)
+client.connect(null, {username: '_ADMIN', password: 'happn'}, function (e) {
+})
+```
+
+Note: The `connect()` function accepts the same arguments as the [Happn.client.create()](https://github.com/happner/happn-3) function and can therefore accept a list or range of redundant connections.
+
+```javascript
+client.connect([
+  {host: '10.0.0.1'},
+  {host: '10.0.0.3'},
+  {host: '10.0.0.8'}
+], {
+  username: '_ADMIN',
+  password: 'happn',
+}).then(...
 ```
 
 ### Events
@@ -79,7 +88,7 @@ client.on('error', function (e) {
 ```javascript
 var kitchenModel = {
   fridge: {
-    version: '^1.0.0',
+    version: '^1.0.0', // requires that server has matching version of fridge component
     methods: {
       getTemperature: {
         // optional parameters for clientside validation
@@ -111,14 +120,6 @@ kitchen.exchange.fridge.getTemperature(['top', 'middle'])
 ```javascript
 kitchen.event.fridge.on('/eventName', function (data) {});
 ```
-
-### Access data
-
-```javascript
-kitchen.data[set(), get(), etc.] // see happner/happn-3
-```
-
-
 
 ## Browser usage
 
