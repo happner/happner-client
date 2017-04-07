@@ -10,3 +10,7 @@
 1.2.0 2017-03-23
 ----------------
   - onward release of happn-3
+  
+1.2.2 2017-04-07
+----------------
+  - onward release of happn-3
