@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "The client for happner-2 and happner cluster services",
   "main": "index.js",
   "scripts": {
