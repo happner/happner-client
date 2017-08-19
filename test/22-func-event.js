@@ -8,6 +8,7 @@ describe('22 - func - event', function () {
   var server, client, api;
 
   before('start server', function (done) {
+    this.timeout(10000);
     Happner.create({
       util: {
         logLevel: process.env.LOG_LEVEL || 'fatal'
@@ -36,6 +37,7 @@ describe('22 - func - event', function () {
   });
 
   before('start client', function (done) {
+    this.timeout(10000);
     var client = new HappnerClient();
     var model = {
       component1: {
@@ -56,11 +58,13 @@ describe('22 - func - event', function () {
   });
 
   after('stop client', function (done) {
+    this.timeout(10000);
     if (!client) return done();
     client.disconnect(done);
   });
 
   after('stop server', function (done) {
+    this.timeout(10000);
     if (!server) return done();
     server.stop({reconnect: false}, done);
   });

@@ -14,7 +14,7 @@ describe('21 - func - exchange', function () {
       var api;
 
       before('start a server', function (done) {
-
+        this.timeout(10000);
         Happner.create({
           domain: 'DOMAIN_NAME',
           util: {
@@ -43,6 +43,7 @@ describe('21 - func - exchange', function () {
       });
 
       before('create client', function (done) {
+        this.timeout(10000);
         client = new HappnerClient();
 
         var model = {
@@ -72,14 +73,14 @@ describe('21 - func - exchange', function () {
       });
 
       after('stop client', function (done) {
-
+        this.timeout(10000);
         if (!client) return done();
         client.disconnect(done);
 
       });
 
       after('stop server', function (done) {
-
+        this.timeout(10000);
         if (!server) return done();
         server.stop({reconnect: false}, done);
 
