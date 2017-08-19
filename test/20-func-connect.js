@@ -11,6 +11,7 @@ describe('20 - func - connect', function () {
   var server;
 
   function startServer(done) {
+    if (this.timeout) this.timeout(10000);
     if (server) return done();
     Happner.create({
       util: {
@@ -196,6 +197,7 @@ describe('20 - func - connect', function () {
   });
 
   it('emits reconnected on reconnect', function (done) {
+    this.timeout(20000);
     var c = new HappnerClient();
     c.connect({
       host: 'localhost',
