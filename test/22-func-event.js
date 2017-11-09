@@ -11,7 +11,7 @@ describe('22 - func - event', function () {
     this.timeout(10000);
     Happner.create({
       util: {
-        logLevel: process.env.LOG_LEVEL || 'fatal'
+        logLevel: process.env.LOG_LEVEL || 'warn'
       },
       modules: {
         'component1': {

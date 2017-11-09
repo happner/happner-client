@@ -12,7 +12,7 @@ describe('23 - func - exchange reconnect', function (done) {
     Happner.create({
       name: 'MESH_NAME',
       util: {
-        logLevel: process.env.LOG_LEVEL || 'fatal'
+        logLevel: process.env.LOG_LEVEL || 'warn'
       },
       happn: {
         adminPassword: 'xxx'
