@@ -15,7 +15,7 @@ describe('20 - func - connect', function () {
     if (server) return done();
     Happner.create({
       util: {
-        logLevel: process.env.LOG_LEVEL || 'fatal'
+        logLevel: process.env.LOG_LEVEL || 'warn'
       },
       happn: {
         secure: true,
