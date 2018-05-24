@@ -34,3 +34,7 @@
 4.0.0 2018-04-12
 ----------------
   - onward release of happn-3
+
+5.0.0 2018-05-24
+----------------
+  - onward release of happn-3
