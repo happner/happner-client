@@ -42,3 +42,7 @@
 5.0.1 2018-05-29
 ----------------
   - added check for client.session in implementors-provider
+
+5.0.2 2015-05-29
+----------------
+  - onward release of happner-2
