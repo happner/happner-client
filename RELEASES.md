@@ -38,3 +38,7 @@
 5.0.0 2018-05-24
 ----------------
   - onward release of happn-3
+
+5.0.1 2018-05-29
+----------------
+  - added check for client.session in implementors-provider
