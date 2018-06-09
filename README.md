@@ -95,7 +95,7 @@ var kitchenModel = {
         params: [
           {name: 'shelves', type: 'array'}
         ]
-      } 
+      }
     }
   }
 };
@@ -121,6 +121,28 @@ kitchen.exchange.fridge.getTemperature(['top', 'middle'])
 kitchen.event.fridge.on('/eventName', function (data) {});
 ```
 
+### Access happn data points directly, via the dataClient
+
+```javascript
+//assuming we have connected
+//var client = new HappnerClient(...
+//client.connect(...
+var dataClient = client.dataClient();
+
+//dataClient is the underlying happn-3 client for the happner-client connection, so you have all the happn-3 goodness:
+dataClient.on('/test/point', function(data){
+
+}).then(...);
+
+dataClient.set('/test/point', {my: 'data'}).then(...)
+
+dataClient.get('/test/point').then(...)
+
+dataClient.remove('/test/point').then(...)
+
+```
+see [this test](https://github.com/happner/happner-client/blob/master/test/24-func-data.js) for a full demonstration
+
 ## Browser usage
 
 Assuming served from [happner-2](https://github.com/happner/happner-2) packaged `/api/client` script
@@ -131,7 +153,7 @@ Assuming served from [happner-2](https://github.com/happner/happner-2) packaged 
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
-  
+
   <!-- includes Happner.HappnerClient -->
   <script src="/api/client"></script>
 
@@ -168,7 +190,7 @@ Assuming served from [happner-2](https://github.com/happner/happner-2) packaged 
       .catch(function (error) {
         console.error('connection error', error);
       });
-    
+
     // repeat call on exchange
     setInterval(function () {
 
@@ -187,4 +209,3 @@ Assuming served from [happner-2](https://github.com/happner/happner-2) packaged 
 </body>
 </html>
 ```
-
