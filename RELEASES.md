@@ -43,6 +43,10 @@
 ----------------
   - added check for client.session in implementors-provider
 
-5.0.2 2015-05-29
+5.0.2 2018-05-29
 ----------------
   - onward release of happner-2
+
+5.1.0 2018-06-08
+----------------
+  - new dataClient() access to actual happn-3 client
