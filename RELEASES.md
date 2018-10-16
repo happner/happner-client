@@ -50,3 +50,19 @@
 5.1.0 2018-06-08
 ----------------
   - new dataClient() access to actual happn-3 client
+
+6.0.0 2018-09-10
+----------------
+  - happn-3 version 8.0.0
+
+6.0.1 2018-09-10
+----------------
+  - happner-2 version up
+
+6.0.2 2018-09-10
+----------------
+  - happner-2 version up
+
+6.0.3 2018-09-10
+----------------
+  - happn-3 version 8.0.1
