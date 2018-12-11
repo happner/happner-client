@@ -17,3 +17,5 @@ node_modules
 !.env.test
 .idea
 coverage
+.nyc_output
+.vscode

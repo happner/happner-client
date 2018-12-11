@@ -4,7 +4,7 @@
   "description": "The client for happner-2 and happner cluster services",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha test --exit",
     "test-cover": "istanbul cover _mocha -- test"
   },
   "repository": {
@@ -18,14 +18,14 @@
   },
   "homepage": "https://github.com/happner/happner-client#readme",
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "happn-3": "^8.0.1"
+    "bluebird": "^3.5.3",
+    "happn-3": "^8.2.1"
   },
   "devDependencies": {
-    "coveralls": "^2.11.15",
+    "coveralls": "^3.0.2",
     "expect.js": "^0.3.1",
-    "happner-2": "^9.0.2",
+    "happner-2": "^9.2.3",
     "istanbul": "^0.4.5",
-    "mocha": "^3.5.0"
+    "mocha": "^5.2.0"
   }
 }
