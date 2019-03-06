@@ -83,3 +83,8 @@
 ----------------
   - happn-3 version 8.2.7
   - happner-2 version 9.3.0
+
+7.0.0 2019-03-01
+----------------
+  - happn-3 version 9.0.0
+  - happner-2 version 10.0.0
