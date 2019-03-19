@@ -1,11 +1,12 @@
 {
   "name": "happner-client",
-  "version": "7.0.0-prerelease.3",
+  "version": "7.0.1",
   "description": "The client for happner-2 and happner cluster services",
   "main": "index.js",
   "scripts": {
     "test": "mocha test",
-    "test-cover": "istanbul cover _mocha -- test"
+    "test-cover": "istanbul cover _mocha --exit -- test",
+    "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover"
   },
   "repository": {
     "type": "git",
@@ -19,12 +20,12 @@
   "homepage": "https://github.com/happner/happner-client#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "happn-3": "prerelease"
+    "happn-3": "^9.0.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.15",
     "expect.js": "^0.3.1",
-    "happner-2": "prerelease",
+    "happner-2": "latest",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0"
   }
