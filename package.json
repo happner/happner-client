@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "8.0.0-prerelease.2",
+  "version": "8.0.0-prerelease.3",
   "description": "The client for happner-2 and happner cluster services",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "devDependencies": {
     "coveralls": "^2.11.15",
     "expect.js": "^0.3.1",
-    "happner-2": "latest",
+    "happner-2": "prerelease",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.0"
   }
