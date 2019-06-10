@@ -46,19 +46,6 @@ client.connect(null, {username: '_ADMIN', password: 'happn'}, function (e) {
 })
 ```
 
-Note: The `connect()` function accepts the same arguments as the [Happn.client.create()](https://github.com/happner/happn-3) function and can therefore accept a list or range of redundant connections.
-
-```javascript
-client.connect([
-  {host: '10.0.0.1'},
-  {host: '10.0.0.3'},
-  {host: '10.0.0.8'}
-], {
-  username: '_ADMIN',
-  password: 'happn',
-}).then(...
-```
-
 ### Events
 
 ```javascript
