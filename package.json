@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "The client for happner-2 and happner cluster services",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/happner/happner-client#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
-    "happn-3": "^10.0.0"
+    "happn-3": "^10.1.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.15",
