@@ -29,6 +29,55 @@ describe('08 - unit - dependency met event', function() {
     };
   });
 
+  it('tests the __getUpdatedDependencyDescription method', function() {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+
+    let descriptions1 = [{
+      components: {
+        component1: {
+          version: '1.1.0'
+        }
+      }
+    }];
+
+    expect(i.__getUpdatedDependencyDescription(descriptions1, 'component1', '^1.1.0'))
+      .to.eql(descriptions1[0]);
+
+    let descriptions2 = [{
+      components: {
+        component2: {
+          version: '1.1.0'
+        }
+      }
+    }];
+
+    expect(i.__getUpdatedDependencyDescription(descriptions2, 'component1', '^1.1.0'))
+      .to.eql(undefined);
+
+    let descriptions3 = {
+      components: {
+        component2: {
+          version: '1.1.0'
+        }
+      }
+    };
+
+    expect(i.__getUpdatedDependencyDescription(descriptions3, 'component2', '^1.1.0'))
+      .to.eql(descriptions3);
+
+    let descriptions4 = {
+      components: {
+        component5: {
+          version: '1.1.0'
+        }
+      }
+    };
+
+    expect(i.__getUpdatedDependencyDescription(descriptions4, 'component1', '^1.1.0'))
+      .to.eql(undefined);
+
+  });
+
   it('emits the dependency met event', function(done) {
     var i = new ImplementorsProvider(mockClient, mockConnection);
     i.log = {
