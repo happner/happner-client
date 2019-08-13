@@ -100,3 +100,15 @@
 8.0.1 2019-06-25
 ----------------
   - happn-3 version 10.1.1
+
+8.1.0 2019-07-25
+----------------
+  - happn-3 update
+
+8.1.1 2019-08-02
+----------------
+  - removed let from client side code
+
+8.1.2 2019-08-13
+----------------
+  - fixed __getUpdatedDependencyDescription method when description is not an array and component does not exist
