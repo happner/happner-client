@@ -31,7 +31,7 @@ describe('05 - unit - implementors provider', function () {
             callback(null, {});
           }
         }
-      }
+      };
     });
 
     it('gets the description on first call', function (done) {

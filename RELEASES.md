@@ -112,3 +112,9 @@
 8.1.2 2019-08-13
 ----------------
   - fixed __getUpdatedDependencyDescription method when description is not an array and component does not exist
+
+8.1.3 2019-09-12
+----------------
+  - $origin checked as property of callback in happner-client.js
+  - peer client url added as part of addPeer in implementors provider
+  - peer url and description emitted as part of dependency-met event in implementors provider

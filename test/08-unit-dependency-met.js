@@ -111,7 +111,8 @@ describe('08 - unit - dependency met event', function() {
         version: '^1.0.0',
         description: {
           version: '1.1.0'
-        }
+        },
+        url:undefined
       });
       done();
     });
