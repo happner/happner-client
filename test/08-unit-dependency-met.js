@@ -112,7 +112,8 @@ describe('08 - unit - dependency met event', function() {
         description: {
           version: '1.1.0'
         },
-        url:undefined
+        url:undefined,
+        meshName: undefined
       });
       done();
     });

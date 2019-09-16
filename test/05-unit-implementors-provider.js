@@ -210,21 +210,20 @@ describe('05 - unit - implementors provider', function () {
               initializing: false,
               name: 'DOMAIN_NAME',
               self: false,
-              meshName: 'SERVER_1'
+              meshName: 'SERVER_1',
+              url:null
             },
             {
               initializing: false,
               name: 'DOMAIN_NAME',
               self: false,
-              meshName: 'SERVER_2'
+              meshName: 'SERVER_2',
+              url:null
             }
           ]);
         })
         .then(done).catch(done);
-
-
     });
-
   });
 
   context('getNextImplementation()', function () {
@@ -453,8 +452,8 @@ describe('05 - unit - implementors provider', function () {
 
     beforeEach(function () {
       mockClient = {
-        on: function (event, handler) {
-        }
+        on: function (event, handler) {},
+        emit:function(){}
       };
     });
 
@@ -497,6 +496,7 @@ describe('05 - unit - implementors provider', function () {
           meshName: 'MESH_4'
         }
       ]);
+
       expect(i.maps).to.eql({
         'remoteComponent3/^1.0.0/method1': [
           {local: false, name: 'MESH_2'},
@@ -509,9 +509,7 @@ describe('05 - unit - implementors provider', function () {
       });
 
       done();
-
     });
-
   });
 
   context('addPeer()', function () {
@@ -520,8 +518,8 @@ describe('05 - unit - implementors provider', function () {
 
     beforeEach(function () {
       mockClient = {
-        on: function (event, handler) {
-        }
+        on: function (event, handler) {},
+        emit: function(){}
       };
 
       mockConnection = {
