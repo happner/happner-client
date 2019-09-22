@@ -78,11 +78,12 @@ describe('08 - unit - dependency met event', function() {
 
   });
 
-  it('emits the dependency met event', function(done) {
+  it('emits the peer/arrived/description event', function(done) {
     var i = new ImplementorsProvider(mockClient, mockConnection);
     i.log = {
       info: function() {},
-      error: function() {}
+      error: function() {},
+      warn: function() {}
     }
 
     var testDescriptions = [{
@@ -103,7 +104,7 @@ describe('08 - unit - dependency met event', function() {
 
     i.gotDescriptions = true;
 
-    i.happnerClient.on('dependency-met', function(whatChanged) {
+    i.happnerClient.on('peer/arrived/description', function(whatChanged) {
       expect(whatChanged).to.eql({
         dependorName: 'test1',
         countMatches: 1,
