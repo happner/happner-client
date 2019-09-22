@@ -611,11 +611,7 @@ describe('05 - unit - implementors provider', function () {
         ]
       });
       expect(i.descriptions.length).to.equal(1);
-
       done();
-
     });
-
   });
-
 });
