@@ -24,7 +24,7 @@
   "rules": {
     "default-case": "error",
     "eqeqeq": "off",
-    "no-console": "off",
+    "no-console": "warn",
     "no-useless-return": "error",
     "prettier/prettier": "error",
     "no-undef": "off",

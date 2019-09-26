@@ -96,8 +96,6 @@ describe('20 - func - connect', function() {
       }
     )
       .catch(function(e) {
-        console.log(e);
-
         expect(e.code).to.be('ECONNREFUSED');
       })
       .then(function() {
