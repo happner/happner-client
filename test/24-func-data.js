@@ -121,7 +121,7 @@ describe('24 - func - data', function() {
       }
     };
 
-    api = adminclient.construct(model);
+    adminclient.construct(model);
     adminclient.connect(
       null,
       {
@@ -145,7 +145,7 @@ describe('24 - func - data', function() {
       }
     };
 
-    api = userclient.construct(model);
+    userclient.construct(model);
     userclient.connect(
       null,
       {

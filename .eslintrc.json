@@ -16,7 +16,10 @@
   "globals": {
     "angular": "readonly",
     "d3": "readonly",
-    "MeshClient": "readonly"
+    "MeshClient": "readonly",
+    "Primus": "readonly",
+    "Happner": "readonly",
+    "HappnClient": "readonly"
   },
   "plugins": [
     "prettier"
@@ -26,7 +29,6 @@
     "eqeqeq": ["error", "always", {"null": "ignore"}],
     "no-console": "warn",
     "no-useless-return": "error",
-    "prettier/prettier": "error",
-    "no-undef": "off"
+    "prettier/prettier": "error"
   }
 }
