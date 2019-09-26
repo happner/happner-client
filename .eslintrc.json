@@ -1,0 +1,35 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jquery": true,
+    "mocha": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "prettier"
+  ],
+  "globals": {
+    "angular": "readonly",
+    "d3": "readonly",
+    "MeshClient": "readonly"
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "default-case": "error",
+    "eqeqeq": "off",
+    "no-console": "off",
+    "no-useless-return": "error",
+    "prettier/prettier": "error",
+    "no-undef": "off",
+    "no-global-assign": "off",
+    "no-unused-vars": "off",
+    "no-redeclare": "off"
+  }
+}

@@ -2,23 +2,21 @@ var expect = require('expect.js');
 
 var HappnerClient = require('..');
 
-describe('02 - unit - mount', function () {
-
+describe('02 - unit - mount', function() {
   var mockOrchestrator;
   var subscriptions;
 
-  beforeEach(function () {
+  beforeEach(function() {
     subscriptions = {};
     mockOrchestrator = {
       peers: {},
-      on: function (event, handler) {
+      on: function(event, handler) {
         subscriptions[event] = 1;
       }
-    }
+    };
   });
 
-  it('subscribes to peer add and remove', function (done) {
-
+  it('subscribes to peer add and remove', function(done) {
     var c = new HappnerClient();
 
     c.mount(mockOrchestrator);
@@ -31,5 +29,4 @@ describe('02 - unit - mount', function () {
   });
 
   xit('unsubscribes from peer add and remove');
-
 });

@@ -3,7 +3,6 @@ var EventEmitter = require('events').EventEmitter;
 var ImplementorsProvider = require('../lib/providers/implementors-provider');
 
 describe('08 - unit - dependency met event', function() {
-
   var mockClient;
 
   beforeEach(function() {
@@ -32,27 +31,33 @@ describe('08 - unit - dependency met event', function() {
   it('tests the __getUpdatedDependencyDescription method', function() {
     var i = new ImplementorsProvider(mockClient, mockConnection);
 
-    let descriptions1 = [{
-      components: {
-        component1: {
-          version: '1.1.0'
+    let descriptions1 = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
         }
       }
-    }];
+    ];
 
-    expect(i.__getUpdatedDependencyDescription(descriptions1, 'component1', '^1.1.0'))
-      .to.eql(descriptions1[0]);
+    expect(i.__getUpdatedDependencyDescription(descriptions1, 'component1', '^1.1.0')).to.eql(
+      descriptions1[0]
+    );
 
-    let descriptions2 = [{
-      components: {
-        component2: {
-          version: '1.1.0'
+    let descriptions2 = [
+      {
+        components: {
+          component2: {
+            version: '1.1.0'
+          }
         }
       }
-    }];
+    ];
 
-    expect(i.__getUpdatedDependencyDescription(descriptions2, 'component1', '^1.1.0'))
-      .to.eql(undefined);
+    expect(i.__getUpdatedDependencyDescription(descriptions2, 'component1', '^1.1.0')).to.eql(
+      undefined
+    );
 
     let descriptions3 = {
       components: {
@@ -62,8 +67,9 @@ describe('08 - unit - dependency met event', function() {
       }
     };
 
-    expect(i.__getUpdatedDependencyDescription(descriptions3, 'component2', '^1.1.0'))
-      .to.eql(descriptions3);
+    expect(i.__getUpdatedDependencyDescription(descriptions3, 'component2', '^1.1.0')).to.eql(
+      descriptions3
+    );
 
     let descriptions4 = {
       components: {
@@ -73,9 +79,9 @@ describe('08 - unit - dependency met event', function() {
       }
     };
 
-    expect(i.__getUpdatedDependencyDescription(descriptions4, 'component1', '^1.1.0'))
-      .to.eql(undefined);
-
+    expect(i.__getUpdatedDependencyDescription(descriptions4, 'component1', '^1.1.0')).to.eql(
+      undefined
+    );
   });
 
   it('emits the peer/arrived/description event', function(done) {
@@ -84,23 +90,27 @@ describe('08 - unit - dependency met event', function() {
       info: function() {},
       error: function() {},
       warn: function() {}
-    }
+    };
 
-    var testDescriptions = [{
-      components: {
-        component1: {
-          version: '1.1.0'
+    var testDescriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
         }
       }
-    }];
+    ];
 
-    i.descriptions = [{
-      components: {
-        component1: {
-          version: '1.1.0'
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
         }
       }
-    }];
+    ];
 
     i.gotDescriptions = true;
 
@@ -113,7 +123,7 @@ describe('08 - unit - dependency met event', function() {
         description: {
           version: '1.1.0'
         },
-        url:undefined,
+        url: undefined,
         meshName: undefined
       });
       done();
