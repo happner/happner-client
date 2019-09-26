@@ -515,7 +515,7 @@ describe('05 - unit - implementors provider', function() {
                   id: 'SESSION_ID'
                 },
                 get: function(path, callback) {
-                  if (path != '/mesh/schema/description') return;
+                  if (path !== '/mesh/schema/description') return;
                   callback(null, {
                     name: 'DOMAIN_NAME',
                     initializing: false,

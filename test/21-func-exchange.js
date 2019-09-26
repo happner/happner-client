@@ -18,7 +18,7 @@ describe('21 - func - exchange', function() {
             logLevel: process.env.LOG_LEVEL || 'warn'
           },
           happn: {
-            secure: mode == 'secure',
+            secure: mode === 'secure',
             adminPassword: 'xxx'
           },
           modules: {
