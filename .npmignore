@@ -32,3 +32,4 @@ publish_error.txt
 registry.bak
 registry.ini
 webSrc
+.DS_Store
