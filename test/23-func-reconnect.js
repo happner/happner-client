@@ -3,7 +3,7 @@ var HappnerClient = require('..');
 var path = require('path');
 var expect = require('expect.js');
 
-describe('23 - func - exchange reconnect', function(done) {
+describe('23 - func - exchange reconnect', function() {
   var server, client, api;
 
   var startServer1 = function(done) {
@@ -89,7 +89,7 @@ describe('23 - func - exchange reconnect', function(done) {
 
   after('stop server', stopServer);
 
-  context('reconnect to same server with same name', function(done) {
+  context('reconnect to same server with same name', function() {
     it('can still call exchange methods', function(done) {
       api.exchange.component1.method1(function(e) {
         if (e) return done(e);
@@ -144,7 +144,7 @@ describe('23 - func - exchange reconnect', function(done) {
     });
   });
 
-  context('reconnect to different server with same name', function(done) {
+  context('reconnect to different server with same name', function() {
     beforeEach(stopServer);
 
     beforeEach(startServer1);

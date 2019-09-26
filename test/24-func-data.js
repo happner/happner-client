@@ -7,7 +7,6 @@ describe('24 - func - data', function() {
   var server;
   var adminclient;
   var userclient;
-  var api;
 
   var addedgroup;
   var addeduser;
@@ -240,7 +239,7 @@ describe('24 - func - data', function() {
         security
           .addGroupPermissions('group', addPermissions)
 
-          .then(function(updatedGroup) {
+          .then(function() {
             dataClient.set(
               '/updated/1',
               {
@@ -275,7 +274,7 @@ describe('24 - func - data', function() {
         security
           .addGroupPermissions('group', addPermissions)
 
-          .then(function(updatedGroup) {
+          .then(function() {
             return dataClient.set('/toremove/1', {
               test: 'data'
             });

@@ -78,7 +78,7 @@ describe('04 - unit - operation provider', function() {
               secure: false
             }
           },
-          on: function(path, handler, callback) {
+          on: function(path) {
             try {
               expect(path).to.be('/_exchange/responses/SESSION_ID/*');
               done();
@@ -113,7 +113,7 @@ describe('04 - unit - operation provider', function() {
               secure: false
             }
           },
-          on: function(path, handler, callback) {
+          on: function(path) {
             try {
               expect(path).to.be('/_exchange/responses/SESSION_ID/*');
               done();
@@ -150,7 +150,7 @@ describe('04 - unit - operation provider', function() {
               secure: false
             }
           },
-          on: function(path, handler, callback) {
+          on: function() {
             count++;
           }
         }
@@ -190,7 +190,7 @@ describe('04 - unit - operation provider', function() {
               secure: true
             }
           },
-          on: function(path, handler, callback) {
+          on: function() {
             count++;
           }
         }
@@ -275,7 +275,7 @@ describe('04 - unit - operation provider', function() {
         return Promise.resolve();
       };
 
-      o.executeRequest = function(implementation, component, method, args, callback) {
+      o.executeRequest = function(implementation, component, method, args) {
         try {
           expect(implementation).to.eql({ local: true, name: 'MESH_NAME' });
           expect(component).to.equal('component');
@@ -287,7 +287,7 @@ describe('04 - unit - operation provider', function() {
         }
       };
 
-      o.request('component', 'version', 'method', [], function(e) {});
+      o.request('component', 'version', 'method', [], function() {});
     });
   });
 
@@ -334,7 +334,7 @@ describe('04 - unit - operation provider', function() {
         })
         .catch(done);
 
-      var timeout1 = setTimeout(function() {
+      setTimeout(function() {
         try {
           expect(callbacks).to.be(0);
         } catch (e) {
@@ -377,7 +377,7 @@ describe('04 - unit - operation provider', function() {
                 username: '_ADMIN'
               }
             },
-            set: function(path, data, options, callback) {}
+            set: function() {}
           }
         };
 
@@ -400,7 +400,7 @@ describe('04 - unit - operation provider', function() {
       });
 
       it('calls set on request path', function(done) {
-        mockConnection.client.set = function(path, data, options, callback) {
+        mockConnection.client.set = function(path) {
           expect(path).to.be('/_exchange/requests/DOMAIN_NAME/component/method');
           done();
         };
@@ -413,7 +413,7 @@ describe('04 - unit - operation provider', function() {
       });
 
       it('calls set with request arguments (secure)', function(done) {
-        mockConnection.client.set = function(path, data, options, callback) {
+        mockConnection.client.set = function(path, data) {
           expect(data).to.eql({
             callbackAddress: '/_exchange/responses/DOMAIN_NAME/component/method/SESSION_ID/1',
             args: [{ params: 1 }],
@@ -437,7 +437,7 @@ describe('04 - unit - operation provider', function() {
       });
 
       it('calls set with request arguments (insecure)', function(done) {
-        mockConnection.client.set = function(path, data, options, callback) {
+        mockConnection.client.set = function(path, data) {
           expect(data).to.eql({
             callbackAddress: '/_exchange/responses/SESSION_ID/DOMAIN_NAME/component/method/1',
             args: [{ params: 1 }],
@@ -463,7 +463,7 @@ describe('04 - unit - operation provider', function() {
       });
 
       it('calls set with timeout and noStore options', function(done) {
-        mockConnection.client.set = function(path, data, options, callback) {
+        mockConnection.client.set = function(path, data, options) {
           expect(options).to.eql({
             timeout: 10 * 1000,
             noStore: true
@@ -666,7 +666,7 @@ describe('04 - unit - operation provider', function() {
       var component = 'componentName';
       var version = '^1.0.0';
       var key = 'event/name';
-      var mockHandler = function(data, meta) {};
+      var mockHandler = function() {};
 
       mockConnection.client = {
         on: function(path, parameters, handler, callback) {

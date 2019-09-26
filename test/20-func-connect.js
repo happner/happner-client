@@ -144,7 +144,7 @@ describe('20 - func - connect', function() {
         password: 'xxx',
         allowSelfSignedCerts: true
       },
-      function(e) {}
+      function() {}
     );
   });
 

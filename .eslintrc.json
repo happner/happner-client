@@ -27,7 +27,6 @@
     "no-console": "warn",
     "no-useless-return": "error",
     "prettier/prettier": "error",
-    "no-undef": "off",
-    "no-unused-vars": "off"
+    "no-undef": "off"
   }
 }

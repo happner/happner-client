@@ -74,7 +74,7 @@ describe('22 - func - event', function() {
   it('can subscribe to events', function(done) {
     api.event.component1.on(
       'event/one',
-      function(data, meta) {
+      function(data) {
         expect(data).to.eql({ DATA: 1 });
         done();
       },
@@ -94,7 +94,7 @@ describe('22 - func - event', function() {
 
     api.event.component1.on(
       'event/two',
-      function(data, meta) {
+      function() {
         clearTimeout(timeout);
         return done(new Error('should be unsubscribed'));
       },
@@ -122,7 +122,7 @@ describe('22 - func - event', function() {
 
     api.event.component1.on(
       'event/three',
-      function(data, meta) {
+      function() {
         clearTimeout(timeout);
         return done(new Error('should be unsubscribed'));
       },
@@ -131,11 +131,12 @@ describe('22 - func - event', function() {
 
         api.event.component1.on(
           'event/three',
-          function(data, meta) {
+          function() {
             clearTimeout(timeout);
             return done(new Error('should be unsubscribed'));
           },
           function(e) {
+            if (e) return done(e);
             api.event.component1.offPath('event/three', function(e) {
               if (e) return done(e);
 
@@ -158,7 +159,7 @@ describe('22 - func - event', function() {
 
     api.event.component2.on(
       'event/one',
-      function(data, meta) {
+      function() {
         clearTimeout(timeout);
         return done(new Error('should not receive - wrong version'));
       },

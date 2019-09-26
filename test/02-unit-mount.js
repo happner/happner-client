@@ -10,7 +10,7 @@ describe('02 - unit - mount', function() {
     subscriptions = {};
     mockOrchestrator = {
       peers: {},
-      on: function(event, handler) {
+      on: function(event) {
         subscriptions[event] = 1;
       }
     };

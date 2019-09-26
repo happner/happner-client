@@ -2,7 +2,6 @@ var expect = require('expect.js');
 
 var HappnerClient = require('..');
 var OperationsProvider = require('../lib/providers/operations-provider');
-var ConnectionProvider = require('../lib/providers/connection-provider');
 
 describe('03 - unit - construct', function() {
   beforeEach(function() {
@@ -33,7 +32,7 @@ describe('03 - unit - construct', function() {
     var c = new HappnerClient();
 
     try {
-      var api = c.construct(model);
+      c.construct(model);
     } catch (e) {
       expect(e.message).to.be('Missing version');
       done();
@@ -273,7 +272,7 @@ describe('03 - unit - construct', function() {
     });
 
     it('can subscribe to an event without callback', function(done) {
-      var eventHandler = function(data) {};
+      var eventHandler = function() {};
 
       OperationsProvider.prototype.subscribe = function(
         component,
@@ -306,7 +305,7 @@ describe('03 - unit - construct', function() {
     });
 
     it('can subscribe to an event with callback', function(done) {
-      var eventHandler = function(data) {};
+      var eventHandler = function() {};
 
       OperationsProvider.prototype.subscribe = function(
         component,
@@ -341,8 +340,6 @@ describe('03 - unit - construct', function() {
     });
 
     it('can unsubscribe (off)', function(done) {
-      var eventHandler = function(data) {};
-
       OperationsProvider.prototype.unsubscribe = function(id, callback) {
         expect(id).to.be('ID');
         callback(new Error('xxxx'));
@@ -367,8 +364,6 @@ describe('03 - unit - construct', function() {
     });
 
     it('can unsubscribe (offPath)', function(done) {
-      var eventHandler = function(data) {};
-
       OperationsProvider.prototype.unsubscribePath = function(componentName, key, callback) {
         expect(componentName).to.be('component1');
         expect(key).to.be('event/xx');
@@ -430,8 +425,8 @@ describe('03 - unit - construct', function() {
       c.construct(model, happner);
 
       // both subscriptions should call subscribe stub that increments count
-      happner.event.component1.on('event/xx', function(data) {});
-      happner.event.component2.on('event/yy', function(data) {});
+      happner.event.component1.on('event/xx', function() {});
+      happner.event.component2.on('event/yy', function() {});
 
       expect(count).to.be(2);
       done();

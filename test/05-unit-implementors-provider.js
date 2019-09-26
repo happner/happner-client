@@ -32,7 +32,7 @@ describe('05 - unit - implementors provider', function() {
     });
 
     it('gets the description on first call', function(done) {
-      mockConnection.client.get = function(path, callback) {
+      mockConnection.client.get = function(path) {
         try {
           expect(path).to.be('/mesh/schema/description');
           done();
@@ -111,7 +111,7 @@ describe('05 - unit - implementors provider', function() {
       var i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions()
         .then(function() {
-          mockConnection.client.get = function(path, callback) {
+          mockConnection.client.get = function() {
             done(new Error('should not get again'));
           };
 
@@ -433,7 +433,7 @@ describe('05 - unit - implementors provider', function() {
 
     beforeEach(function() {
       mockClient = {
-        on: function(event, handler) {},
+        on: function() {},
         emit: function() {}
       };
     });
@@ -497,7 +497,7 @@ describe('05 - unit - implementors provider', function() {
 
     beforeEach(function() {
       mockClient = {
-        on: function(event, handler) {},
+        on: function() {},
         emit: function() {}
       };
 
