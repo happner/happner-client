@@ -17,3 +17,8 @@ node_modules
 !.env.test
 .idea
 coverage
+
+example.com.cert
+example.com.key
+.nyc_output
+coverage

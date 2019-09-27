@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.com/FieldServer/happner-client.svg?token=HPAyz8BhzPLszVxys36G&branch=master)](https://travis-ci.com/FieldServer/happner-client)  
+NOTE on Coveralls Badge: get the badge markdown from the Coveralls page for this repo, then delete this line.
+  [![Coverage Status](https://coveralls.io/repos/github/FieldServer/npm_module_init/badge.svg?t=9dsZHa)](https://coveralls.io/github/FieldServer/npm_module_init)
+
+
 [![npm](https://img.shields.io/npm/v/happner-client.svg)](https://www.npmjs.com/package/happner-client)[![Build Status](https://travis-ci.org/happner/happner-client.svg?branch=master)](https://travis-ci.org/happner/happner-client)[![Coverage Status](https://coveralls.io/repos/happner/happner-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/happner/happner-client?branch=master)
 
 # happner-client

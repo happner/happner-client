@@ -1,3 +1,1 @@
-describe('02 - unit - connect', function () {
-
-});
+describe('02 - unit - connect', function() {});

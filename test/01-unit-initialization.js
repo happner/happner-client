@@ -1,3 +1,1 @@
-describe('01 - unit - initialization', function () {
-
-});
+describe('01 - unit - initialization', function() {});

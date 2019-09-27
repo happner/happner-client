@@ -1,5 +1,3 @@
-describe('07 - unit - arriving peer', function () {
-
+describe('07 - unit - arriving peer', function() {
   it('');
-
 });

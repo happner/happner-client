@@ -1,32 +1,42 @@
 {
   "name": "happner-client",
-  "version": "8.1.2",
+  "version": "9.0.0",
   "description": "The client for happner-2 and happner cluster services",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha test",
-    "test-cover": "istanbul cover _mocha --exit -- test",
-    "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover"
+  "homepage": "https://github.com/happner/happner-client#readme",
+  "bugs": {
+    "url": "https://github.com/happner/happner-client/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/happner/happner-client.git"
   },
-  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/happner/happner-client/issues"
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "coverage": "npm run test-cover && npm run report",
+    "coveralls": "npm run test-cover && nyc report --reporter=text-lcov | coveralls",
+    "lint": "eslint '**/*.js'",
+    "lint-fix": "eslint '**/*.js' --fix",
+    "postpublish": "npm access grant read-write smc:smc-developers happner-client & npm access grant read-only smc:smc-read-only happner-client",
+    "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover",
+    "report": "nyc report --reporter=text --reporter=lcov --reporter=text-summary && nyc report --reporter=text --reporter=text-summary > coverage.txt",
+    "test": "npm run lint && mocha --opts mocha.opts",
+    "test-cover": "env LOG_LEVEL=off nyc --reporter=none mocha --opts mocha.opts"
   },
-  "homepage": "https://github.com/happner/happner-client#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
     "happn-3": "^10.1.1"
   },
   "devDependencies": {
-    "coveralls": "^2.11.15",
+    "coveralls": "^3.0.6",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "expect.js": "^0.3.1",
     "happner-2": "latest",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.5.0"
+    "mocha": "^6.2.0",
+    "nyc": "^13.3.0",
+    "prettier": "^1.18.2"
   }
 }
