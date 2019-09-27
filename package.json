@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
-    "happn-3": "^10.1.1"
+    "happn-3": "^10.2.3"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
