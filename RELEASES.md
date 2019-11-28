@@ -119,3 +119,7 @@
   - peer client url added as part of addPeer in implementors provider
   - peer url and description emitted as part of dependency-met event in implementors provider
   - breaking: peer arrival departure event keys changed
+
+10.0.0 2019-11-28
+----------------
+  - happn-3 version 11.0.0, breaking client disconnection on token revocation
