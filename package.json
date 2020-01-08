@@ -22,7 +22,7 @@
     "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover",
     "report": "nyc report --reporter=text --reporter=lcov --reporter=text-summary && nyc report --reporter=text --reporter=text-summary > coverage.txt",
     "test": "npm run lint && mocha --opts mocha.opts",
-    "test-cover": "env LOG_LEVEL=off nyc --reporter=none mocha --opts mocha.opts",
+    "test-cover": "env LOG_LEVEL=off nyc  mocha --opts mocha.opts",
     "prepare": "rm -rf node_modules/happner-2/node_modules/bitcore-lib && rm -rf node_modules/happner-client/node_modules/bitcore-lib && rm -rf node_modules/bitcore-ecies/node_modules/bitcore-lib"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "happn-3": "^11.0.0"
   },
   "devDependencies": {
+    "await-delay": "^1.0.0",
     "coveralls": "^3.0.6",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
@@ -38,6 +39,7 @@
     "happner-2": "latest",
     "mocha": "^6.2.0",
     "nyc": "^13.3.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "why-is-node-running": "^2.1.0"
   }
 }
