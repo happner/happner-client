@@ -6,24 +6,20 @@ const HappnerClient = require('../../..');
 const why = require('why-is-node-running');
 const delay = require('await-delay');
 
-var certPath = path.dirname(__dirname) + path.sep + 'example.com.cert';
-var keyPath = path.dirname(__dirname) + path.sep + 'example.com.key';
+const certPath = path.dirname(__dirname) + path.sep + 'example.com.cert';
+const keyPath = path.dirname(__dirname) + path.sep + 'example.com.key';
 
-const t1Component1Path = path
-  .join(__dirname, '__fixtures/21-component-1/index.js')
-  .replace('func/lib/', '');
-const t1Component2Path = path
-  .join(__dirname, '__fixtures/21-component-2/index.js')
-  .replace('func/lib/', '');
-const t2Component1Path = path
-  .join(__dirname, '__fixtures/22-component-1/index.js')
-  .replace('func/lib/', '');
-const t2Component2Path = path
-  .join(__dirname, '__fixtures/22-component-2/index.js')
-  .replace('func/lib/', '');
-const t3Component1Path = path
-  .join(__dirname, '__fixtures/23-component-1/index.js')
-  .replace('func/lib/', '');
+const fixturesPath = path.resolve(__dirname, '../../__fixtures');
+
+const componentPaths = {
+  component1: fixturesPath + '/21-component-1/index.js',
+  component2: fixturesPath + '/21-component-2/index.js',
+  component3: fixturesPath + '/22-component-1/index.js',
+  component4: fixturesPath + '/22-component-2/index.js',
+  component5: fixturesPath + '/23-component-1/index.js'
+};
+
+const { component1, component2, component3, component4, component5 } = componentPaths;
 
 describe(testHelper.testName(__filename, 4), function() {
   this.timeout(10000);
@@ -87,7 +83,7 @@ describe(testHelper.testName(__filename, 4), function() {
   afterEach('stop server disconnect', stopServer);
 
   it('supports callback', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.connect(
       {
         // config: {
@@ -110,7 +106,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('supports promise', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.on('error', function() {});
     c.connect(
       {
@@ -138,7 +134,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   it('defaults', function(done) {
     // inherits happn defaulting
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.connect(
       {
         // host: 'localhost',
@@ -158,7 +154,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('emits connected on connect', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.on('connected', function() {
       c.disconnect(done);
     });
@@ -178,7 +174,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('emits disconnected on normal disconnect', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.connect(
       {
         host: 'localhost',
@@ -213,7 +209,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   //Leak here
   it('emits disconnected even if server was stopped with reconnect true', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.connect(
       {
         host: 'localhost',
@@ -248,7 +244,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   it('emits reconnected on reconnect', function(done) {
     this.timeout(20000);
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.connect(
       {
         host: 'localhost',
@@ -283,7 +279,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('emits reconnecting on reconnecting', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
     c.connect(
       {
         host: 'localhost',
@@ -320,9 +316,9 @@ describe(testHelper.testName(__filename, 4), function() {
 describe(testHelper.testName(__filename, 4), function() {
   ['insecure', 'secure'].forEach(function(mode) {
     context(mode, function() {
-      var server;
-      var client;
-      var api;
+      let server;
+      let client;
+      let api;
 
       before('start a server', function(done) {
         this.timeout(10000);
@@ -337,11 +333,11 @@ describe(testHelper.testName(__filename, 4), function() {
           },
           modules: {
             component1: {
-              path: t1Component1Path
+              path: component1
             },
 
             component2: {
-              path: t1Component2Path
+              path: component2
             }
           },
           components: {
@@ -360,7 +356,7 @@ describe(testHelper.testName(__filename, 4), function() {
         this.timeout(10000);
         client = new HappnerClient();
 
-        var model = {
+        let model = {
           component1: {
             version: '^1.0.0',
             methods: {
@@ -525,7 +521,7 @@ describe(testHelper.testName(__filename, 4), function() {
 });
 
 describe(testHelper.testName(__filename, 4), function() {
-  var server, client, api;
+  let server, client, api;
   before('start server', function(done) {
     this.timeout(10000);
     Happner.create({
@@ -534,10 +530,10 @@ describe(testHelper.testName(__filename, 4), function() {
       },
       modules: {
         component1: {
-          path: t2Component1Path
+          path: component3
         },
         component2: {
-          path: t2Component2Path
+          path: component4
         }
       },
       components: {
@@ -558,7 +554,7 @@ describe(testHelper.testName(__filename, 4), function() {
   before('start client', function(done) {
     this.timeout(10000);
     let client = new HappnerClient();
-    var model = {
+    let model = {
       component1: {
         version: '^1.0.0',
         methods: {
@@ -611,8 +607,8 @@ describe(testHelper.testName(__filename, 4), function() {
 
   //Leak here
   it('can unsubscribe by eventId', function(done) {
-    var eventId;
-    var timeout;
+    let eventId;
+    let timeout;
 
     api.event.component1.on(
       'event/two',
@@ -641,7 +637,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   //Leak here
   it('can unsubscribe by path', function(done) {
-    var timeout;
+    let timeout;
 
     api.event.component1.on(
       'event/three',
@@ -679,7 +675,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   //Leak here
   it('does not receive events of wrong version', function(done) {
-    var timeout;
+    let timeout;
 
     api.event.component2.on(
       'event/one',
@@ -699,9 +695,9 @@ describe(testHelper.testName(__filename, 4), function() {
 });
 
 describe(testHelper.testName(__filename, 4), function() {
-  var server, client, api;
+  let server, client, api;
 
-  var startServer1 = function(done) {
+  let startServer1 = function(done) {
     // with component
     Happner.create({
       name: 'MESH_NAME',
@@ -713,7 +709,7 @@ describe(testHelper.testName(__filename, 4), function() {
       },
       modules: {
         component1: {
-          path: t3Component1Path
+          path: component5
         }
       },
       components: {
@@ -730,7 +726,7 @@ describe(testHelper.testName(__filename, 4), function() {
       .catch(done);
   };
 
-  var startServer2 = function(done) {
+  let startServer2 = function(done) {
     // without component
     Happner.create({
       name: 'MESH_NAME',
@@ -748,7 +744,7 @@ describe(testHelper.testName(__filename, 4), function() {
       .catch(done);
   };
 
-  var stopServer = function(done) {
+  let stopServer = function(done) {
     if (!server) return done();
     server.stop(done);
   };
@@ -756,9 +752,9 @@ describe(testHelper.testName(__filename, 4), function() {
   before('start server', startServer1);
 
   before('start client', function(done) {
-    var _client = new HappnerClient();
+    let _client = new HappnerClient();
 
-    var model = {
+    let model = {
       component1: {
         version: '^1.0.0',
         methods: {
@@ -807,8 +803,8 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('resumes events', function(done) {
-      var count = 0;
-      var counted;
+      let count = 0;
+      let counted;
 
       api.event.component1.on('event/one', function() {
         count++;
@@ -876,13 +872,13 @@ describe(testHelper.testName(__filename, 4), function() {
 });
 
 describe(testHelper.testName(__filename, 4), function() {
-  var server;
-  var adminclient;
-  var userclient;
+  let server;
+  let adminclient;
+  let userclient;
 
-  var addedgroup;
-  var addeduser;
-  var security;
+  let addedgroup;
+  let addeduser;
+  let security;
 
   before('start a server', function(done) {
     this.timeout(10000);
@@ -897,10 +893,10 @@ describe(testHelper.testName(__filename, 4), function() {
       },
       modules: {
         component1: {
-          path: t1Component1Path
+          path: component1
         },
         component2: {
-          path: t1Component2Path
+          path: component2
         }
       },
       components: {
@@ -958,7 +954,7 @@ describe(testHelper.testName(__filename, 4), function() {
     this.timeout(10000);
     adminclient = new HappnerClient();
 
-    var model = {
+    let model = {
       component1: {
         version: '^1.0.0',
         methods: {
@@ -994,7 +990,7 @@ describe(testHelper.testName(__filename, 4), function() {
     this.timeout(10000);
     userclient = new HappnerClient();
 
-    var model = {
+    let model = {
       component1: {
         version: '^1.0.0',
         methods: {
@@ -1038,7 +1034,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('allows access to allowed "on" data points', function(done) {
-    var dataClient = userclient.dataClient();
+    let dataClient = userclient.dataClient();
 
     dataClient.on(
       '/allowed/on/*',
@@ -1062,7 +1058,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('denies access to denied data points', function(done) {
-    var dataClient = userclient.dataClient();
+    let dataClient = userclient.dataClient();
 
     dataClient.set(
       '/not/allowed/on/1',
@@ -1077,7 +1073,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('adds group data permissions, we check we have access to the new path', function(done) {
-    var dataClient = userclient.dataClient();
+    let dataClient = userclient.dataClient();
 
     dataClient.set(
       '/updated/1',
@@ -1086,7 +1082,7 @@ describe(testHelper.testName(__filename, 4), function() {
       },
       function(e) {
         expect(e.toString()).to.be('AccessDenied: unauthorized');
-        var addPermissions = {
+        let addPermissions = {
           data: {
             '/updated/*': {
               actions: ['on', 'set']
@@ -1112,7 +1108,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('removes group data permissions, we check we no longer have access to the new path, but still have access to other paths', function(done) {
-    var dataClient = userclient.dataClient();
+    let dataClient = userclient.dataClient();
 
     dataClient.set(
       '/toremove/1',
@@ -1121,7 +1117,7 @@ describe(testHelper.testName(__filename, 4), function() {
       },
       function(e) {
         expect(e.toString()).to.be('AccessDenied: unauthorized');
-        var addPermissions = {
+        let addPermissions = {
           data: {
             '/toremove/*': {
               actions: ['on', 'set']
@@ -1162,7 +1158,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('adds group data permissions via a group upsert, we check we have access to the new path and the previous permissions', function(done) {
-    var dataClient = userclient.dataClient();
+    let dataClient = userclient.dataClient();
 
     dataClient.set(
       '/upserted/1',

@@ -14,8 +14,8 @@ describe(testHelper.testName(__filename, 4), function() {
   // after(function() {
   //   why();
   // });
-  var mockOrchestrator;
-  var subscriptions;
+  let mockOrchestrator;
+  let subscriptions;
 
   beforeEach(function() {
     subscriptions = {};
@@ -28,7 +28,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('subscribes to peer add and remove', function(done) {
-    var c = new HappnerClient();
+    let c = new HappnerClient();
 
     c.mount(mockOrchestrator);
     expect(subscriptions).to.eql({
@@ -54,7 +54,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('errors on model without version declared', function(done) {
-    var model = {
+    let model = {
       component1: {
         // version: '^1.0.0',
         methods: {
@@ -64,7 +64,7 @@ describe(testHelper.testName(__filename, 4), function() {
       }
     };
 
-    var c = new HappnerClient();
+    let c = new HappnerClient();
 
     try {
       c.construct(model);
@@ -76,7 +76,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   context('exchange', function() {
     it('builds exchange functions from model', function(done) {
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -93,9 +93,9 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
+      let c = new HappnerClient();
 
-      var api = c.construct(model);
+      let api = c.construct(model);
 
       expect(api.exchange.component1.method1).to.be.a(Function);
       expect(api.exchange.component1.method2).to.be.a(Function);
@@ -116,7 +116,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -126,8 +126,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.exchange.component1.method1();
     });
@@ -137,7 +137,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(null, { RE: 'SULT' });
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -146,8 +146,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.exchange.component1.method1('ARG1').then(function(result) {
         expect(result).to.eql({ RE: 'SULT' });
@@ -160,7 +160,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(null, { RE: 'SULT' });
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -169,8 +169,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.exchange.component1.method1('ARG1', function(e, result) {
         if (e) return done(e);
@@ -184,7 +184,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(null, { RE: 'SULT' });
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -199,8 +199,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var happner = {
+      let c = new HappnerClient();
+      let happner = {
         exchange: {
           component2: {
             __version: '2.0.1',
@@ -230,7 +230,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(null, { RE: 'SULT' });
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -245,8 +245,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var happner = {
+      let c = new HappnerClient();
+      let happner = {
         exchange: {
           component2: {
             __version: '2.0.1', // <----------- wrong version, gets replaced
@@ -275,7 +275,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   context('event', function() {
     it('builds on, off and offPath', function(done) {
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -292,9 +292,9 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
+      let c = new HappnerClient();
 
-      var api = c.construct(model);
+      let api = c.construct(model);
 
       expect(api.event.component1.on).to.be.a(Function);
       expect(api.event.component1.off).to.be.a(Function);
@@ -306,7 +306,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('can subscribe to an event without callback', function(done) {
-      var eventHandler = function() {};
+      let eventHandler = function() {};
 
       OperationsProvider.prototype.subscribe = function(
         component,
@@ -323,7 +323,7 @@ describe(testHelper.testName(__filename, 4), function() {
         c.disconnect(done);
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -332,14 +332,14 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.event.component1.on('event/xx', eventHandler);
     });
 
     it('can subscribe to an event with callback', function(done) {
-      var eventHandler = function() {};
+      let eventHandler = function() {};
 
       OperationsProvider.prototype.subscribe = function(
         component,
@@ -355,7 +355,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(new Error('xxxx'));
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -364,8 +364,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.event.component1.on('event/xx', eventHandler, function(e) {
         expect(e.message).to.be('xxxx');
@@ -379,7 +379,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(new Error('xxxx'));
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -388,8 +388,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.event.component1.off('ID', function(e) {
         expect(e.message).to.be('xxxx');
@@ -404,7 +404,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(new Error('xxxx'));
       };
 
-      var model = {
+      let model = {
         component1: {
           version: '^1.0.0',
           methods: {
@@ -413,8 +413,8 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
-      var api = c.construct(model);
+      let c = new HappnerClient();
+      let api = c.construct(model);
 
       api.event.component1.offPath('event/xx', function(e) {
         expect(e.message).to.be('xxxx');
@@ -423,7 +423,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('adds happner event api where component undefined', function(done) {
-      var count = 0;
+      let count = 0;
       OperationsProvider.prototype.subscribe = function(
         component,
         version,
@@ -435,7 +435,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback();
       };
 
-      var model = {
+      let model = {
         component1: {
           // component1 gets amended onto $happner
           version: '^1.0.0'
@@ -446,7 +446,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var happner = {
+      let happner = {
         exchange: {},
         event: {
           component2: {
@@ -455,7 +455,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var c = new HappnerClient();
+      let c = new HappnerClient();
       c.construct(model, happner);
 
       // both subscriptions should call subscribe stub that increments count
@@ -473,11 +473,11 @@ describe(testHelper.testName(__filename, 4), function() {
 
   context('request()', function() {
     it('errors if not connected', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: false
       };
 
-      var o = new OperationsProvider({}, mockConnection, {});
+      let o = new OperationsProvider({}, mockConnection, {});
       o.request('component', 'version', 'method', [], function(e) {
         expect(e.message).to.be('Not connected');
         done();
@@ -486,11 +486,11 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('calls getDescriptions', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: true
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         getDescriptions: function() {
           return {
             // return mock promise
@@ -504,17 +504,17 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
       o.stop();
     });
 
     it('calls getImplementation', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: true
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         getDescriptions: function() {
           return Promise.resolve();
         },
@@ -531,13 +531,13 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
       o.stop();
     });
 
     it('subscribes to response path per insecure', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: true,
         client: {
           session: {
@@ -557,7 +557,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         sessionId: 'SESSION_ID',
         getDescriptions: function() {
           return Promise.resolve();
@@ -567,13 +567,13 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
       o.stop();
     });
 
     it('subscribes to response path per secure', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: true,
         client: {
           session: {
@@ -593,7 +593,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         sessionId: 'SESSION_ID',
         getDescriptions: function() {
           return Promise.resolve();
@@ -603,15 +603,15 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
       o.stop();
     });
 
     it('subscribes to insecure response path only once', function(done) {
-      var count = 0;
+      let count = 0;
 
-      var mockConnection = {
+      let mockConnection = {
         connected: true,
         client: {
           session: {
@@ -626,7 +626,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         domain: 'DOMAIN_NAME',
         secure: false,
         getDescriptions: function() {
@@ -637,7 +637,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
       o.request('component', 'version', 'method', [], function() {});
       o.request('component2', 'version', 'method', [], function() {});
@@ -650,9 +650,9 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('subscribes to each secure response path only once', function(done) {
-      var count = 0;
+      let count = 0;
 
-      var mockConnection = {
+      let mockConnection = {
         connected: true,
         client: {
           session: {
@@ -667,7 +667,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         domain: 'DOMAIN_NAME',
         sessionId: 'SESSION_ID',
         secure: true,
@@ -679,7 +679,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
       o.request('component', 'version', 'method', [], function() {});
       o.request('component2', 'version', 'method', [], function() {});
@@ -692,7 +692,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('errors if subscribe to response path fails', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: true,
         client: {
           session: {
@@ -707,7 +707,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         getDescriptions: function() {
           return Promise.resolve();
         },
@@ -716,7 +716,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function(e) {
         try {
           expect(e.message).to.equal('xxxx');
@@ -729,11 +729,11 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('calls executeRequest', function(done) {
-      var mockConnection = {
+      let mockConnection = {
         connected: true
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         getDescriptions: function() {
           return Promise.resolve();
         },
@@ -742,7 +742,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
 
       o.subscribeToResponsePaths = function() {
         return Promise.resolve();
@@ -767,9 +767,9 @@ describe(testHelper.testName(__filename, 4), function() {
 
   context('subscribeToResponsePaths()', function() {
     it('does not resolve on second call to subscribe while first call is still pending', function(done) {
-      var callbacks = 0;
+      let callbacks = 0;
 
-      var mockConnection = {
+      let mockConnection = {
         connected: true,
         client: {
           session: {
@@ -786,7 +786,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var mockImplementors = {
+      let mockImplementors = {
         getDescriptions: function() {
           return Promise.resolve();
         },
@@ -795,7 +795,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      let o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.subscribeToResponsePaths('component', 'method')
         .then(function() {
           callbacks++;
@@ -817,7 +817,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       }, 50);
 
-      var timeout2 = setTimeout(function() {
+      let timeout2 = setTimeout(function() {
         try {
           expect(callbacks).to.be(2);
           done();
@@ -837,7 +837,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     context('on local', function() {
-      var mockConnection, mockImplementers;
+      let mockConnection, mockImplementers;
 
       beforeEach(function() {
         mockConnection = {
@@ -864,7 +864,7 @@ describe(testHelper.testName(__filename, 4), function() {
       it('rejects on not connected', function(done) {
         mockConnection.connected = false;
 
-        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        let o = new OperationsProvider({}, mockConnection, mockImplementers);
 
         o.executeRequest({ local: true }, 'component', 'method', ['ARGS'], function() {})
           .catch(function(e) {
@@ -881,7 +881,7 @@ describe(testHelper.testName(__filename, 4), function() {
           done();
         };
 
-        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        let o = new OperationsProvider({}, mockConnection, mockImplementers);
 
         o.executeRequest({ local: true }, 'component', 'method', ['ARGS'], function() {}).catch(
           done
@@ -902,7 +902,7 @@ describe(testHelper.testName(__filename, 4), function() {
           done();
         };
 
-        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        let o = new OperationsProvider({}, mockConnection, mockImplementers);
 
         o.executeRequest(
           { local: true },
@@ -929,7 +929,7 @@ describe(testHelper.testName(__filename, 4), function() {
         delete mockConnection.client.session.user;
         mockConnection.client.session.happn.secure = false;
 
-        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        let o = new OperationsProvider({}, mockConnection, mockImplementers);
 
         o.executeRequest(
           { local: true },
@@ -950,11 +950,11 @@ describe(testHelper.testName(__filename, 4), function() {
           done();
         };
 
-        var mockHappnerClient = {
+        let mockHappnerClient = {
           __requestTimeout: 10 * 1000
         };
 
-        var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
+        let o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
 
         o.executeRequest(
           { local: true },
@@ -971,7 +971,7 @@ describe(testHelper.testName(__filename, 4), function() {
           callback(new Error('failed to set'));
         };
 
-        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        let o = new OperationsProvider({}, mockConnection, mockImplementers);
 
         o.executeRequest({ local: true }, 'component', 'method', [{ params: 1 }], function() {})
           .catch(function(e) {
@@ -987,7 +987,7 @@ describe(testHelper.testName(__filename, 4), function() {
           callback(null);
         };
 
-        var o = new OperationsProvider({}, mockConnection, mockImplementers);
+        let o = new OperationsProvider({}, mockConnection, mockImplementers);
 
         o.executeRequest({ local: true }, 'component', 'method', [{ params: 1 }], function() {})
           .then(function() {
@@ -1002,11 +1002,11 @@ describe(testHelper.testName(__filename, 4), function() {
           callback(null);
         };
 
-        var mockHappnerClient = {
+        let mockHappnerClient = {
           __responseTimeout: 100
         };
 
-        var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
+        let o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
 
         o.executeRequest({ local: true }, 'component', 'method', [{ params: 1 }], function() {})
           .then(function() {
@@ -1023,11 +1023,11 @@ describe(testHelper.testName(__filename, 4), function() {
           callback(null);
         };
 
-        var mockHappnerClient = {
+        let mockHappnerClient = {
           __responseTimeout: 100
         };
 
-        var o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
+        let o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
 
         o.executeRequest({ local: true }, 'component', 'method', [{ params: 1 }], function(e) {
           expect(e.message).to.equal('Timeout awaiting response');
@@ -1044,10 +1044,10 @@ describe(testHelper.testName(__filename, 4), function() {
     // error: {status: 'error', args: [{message: 'xxx', name: 'Error'}]}
 
     it('handles no such waiting caller', function(done) {
-      var o = new OperationsProvider({}, {}, {});
+      let o = new OperationsProvider({}, {}, {});
 
-      var testData = { status: 'ok', args: [null, { params: 1 }] };
-      var testMeta = { path: 'abc/def/ghi/18' };
+      let testData = { status: 'ok', args: [null, { params: 1 }] };
+      let testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
 
@@ -1056,7 +1056,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('clears the request timeout', function(done) {
-      var o = new OperationsProvider({}, {}, {});
+      let o = new OperationsProvider({}, {}, {});
 
       o.awaitingResponses[18] = {
         callback: function() {},
@@ -1066,27 +1066,27 @@ describe(testHelper.testName(__filename, 4), function() {
         }, 50)
       };
 
-      var testData = { status: 'ok', args: [null, { params: 1 }] };
-      var testMeta = { path: 'abc/def/ghi/18' };
+      let testData = { status: 'ok', args: [null, { params: 1 }] };
+      let testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
 
-      var passTimeout = setTimeout(function() {
+      let passTimeout = setTimeout(function() {
         done();
       }, 100);
       o.stop();
     });
 
     it('deletes the awaiting response', function(done) {
-      var o = new OperationsProvider({}, {}, {});
+      let o = new OperationsProvider({}, {}, {});
 
       o.awaitingResponses[18] = {
         callback: function() {},
         timeout: null
       };
 
-      var testData = { status: 'ok', args: [null, { params: 1 }] };
-      var testMeta = { path: 'abc/def/ghi/18' };
+      let testData = { status: 'ok', args: [null, { params: 1 }] };
+      let testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
       expect(o.awaitingResponses[18]).to.be(undefined);
@@ -1095,7 +1095,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('calls back on status OK to the waiting caller', function(done) {
-      var o = new OperationsProvider({}, {}, {});
+      let o = new OperationsProvider({}, {}, {});
 
       o.awaitingResponses[18] = {
         callback: function(e, param1, param2) {
@@ -1106,15 +1106,15 @@ describe(testHelper.testName(__filename, 4), function() {
         timeout: null
       };
 
-      var testData = { status: 'ok', args: [null, { params: 1 }, { params: 2 }] };
-      var testMeta = { path: 'abc/def/ghi/18' };
+      let testData = { status: 'ok', args: [null, { params: 1 }, { params: 2 }] };
+      let testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
       o.stop();
     });
 
     it('converts error responses to errors on status error', function(done) {
-      var o = new OperationsProvider({}, {}, {});
+      let o = new OperationsProvider({}, {}, {});
 
       o.awaitingResponses[18] = {
         callback: function(e) {
@@ -1125,8 +1125,8 @@ describe(testHelper.testName(__filename, 4), function() {
         timeout: null
       };
 
-      var testData = { status: 'error', args: [{ message: 'xxx', name: 'TypeError' }] };
-      var testMeta = { path: 'abc/def/ghi/18' };
+      let testData = { status: 'error', args: [{ message: 'xxx', name: 'TypeError' }] };
+      let testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
       o.stop();
@@ -1134,7 +1134,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   context('subscribe()', function() {
-    var mockConnection, mockImplementators;
+    let mockConnection, mockImplementators;
 
     before(function() {
       mockConnection = {
@@ -1150,12 +1150,12 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('does the subscribe on correct path and options', function(done) {
-      var o = new OperationsProvider({}, mockConnection, mockImplementators);
+      let o = new OperationsProvider({}, mockConnection, mockImplementators);
 
-      var component = 'componentName';
-      var version = '^1.0.0';
-      var key = 'event/name';
-      var mockHandler = function() {};
+      let component = 'componentName';
+      let version = '^1.0.0';
+      let key = 'event/name';
+      let mockHandler = function() {};
 
       mockConnection.client = {
         on: function(path, parameters, handler, callback) {
@@ -1180,7 +1180,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   context('unsubscribe()', function() {
-    var mockConnection;
+    let mockConnection;
 
     before(function() {
       mockConnection = {
@@ -1196,7 +1196,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, {});
+      let o = new OperationsProvider({}, mockConnection, {});
 
       o.unsubscribe('EVENT_ID', function(e) {
         if (e) return done(e);
@@ -1207,7 +1207,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   context('unsubscribePath()', function() {
-    var mockConnection, mockImplementators;
+    let mockConnection, mockImplementators;
 
     before(function() {
       mockConnection = {
@@ -1230,10 +1230,10 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementators);
+      let o = new OperationsProvider({}, mockConnection, mockImplementators);
 
-      var component = 'component';
-      var key = 'event/name';
+      let component = 'component';
+      let key = 'event/name';
 
       o.unsubscribePath(component, key, function(e) {
         if (e) return done(e);
@@ -1243,7 +1243,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
   });
 
-  var mockClient;
+  let mockClient;
 
   beforeEach(function() {
     mockClient = {
@@ -1252,7 +1252,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   context('getDescriptions()', function() {
-    var mockConnection;
+    let mockConnection;
 
     beforeEach(function() {
       mockConnection = {
@@ -1281,16 +1281,16 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions();
     });
 
     it('keeps getting description until description.initializing is false', function(done) {
       this.timeout(3500);
 
-      var count = 0;
+      let count = 0;
 
-      var descriptions = [
+      let descriptions = [
         {
           initializing: true
         },
@@ -1310,7 +1310,7 @@ describe(testHelper.testName(__filename, 4), function() {
         callback(null, descriptions.shift());
       };
 
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions();
 
       setTimeout(function() {
@@ -1320,7 +1320,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('resolves after description arrives for subsequent calls', function(done) {
-      var count = 0;
+      let count = 0;
 
       mockConnection.client.get = function(path, callback) {
         count++;
@@ -1331,7 +1331,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }, 100);
       };
 
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions();
       i.getDescriptions()
         .then(function() {
@@ -1348,7 +1348,7 @@ describe(testHelper.testName(__filename, 4), function() {
         });
       };
 
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
       i.getDescriptions()
         .then(function() {
           mockConnection.client.get = function() {
@@ -1370,7 +1370,7 @@ describe(testHelper.testName(__filename, 4), function() {
         });
       };
 
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
 
       i.getDescriptions()
         .then(function() {
@@ -1436,7 +1436,7 @@ describe(testHelper.testName(__filename, 4), function() {
         }
       };
 
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
 
       i.getDescriptions()
         .then(function() {
@@ -1464,7 +1464,7 @@ describe(testHelper.testName(__filename, 4), function() {
 
   context('getNextImplementation()', function() {
     it('reject if no description', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function(e) {
@@ -1475,7 +1475,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('resolves if already mapped', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{}];
       i.maps['component/version/method'] = [{ local: true }];
@@ -1489,7 +1489,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('resolves in round robin', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{}];
       i.maps['component/version/method'] = [
@@ -1519,7 +1519,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('creates the implementation map just-in-time', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [
         {
@@ -1549,7 +1549,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('remembers when method not implemented (empty array)', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [{}];
       i.maps['component/version/method'] = [];
@@ -1563,7 +1563,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('rejects if not implemented component', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [
         {
@@ -1580,7 +1580,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('rejects if not implemented version', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [
         {
@@ -1605,7 +1605,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('rejects if not implemented method', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [
         {
@@ -1630,7 +1630,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('destroys all maps on reconnect', function(done) {
-      var i;
+      let i;
 
       mockClient = {
         on: function(event, handler) {
@@ -1649,7 +1649,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('destroys all descriptions on reconnect', function(done) {
-      var i;
+      let i;
 
       mockClient = {
         on: function(event, handler) {
@@ -1669,7 +1669,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   context('removePeer()', function() {
-    var mockClient;
+    let mockClient;
 
     beforeEach(function() {
       mockClient = {
@@ -1679,7 +1679,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('removes implementations and description on peer departure', function(done) {
-      var i = new ImplementorsProvider(mockClient, {});
+      let i = new ImplementorsProvider(mockClient, {});
 
       i.descriptions = [
         {
@@ -1733,7 +1733,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   context('addPeer()', function() {
-    var mockClient, mockConnection;
+    let mockClient, mockConnection;
 
     beforeEach(function() {
       mockClient = {
@@ -1787,7 +1787,7 @@ describe(testHelper.testName(__filename, 4), function() {
     });
 
     it('adds implementations and description on peer arrival', function(done) {
-      var i = new ImplementorsProvider(mockClient, mockConnection);
+      let i = new ImplementorsProvider(mockClient, mockConnection);
 
       i.maps = {
         'component1/^1.0.0/method1': [
@@ -1833,13 +1833,11 @@ describe(testHelper.testName(__filename, 4), function() {
     });
   });
 
-  var mockClient;
-
   beforeEach(function() {
     mockClient = new EventEmitter();
   });
 
-  var mockConnection;
+  let mockConnection;
 
   beforeEach(function() {
     mockConnection = {
@@ -1859,7 +1857,7 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('tests the __getUpdatedDependencyDescription method', function() {
-    var i = new ImplementorsProvider(mockClient, mockConnection);
+    let i = new ImplementorsProvider(mockClient, mockConnection);
 
     let descriptions1 = [
       {
@@ -1915,14 +1913,14 @@ describe(testHelper.testName(__filename, 4), function() {
   });
 
   it('emits the peer/arrived/description event', function(done) {
-    var i = new ImplementorsProvider(mockClient, mockConnection);
+    let i = new ImplementorsProvider(mockClient, mockConnection);
     i.log = {
       info: function() {},
       error: function() {},
       warn: function() {}
     };
 
-    var testDescriptions = [
+    let testDescriptions = [
       {
         components: {
           component1: {

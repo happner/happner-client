@@ -1,1 +1,3 @@
 --exit
+test/func/lib
+test/unit/lib
