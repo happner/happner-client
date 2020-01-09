@@ -1,3 +1,5 @@
 --exit
 test/func/lib
+test/func/lib/providers
 test/unit/lib
+test/unit/lib/providers
