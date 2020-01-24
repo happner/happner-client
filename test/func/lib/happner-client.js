@@ -3,8 +3,8 @@ const expect = require('expect.js');
 const testHelper = require('../../__fixtures/test-helper');
 const Happner = require('happner-2');
 const HappnerClient = require('../../..');
-const why = require('why-is-node-running');
-const delay = require('await-delay');
+// const why = require('why-is-node-running');
+// const delay = require('await-delay');
 
 const certPath = path.dirname(__dirname) + path.sep + 'example.com.cert';
 const keyPath = path.dirname(__dirname) + path.sep + 'example.com.key';
