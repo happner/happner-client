@@ -121,5 +121,10 @@
   - breaking: peer arrival departure event keys changed
 
 10.0.0 2019-11-28
-----------------
+-----------------
   - happn-3 version 11.0.0, breaking client disconnection on token revocation
+
+11.0.0 2020-02-24
+-----------------
+  - bump happn-3 to version 11.2.0
+  - breaking: peer/arrived/description event payload changed
