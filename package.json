@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.0.0",
+  "version": "11.0.1",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
-    "happn-3": "^11.2.0"
+    "happn-3": "^11.3.2"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
