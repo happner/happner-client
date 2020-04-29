@@ -128,3 +128,7 @@
 -----------------
   - bump happn-3 to version 11.2.0
   - breaking: peer/arrived/description event changed on logDependenciesMet, now for every dependency peer, not just the first one
+
+11.0.1 2020-02-24
+-----------------
+  - bump happn-3 to version 11.3.2 for async@3
