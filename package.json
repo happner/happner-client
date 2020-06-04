@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.0.1",
+  "version": "11.0.2",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -18,7 +18,6 @@
     "coveralls": "npm run test-cover && nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint '**/*.js'",
     "lint-fix": "eslint '**/*.js' --fix",
-    "postpublish": "npm access grant read-write smc:smc-developers happner-client & npm access grant read-only smc:smc-read-only happner-client",
     "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover",
     "report": "nyc report --reporter=text --reporter=lcov --reporter=text-summary && nyc report --reporter=text --reporter=text-summary > coverage.txt",
     "test": "npm run lint && mocha --opts mocha.opts",
@@ -27,7 +26,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
-    "happn-3": "^11.3.2"
+    "happn-3": "^11.4.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
