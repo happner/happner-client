@@ -132,3 +132,8 @@
 11.0.1 2020-02-24
 -----------------
   - bump happn-3 to version 11.3.2 for async@3
+
+11.0.2 2020-06-04
+-----------------
+  - bump happn-3 to version 11.4.0
+  - IE11 support in implementors provider
