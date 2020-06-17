@@ -138,6 +138,10 @@
   - bump happn-3 to version 11.4.0
   - IE11 support in implementors provider
 
-11.0.2 2020-06-05
+11.0.3 2020-06-05
 -----------------
   - bump happn-3 to version 11.5.0
+
+11.0.4 2020-06-17
+-----------------
+  - runaway promise warning - browser, due to operations provider not returning a promise
