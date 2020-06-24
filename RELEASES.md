@@ -145,3 +145,7 @@
 11.0.4 2020-06-17
 -----------------
   - runaway promise warning - browser, due to operations provider not returning a promise
+
+11.1.0 2020-06-24
+-----------------
+  - added coercedSatisfies to the semver implementation
