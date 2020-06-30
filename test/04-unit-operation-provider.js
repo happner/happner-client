@@ -1,10 +1,5 @@
 var expect = require('expect.js');
-var Promise = require('bluebird');
-
 var OperationsProvider = require('../lib/providers/operations-provider');
-// var ConnectionProvider = require('../lib/providers/connection-provider');
-// var ImplementorsProvider = require('../lib/providers/implementors-provider');
-
 describe('04 - unit - operation provider', function() {
   context('request()', function() {
     it('errors if not connected', function(done) {
