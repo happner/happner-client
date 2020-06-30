@@ -152,4 +152,4 @@
 
 11.1.1 2020-06-30
 -----------------
-  - removed bluebird
+  - removed bluebird dependency
