@@ -149,3 +149,7 @@
 11.1.0 2020-06-24
 -----------------
   - added coercedSatisfies to the semver implementation
+
+11.1.1 2020-06-30
+-----------------
+  - removed bluebird dependency
