@@ -152,6 +152,60 @@ describe('05 - unit - implementors provider', function() {
       i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
     });
 
+    it('does not ignore non-brokered descriptions in the cluster setup', function(done) {
+      this.timeout(3500);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
+      i.happnerClient.log = {
+        info: () => {}
+      };
+      const client = {
+        session: {
+          happn: { name: 'test' }
+        },
+        get: function(_path, cb) {
+          cb(null, {
+            brokered: false
+          });
+        }
+      };
+      const onSuccess = () => {
+        done();
+      };
+      const onFailure = () => {
+        done(new Error('was not meant to happen'));
+      };
+      const cluster = true;
+      const self = false;
+      i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
+    });
+
+    it('does not ignore brokered descriptions in the non-cluster setup', function(done) {
+      this.timeout(3500);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
+      i.happnerClient.log = {
+        info: () => {}
+      };
+      const client = {
+        session: {
+          happn: { name: 'test' }
+        },
+        get: function(_path, cb) {
+          cb(null, {
+            brokered: true
+          });
+        }
+      };
+      const onSuccess = () => {
+        done();
+      };
+      const onFailure = () => {
+        done(new Error('was not meant to happen'));
+      };
+      const cluster = false;
+      const self = false;
+      i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
+    });
+
     it('sets domain', function(done) {
       mockConnection.client.get = function(path, callback) {
         callback(null, {
