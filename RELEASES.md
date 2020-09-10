@@ -153,3 +153,7 @@
 11.1.1 2020-06-30
 -----------------
   - removed bluebird dependency
+
+11.1.2 2020-09-10
+-----------------
+  - patch: ignore brokered descriptions JIRA: SMC-989

@@ -33,3 +33,4 @@ registry.bak
 registry.ini
 webSrc
 .DS_Store
+.vscode
