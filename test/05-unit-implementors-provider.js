@@ -122,6 +122,36 @@ describe('05 - unit - implementors provider', function() {
         });
     });
 
+    it('ignores brokered descriptions in the cluster setup', function(done) {
+      this.timeout(3500);
+      var i = new ImplementorsProvider(mockClient, mockConnection);
+      i.happnerClient.log = {
+        info: msg => {
+          expect(msg).to.be('ignoring brokered description for peer: test');
+          setTimeout(done, 2000);
+        }
+      };
+      const client = {
+        session: {
+          happn: { name: 'test' }
+        },
+        get: function(_path, cb) {
+          cb(null, {
+            brokered: true
+          });
+        }
+      };
+      const onSuccess = () => {
+        done(new Error('was not meant to happen'));
+      };
+      const onFailure = () => {
+        done(new Error('was not meant to happen'));
+      };
+      const cluster = true;
+      const self = false;
+      i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
+    });
+
     it('sets domain', function(done) {
       mockConnection.client.get = function(path, callback) {
         callback(null, {

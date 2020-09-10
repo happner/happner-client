@@ -22,3 +22,4 @@ example.com.cert
 example.com.key
 .nyc_output
 coverage
+.vscode
