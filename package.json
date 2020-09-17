@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.1.2",
+  "version": "11.1.2-prerelease-3",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -33,7 +33,7 @@
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.1",
     "expect.js": "^0.3.1",
-    "happner-2": "latest",
+    "happner-2": "prerelease-11",
     "mocha": "^6.2.0",
     "nyc": "^13.3.0",
     "prettier": "^1.18.2"
