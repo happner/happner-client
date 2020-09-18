@@ -157,3 +157,7 @@
 11.1.2 2020-09-10
 -----------------
   - patch: ignore brokered descriptions JIRA: SMC-989
+
+11.1.3 2020-09-18
+-----------------
+  - patch: brokered descriptions are ignored - but the mesh carries on loading: JIRA: SMC-989

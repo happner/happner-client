@@ -147,9 +147,13 @@ describe('05 - unit - implementors provider', function() {
       const onFailure = () => {
         done(new Error('was not meant to happen'));
       };
+      const onIgnore = reason => {
+        expect(reason).to.be('ignoring brokered description for peer: test');
+        setTimeout(done, 2000);
+      };
       const cluster = true;
       const self = false;
-      i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
+      i.getSingleDescription(client, self, cluster, onSuccess, onFailure, onIgnore);
     });
 
     it('does not ignore non-brokered descriptions in the cluster setup', function(done) {
@@ -174,9 +178,12 @@ describe('05 - unit - implementors provider', function() {
       const onFailure = () => {
         done(new Error('was not meant to happen'));
       };
+      const onIgnore = () => {
+        done(new Error('was not meant to happen'));
+      };
       const cluster = true;
       const self = false;
-      i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
+      i.getSingleDescription(client, self, cluster, onSuccess, onFailure, onIgnore);
     });
 
     it('does not ignore brokered descriptions in the non-cluster setup', function(done) {
@@ -201,9 +208,12 @@ describe('05 - unit - implementors provider', function() {
       const onFailure = () => {
         done(new Error('was not meant to happen'));
       };
+      const onIgnore = () => {
+        done(new Error('was not meant to happen'));
+      };
       const cluster = false;
       const self = false;
-      i.getSingleDescription(client, self, cluster, onSuccess, onFailure);
+      i.getSingleDescription(client, self, cluster, onSuccess, onFailure, onIgnore);
     });
 
     it('sets domain', function(done) {
