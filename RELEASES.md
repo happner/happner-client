@@ -164,6 +164,6 @@
 
 11.1.4 2020-09-18
 -----------------
-  - added coercedSatisfies to the semver implementation for local instances.
+  - added coercedSatisfies to the semver implementation for local instances. SMC-1089
   - fixed unit test 03 to release mocha process
   - added node v14 to travis tests
