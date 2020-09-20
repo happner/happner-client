@@ -165,3 +165,4 @@
 11.1.4 2020-09-18
 -----------------
   - added coercedSatisfies to the semver implementation for local instances.
+  - fixed unit test 03 to release mocha process

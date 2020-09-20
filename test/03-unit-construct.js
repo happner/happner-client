@@ -1,5 +1,6 @@
-var expect = require('expect.js');
-var why = require('why-is-node-running');
+let expect = require('expect.js');
+//intentionally left here for next time
+//var why = require('why-is-node-running');
 
 var HappnerClient = require('..');
 var OperationsProvider = require('../lib/providers/operations-provider');
@@ -19,6 +20,7 @@ describe('03 - unit - construct', function() {
     OperationsProvider.prototype.unsubscribePath = this.originalUnsubscribePath;
   });
 
+  //intentionally left here for next time
   //after('why is node running?', () => setTimeout(why, 5000));
 
   it('errors on model without version declared', function(done) {
