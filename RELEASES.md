@@ -166,3 +166,4 @@
 -----------------
   - added coercedSatisfies to the semver implementation for local instances.
   - fixed unit test 03 to release mocha process
+  - added node v14 to travis tests
