@@ -161,3 +161,9 @@
 11.1.3 2020-09-18
 -----------------
   - patch: brokered descriptions are ignored - but the mesh carries on loading: JIRA: SMC-989
+
+11.1.4 2020-09-18
+-----------------
+  - added coercedSatisfies to the semver implementation for local instances. SMC-1089
+  - fixed unit test 03 to release mocha process
+  - added node v14 to travis tests

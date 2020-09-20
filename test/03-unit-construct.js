@@ -1,4 +1,6 @@
-var expect = require('expect.js');
+let expect = require('expect.js');
+//intentionally left here for next time
+//var why = require('why-is-node-running');
 
 var HappnerClient = require('..');
 var OperationsProvider = require('../lib/providers/operations-provider');
@@ -18,6 +20,9 @@ describe('03 - unit - construct', function() {
     OperationsProvider.prototype.unsubscribePath = this.originalUnsubscribePath;
   });
 
+  //intentionally left here for next time
+  //after('why is node running?', () => setTimeout(why, 5000));
+
   it('errors on model without version declared', function(done) {
     var model = {
       component1: {
@@ -35,12 +40,13 @@ describe('03 - unit - construct', function() {
       c.construct(model);
     } catch (e) {
       expect(e.message).to.be('Missing version');
-      done();
+      c.disconnect(done);
     }
   });
 
   context('exchange', function() {
-    it('builds exchange functions from model', function() {
+    it('builds exchange functions from model', function(done) {
+      var c = new HappnerClient();
       var model = {
         component1: {
           version: '^1.0.0',
@@ -57,24 +63,22 @@ describe('03 - unit - construct', function() {
           }
         }
       };
-
-      var c = new HappnerClient();
-
       var api = c.construct(model);
-
       expect(api.exchange.component1.method1).to.be.a(Function);
       expect(api.exchange.component1.method2).to.be.a(Function);
       expect(api.exchange.component2.method1).to.be.a(Function);
       expect(api.exchange.component2.method2).to.be.a(Function);
+      c.disconnect(done);
     });
 
     it('calls operations provider on calls to exchange functions', function(done) {
+      var c = new HappnerClient();
       OperationsProvider.prototype.request = function(component, version, method) {
         try {
           expect(component).to.be('component1');
           expect(version).to.be('^1.0.0');
           expect(method).to.be('method1');
-          done();
+          c.disconnect(done);
         } catch (e) {
           done(e);
         }
@@ -90,9 +94,7 @@ describe('03 - unit - construct', function() {
         }
       };
 
-      var c = new HappnerClient();
       var api = c.construct(model);
-
       api.exchange.component1.method1();
     });
 
@@ -117,8 +119,8 @@ describe('03 - unit - construct', function() {
         .method1('ARG1')
         .then(function(result) {
           expect(result).to.eql({ RE: 'SULT' });
+          c.disconnect(done);
         })
-        .then(done)
         .catch(done);
     });
 
@@ -142,7 +144,7 @@ describe('03 - unit - construct', function() {
       api.exchange.component1.method1('ARG1', function(e, result) {
         if (e) return done(e);
         expect(result).to.eql({ RE: 'SULT' });
-        done();
+        c.disconnect(done);
       });
     });
 
@@ -187,7 +189,7 @@ describe('03 - unit - construct', function() {
         happner.exchange.component1.method1('ARG1', function(e, result) {
           if (e) return done(e);
           expect(result).to.eql({ RE: 'SULT' });
-          done();
+          c.disconnect(done);
         });
       });
     });
@@ -234,14 +236,54 @@ describe('03 - unit - construct', function() {
         happner.exchange.component1.method1('ARG1', function(e, result) {
           if (e) return done(e);
           expect(result).to.eql({ RE: 'SULT' });
-          done();
+          c.disconnect(done);
         });
+      });
+    });
+    it('is able to use prerelease versions, via coercedSatisfies', function(done) {
+      OperationsProvider.prototype.request = function(component, version, method, args, callback) {
+        callback(null, { RE: 'SULT' });
+      };
+
+      var model = {
+        component1: {
+          version: '^1.0.0',
+          methods: {
+            method1: {}
+          }
+        },
+        component2: {
+          version: '^3.0.0',
+          methods: {
+            method1: {}
+          }
+        }
+      };
+
+      var c = new HappnerClient();
+      var happner = {
+        exchange: {
+          component2: {
+            __version: '3.0.0-prerelease-1', // <----------- wrong version, gets replaced
+            method1: function(callback) {
+              callback(null, 'existing component');
+            }
+          }
+        },
+        event: {}
+      };
+
+      c.construct(model, happner);
+
+      happner.exchange.component2.method1(function(e, result) {
+        expect(result).to.be('existing component');
+        c.disconnect(done);
       });
     });
   });
 
   context('event', function() {
-    it('builds on, off and offPath', function() {
+    it('builds on, off and offPath', function(done) {
       var model = {
         component1: {
           version: '^1.0.0',
@@ -269,11 +311,12 @@ describe('03 - unit - construct', function() {
       expect(api.event.component2.on).to.be.a(Function);
       expect(api.event.component2.off).to.be.a(Function);
       expect(api.event.component2.offPath).to.be.a(Function);
+      c.disconnect(done);
     });
 
     it('can subscribe to an event without callback', function(done) {
       var eventHandler = function() {};
-
+      var c = new HappnerClient();
       OperationsProvider.prototype.subscribe = function(
         component,
         version,
@@ -286,7 +329,7 @@ describe('03 - unit - construct', function() {
         expect(key).to.be('event/xx');
         expect(handler).to.be(eventHandler);
         callback();
-        done();
+        c.disconnect(done);
       };
 
       var model = {
@@ -297,16 +340,13 @@ describe('03 - unit - construct', function() {
           }
         }
       };
-
-      var c = new HappnerClient();
       var api = c.construct(model);
-
       api.event.component1.on('event/xx', eventHandler);
     });
 
     it('can subscribe to an event with callback', function(done) {
       var eventHandler = function() {};
-
+      var c = new HappnerClient();
       OperationsProvider.prototype.subscribe = function(
         component,
         version,
@@ -329,13 +369,10 @@ describe('03 - unit - construct', function() {
           }
         }
       };
-
-      var c = new HappnerClient();
       var api = c.construct(model);
-
       api.event.component1.on('event/xx', eventHandler, function(e) {
         expect(e.message).to.be('xxxx');
-        done();
+        c.disconnect(done);
       });
     });
 
@@ -359,7 +396,7 @@ describe('03 - unit - construct', function() {
 
       api.event.component1.off('ID', function(e) {
         expect(e.message).to.be('xxxx');
-        done();
+        c.disconnect(done);
       });
     });
 
@@ -384,7 +421,7 @@ describe('03 - unit - construct', function() {
 
       api.event.component1.offPath('event/xx', function(e) {
         expect(e.message).to.be('xxxx');
-        done();
+        c.disconnect(done);
       });
     });
 
@@ -429,7 +466,7 @@ describe('03 - unit - construct', function() {
       happner.event.component2.on('event/yy', function() {});
 
       expect(count).to.be(2);
-      done();
+      c.disconnect(done);
     });
   });
 
