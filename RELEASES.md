@@ -170,4 +170,4 @@
 
 11.1.5 2020-09-30
 -----------------
-  - SMC-1147: upped the default requestTimeout and responseTimeout 2 2 minutes
+  - SMC-1147: upped the default requestTimeout and responseTimeout 2 minutes
