@@ -167,3 +167,7 @@
   - added coercedSatisfies to the semver implementation for local instances. SMC-1089
   - fixed unit test 03 to release mocha process
   - added node v14 to travis tests
+
+11.1.5 2020-09-30
+-----------------
+  - SMC-1147: upped the default requestTimeout and responseTimeout to 1 minutes and 2 minutes respectively
