@@ -198,7 +198,7 @@ describe('21 - func - exchange', function() {
       });
       context('timeouts', function() {
         it('checks the default request and response timeouts are 120 seconds', function() {
-          expect(client.__requestTimeout).to.be(120e3);
+          expect(client.__requestTimeout).to.be(60e3);
           expect(client.__responseTimeout).to.be(120e3);
         });
 
