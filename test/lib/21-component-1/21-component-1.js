@@ -13,3 +13,9 @@ Component.prototype.methodReturningTwoArgs = function(arg1, arg2, callback) {
 Component.prototype.methodReturningError = function(callback) {
   callback(new Error('Component error'));
 };
+
+Component.prototype.methodThatTimesOut = function(callback) {
+  setTimeout(function() {
+    callback(null);
+  }, 6e3);
+};

@@ -4,6 +4,7 @@ var expect = require('expect.js');
 var path = require('path');
 
 describe('21 - func - exchange', function() {
+  this.timeout(10000);
   ['insecure', 'secure'].forEach(function(mode) {
     context(mode, function() {
       var server;
@@ -55,33 +56,9 @@ describe('21 - func - exchange', function() {
           .catch(done);
       });
 
-      before('create client', function(done) {
+      before('create client', async () => {
         this.timeout(10000);
-        client = new HappnerClient();
-
-        var model = {
-          component1: {
-            version: '^1.0.0',
-            methods: {
-              methodReturningOneArg: {},
-              methodReturningTwoArgs: {},
-              methodReturningError: {},
-              methodOnApiOnly: {}
-            }
-          },
-          component2: {
-            version: '^1.0.0',
-            methods: {
-              methodReturningOneArg: {},
-              methodReturningTwoArgs: {},
-              methodReturningError: {},
-              methodOnApiOnly: {}
-            }
-          }
-        };
-
-        api = client.construct(model);
-        client.connect(null, { username: '_ADMIN', password: 'xxx' }, done);
+        [client, api] = await createClientAndAPI({});
       });
 
       after('stop client', function(done) {
@@ -219,6 +196,60 @@ describe('21 - func - exchange', function() {
           });
         });
       });
+      context('timeouts', function() {
+        it('checks the default request and response timeouts are 120 seconds', function() {
+          expect(client.__requestTimeout).to.be(120e3);
+          expect(client.__responseTimeout).to.be(120e3);
+        });
+
+        it('sets up a client with the request and response timeout that is less then long-running method, the request should time out', async () => {
+          const [timeoutClient, timeoutApi] = await createClientAndAPI({
+            requestTimeout: 5e3,
+            responseTimeout: 5e3
+          });
+          expect(timeoutClient.__requestTimeout).to.be(5e3);
+          expect(timeoutClient.__responseTimeout).to.be(5e3);
+          let errorMessage;
+          try {
+            await timeoutApi.exchange.component1.methodThatTimesOut();
+          } catch (e) {
+            errorMessage = e.message;
+          }
+          expect(errorMessage).to.be('Timeout awaiting response');
+          timeoutClient.disconnect(() => {
+            //do nothing
+          });
+        });
+      });
+      async function createClientAndAPI(opts) {
+        const createdClient = new HappnerClient(opts);
+
+        var model = {
+          component1: {
+            version: '^1.0.0',
+            methods: {
+              methodReturningOneArg: {},
+              methodReturningTwoArgs: {},
+              methodReturningError: {},
+              methodOnApiOnly: {},
+              methodThatTimesOut: {}
+            }
+          },
+          component2: {
+            version: '^1.0.0',
+            methods: {
+              methodReturningOneArg: {},
+              methodReturningTwoArgs: {},
+              methodReturningError: {},
+              methodOnApiOnly: {}
+            }
+          }
+        };
+
+        const createdApi = createdClient.construct(model);
+        await createdClient.connect(null, { username: '_ADMIN', password: 'xxx' });
+        return [createdClient, createdApi];
+      }
     });
   });
 });
