@@ -171,3 +171,7 @@
 11.1.5 2020-09-30
 -----------------
   - SMC-1147: upped the default requestTimeout and responseTimeout to 1 minutes and 2 minutes respectively
+
+11.1.6 2020-10-04
+-----------------
+  - happn-3 patch: selective security cache clearing and concurrency 1 queue on dataChanged event - SMC-1189
