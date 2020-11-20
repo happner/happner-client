@@ -175,3 +175,9 @@
 11.1.6 2020-10-04
 -----------------
   - happn-3 patch: selective security cache clearing and concurrency 1 queue on dataChanged event - SMC-1189
+
+11.1.7 2020-11-19
+-----------------
+  - happn-3: feature: SMC-1269 - logging a JSON object on socket error
+  - happn-3: feature: SMC-1321 - only print error message for fail to decode JSON socket error, also just warning
+
