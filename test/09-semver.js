@@ -12,5 +12,6 @@ describe('09 - semver', function() {
     expect(semver.coercedSatisfies('2.0.0-prerelease-1', '*')).to.be(true);
     expect(semver.satisfies('1.0.1', '*')).to.be(true);
     expect(semver.coercedSatisfies('1.0.3-smc-842-1', '^1.0.0')).to.be(true);
+    expect(semver.coercedSatisfies('16.1.4-prerelease-9', '16.1.4-prerelease-9')).to.be(true);
   });
 });

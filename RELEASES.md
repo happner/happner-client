@@ -185,3 +185,6 @@
 -----------------
   - SMC-1482 - fix: redirected logs not in correct format
 
+11.1.9 2020-12-03
+-----------------
+  - SMC-1565 to fix semver satisfies specific prerelease versions
