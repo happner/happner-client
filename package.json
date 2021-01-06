@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.2.0-prerelease-2",
+  "version": "11.2.0-prerelease-3",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
