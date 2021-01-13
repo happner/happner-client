@@ -86,4 +86,193 @@ describe('08 - unit - dependency met event', function() {
 
     i.logDependenciesMet(testDescriptions);
   });
+
+  it('tests the logdependencies met function, dependencies not met', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
+        }
+      }
+    ];
+
+    i.gotDescriptions = true;
+
+    i.dependencies = {
+      test1: {
+        component1: '^1.0.0',
+        component2: '1.0.0'
+      }
+    };
+    expect(i.logDependenciesMet(i.descriptions)).to.be(false);
+    done();
+  });
+
+  it('tests the logdependencies met function, dependencies are met', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
+        }
+      }
+    ];
+
+    i.gotDescriptions = true;
+
+    i.dependencies = {
+      test1: {
+        component1: '^1.0.0'
+      }
+    };
+    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    done();
+  });
+
+  it('tests the logdependencies met function fires Event when dependencies are met', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
+        }
+      }
+    ];
+
+    i.gotDescriptions = true;
+
+    i.dependencies = {
+      test1: {
+        component1: '^1.0.0'
+      }
+    };
+    i.happnerClient.on('test1/startup/dependencies/satisfied', () => {
+      expect(i.events.once['test1/startup/dependencies/satisfied']).to.be(true);
+      done();
+    });
+    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+  });
+
+  it('tests the logdependencies met function when dependencies are undefined', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
+        }
+      }
+    ];
+
+    i.gotDescriptions = true;
+
+    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    done();
+  });
+
+  it('tests the logdependencies met function when dependencies are empty object', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
+        }
+      }
+    ];
+    i.dependencies = {};
+    i.gotDescriptions = true;
+
+    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    done();
+  });
+
+  it('tests the logdependencies met function when inner/component dependencies are empty object', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+
+    i.descriptions = [
+      {
+        components: {
+          component1: {
+            version: '1.1.0'
+          }
+        }
+      }
+    ];
+    i.dependencies = {
+      test1: {}
+    };
+    i.gotDescriptions = true;
+    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    done();
+  });
+
+  it('tests the registerAndCheck function registers dependencies and calls logDependenciesMet', function(done) {
+    var i = new ImplementorsProvider(mockClient, mockConnection);
+    i.log = {
+      info: function() {},
+      error: function() {},
+      warn: function() {}
+    };
+    i.descriptions = { TEST: 'DESCRIPTIONS' };
+    let testDependencies = {
+      component1: {
+        version: '3.1.1'
+      },
+      component2: {
+        version: '*'
+      }git
+    };
+    i.logDependenciesMet = descriptions => {
+      expect(descriptions).to.be(i.descriptions);
+      expect(i.dependencies).to.eql({ newComponent: { component1: '3.1.1', component2: '*' } });
+      return true;
+    };
+    expect(i.addAndCheckDependencies('newComponent', testDependencies)).to.be(true);
+    done();
+  });
 });
