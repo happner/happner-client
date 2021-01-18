@@ -265,7 +265,7 @@ describe('08 - unit - dependency met event', function() {
       },
       component2: {
         version: '*'
-      }git
+      }
     };
     i.logDependenciesMet = descriptions => {
       expect(descriptions).to.be(i.descriptions);
