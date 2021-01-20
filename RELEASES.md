@@ -188,3 +188,14 @@
 11.1.9 2020-12-03
 -----------------
   - SMC-1565 to fix semver satisfies specific prerelease versions
+
+11.2.0 2021-01-20
+-----------------
+  - SMC-917: modified implementors provider to emit startup/dependencies/… …
+  - SMC-917: added events.once to implementors provider
+  - smc-917 - prerelease publish
+  - SMC-917: Added registerAndCheckDependencies method in ImplementorsPro… …
+  - SMC-917: Added unit tests for SMC-917 changes to ./lib/provides/imple… …
+  - SMC-917: ImplementorsProvidor: AddAndCheckDependencies now checks for… …
+  - SMC-917: Chore: lint-fixed
+  - SMC-917: Code review changes (minor)
