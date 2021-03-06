@@ -91,6 +91,39 @@ describe('25 - func - light-client', function() {
           );
         });
 
+        //TODO: issue here - this should not time out
+        xit('fails call a component that does not exist', function(done) {
+          client.exchange.$call(
+            {
+              component: 'nonExistentComponent',
+              method: 'methodReturningOneArg',
+              arguments: ['arg1']
+            },
+            function(e) {
+              expect(e.message).to.be(
+                "Call to unconfigured method 'component1.nonExistentMethod()'"
+              );
+              done();
+            }
+          );
+        });
+
+        it.only('fails call a method that does not exist', function(done) {
+          client.exchange.$call(
+            {
+              component: 'component1',
+              method: 'nonExistentMethod',
+              arguments: ['arg1']
+            },
+            function(e) {
+              expect(e.message).to.be(
+                "Call to unconfigured method 'component1.nonExistentMethod()'"
+              );
+              done();
+            }
+          );
+        });
+
         it('can call a function which returns two arguments', function(done) {
           api.exchange.component1.methodReturningTwoArgs('arg1', 'arg2', function(
             e,
