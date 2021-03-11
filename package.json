@@ -28,6 +28,7 @@
     "happn-3": "^11.8.1"
   },
   "devDependencies": {
+    "await-delay": "^1.0.0",
     "coveralls": "^3.0.6",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",

@@ -3,16 +3,17 @@ const LightClient = require('..').Light;
 const expect = require('expect.js');
 const path = require('path');
 const DOMAIN = 'DOMAIN_NAME';
+const delay = require('await-delay');
 
 describe('25 - func - light-client', function() {
-  this.timeout(10000);
+  this.timeout(100000);
   ['insecure', 'secure'].forEach(function(mode) {
     context(mode, function() {
       var server;
       var client;
 
       before('start a server', function(done) {
-        this.timeout(10000);
+        this.timeout(100000);
         Happner.create({
           domain: DOMAIN,
           util: {
@@ -57,18 +58,18 @@ describe('25 - func - light-client', function() {
       });
 
       before('create client', async () => {
-        this.timeout(10000);
+        this.timeout(100000);
         client = await createClient({ domain: DOMAIN, secure: mode === 'secure' });
       });
 
       after('stop client', function(done) {
-        this.timeout(10000);
+        this.timeout(100000);
         if (!client) return done();
         client.disconnect(done);
       });
 
       after('stop server', function(done) {
-        this.timeout(10000);
+        this.timeout(100000);
         if (!server) return done();
         server.stop({ reconnect: false }, done);
       });
@@ -315,6 +316,439 @@ describe('25 - func - light-client', function() {
           });
         });
       });
+
+      context.only('events - promises', function() {
+        it('we are able to call component methods and listen to events', async () => {
+          let results = await callAndListen(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' }
+          );
+          expect(results).to.eql({
+            event: { DATA: 1 },
+            exec: []
+          });
+        });
+
+        it('we are able to call component methods and listen to events using $once', async () => {
+          let eventCounter = await callAndListenOnce(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' }
+          );
+          expect(eventCounter).to.eql(1);
+        });
+
+        it('we are able to call component methods and listen to events using $once - negative', async () => {
+          let eventCounter = await callAndListenOnce(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' },
+            true
+          );
+          expect(eventCounter).to.eql(3);
+        });
+
+        it('we are able to call component methods and listen to events with an $off', async () => {
+          let eventCounter = await callAndListenOff(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' }
+          );
+          expect(eventCounter).to.eql(3);
+        });
+
+        it('we are able to call component methods and listen to events with an $off - negative test', async () => {
+          let eventCounter = await callAndListenOff(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' },
+            true
+          );
+          expect(eventCounter).to.eql(4);
+        });
+
+        it('we are able to call component methods and listen to events with an $offPath', async () => {
+          let eventCounter = await callAndListenOffPath(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' }
+          );
+          expect(eventCounter).to.eql(2);
+        });
+
+        it('we are able to call component methods and listen to events with an $offPath - negative test', async () => {
+          let eventCounter = await callAndListenOffPath(
+            client,
+            {
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
+            },
+            { component: 'component1', path: 'test/event' },
+            true
+          );
+          expect(eventCounter).to.eql(4);
+        });
+      });
+
+      xcontext('events - callbacks', function() {
+        it('we are able to call component methods and listen to events - with callback', function(done) {
+          callAndListenCallback(
+            client,
+            {
+              component: 'component',
+              method: 'exec'
+            },
+            { component: 'component1', path: 'test/event' },
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql({
+                event: { result: 3 },
+                exec: 3
+              });
+              done();
+            }
+          );
+        });
+
+        it('we are able to call component methods and listen to events, with mesh name - with callback', function(done) {
+          callAndListenCallback(
+            client,
+            {
+              mesh: 'MESH_NAME',
+              component: 'component',
+              method: 'exec'
+            },
+            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql({
+                event: { result: 3 },
+                exec: 3
+              });
+              done();
+            }
+          );
+        });
+
+        it('we are able to call component methods and listen to events using $once, with mesh name - with callback', function(done) {
+          callAndListenOnceCallback(
+            client,
+            {
+              mesh: 'MESH_NAME',
+              component: 'component',
+              method: 'exec'
+            },
+            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql(1);
+              done();
+            }
+          );
+        });
+
+        it('we are able to call component methods and listen to events with an $off, with mesh name - with callback', function(done) {
+          callAndListenOffCallback(
+            client,
+            {
+              mesh: 'MESH_NAME',
+              component: 'component',
+              method: 'exec'
+            },
+            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            false,
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql(3);
+              done();
+            }
+          );
+        });
+
+        it('we are able to call component methods and listen to events with an $off, with mesh name - with callback - negative test', function(done) {
+          callAndListenOffCallback(
+            client,
+            {
+              mesh: 'MESH_NAME',
+              component: 'component',
+              method: 'exec'
+            },
+            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            true,
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql(4);
+              done();
+            }
+          );
+        });
+
+        it('we are able to call component methods and listen to events with an $offPath, with mesh name - with callback', function(done) {
+          callAndListenOffPathCallback(
+            client,
+            {
+              mesh: 'MESH_NAME',
+              component: 'component',
+              method: 'exec'
+            },
+            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            false,
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql(2);
+              done();
+            }
+          );
+        });
+
+        it('we are able to call component methods and listen to events with an $offPath, with mesh name - with callback - negative test', function(done) {
+          callAndListenOffPathCallback(
+            client,
+            {
+              mesh: 'MESH_NAME',
+              component: 'component',
+              method: 'exec'
+            },
+            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            true,
+            (e, results) => {
+              if (e) return done(e);
+              expect(results).to.eql(4);
+              done();
+            }
+          );
+        });
+      });
+
+      async function callAndListen(client, callParameters, listenParameters) {
+        let results = {};
+        await client.event.$on(listenParameters, function(data) {
+          results.event = data;
+        });
+        results.exec = await client.exchange.$call(callParameters);
+        await delay(2000);
+        return results;
+      }
+
+      async function callAndListenOnce(client, callParameters, listenParameters, negative) {
+        let eventCounter = 0;
+        if (!negative) {
+          await client.event.$once(listenParameters, function() {
+            eventCounter++;
+          });
+        } else {
+          await client.event.$on(listenParameters, function() {
+            eventCounter++;
+          });
+        }
+
+        await client.exchange.$call(callParameters);
+        await client.exchange.$call(callParameters);
+        await client.exchange.$call(callParameters);
+        await delay(2000);
+        return eventCounter;
+      }
+
+      async function callAndListenOff(client, callParameters, listenParameters, negative) {
+        let eventCounter = 0;
+        const id = await client.event.$on(listenParameters, function() {
+          eventCounter++;
+        });
+        await client.event.$on(listenParameters, function() {
+          eventCounter++;
+        });
+        await client.exchange.$call(callParameters);
+        if (!negative) await client.event.$off(id);
+        await client.exchange.$call(callParameters);
+        await delay(2000);
+        return eventCounter;
+      }
+
+      async function callAndListenOffPath(client, callParameters, listenParameters, negative) {
+        let eventCounter = 0;
+        await client.event.$on(listenParameters, function() {
+          eventCounter++;
+        });
+        await client.event.$on(listenParameters, function() {
+          eventCounter++;
+        });
+        await client.exchange.$call(callParameters);
+        if (!negative) await client.event.$offPath(listenParameters);
+        await client.exchange.$call(callParameters);
+        await delay(2000);
+        return eventCounter;
+      }
+
+      function callAndListenCallback(client, callParameters, listenParameters, callback) {
+        let results = {};
+        client.event.$on(
+          listenParameters,
+          function(data) {
+            results.event = data;
+          },
+          e => {
+            if (e) return callback(e);
+            client.exchange.$call(callParameters, (e, result) => {
+              if (e) return callback(e);
+              results.exec = result;
+              setTimeout(() => {
+                callback(null, results);
+              }, 2000);
+            });
+          }
+        );
+      }
+
+      function callAndListenOnceCallback(client, callParameters, listenParameters, callback) {
+        let eventCounter = 0;
+        client.event.$once(
+          listenParameters,
+          function() {
+            eventCounter++;
+          },
+          e => {
+            if (e) return callback(e);
+            client.exchange.$call(callParameters, e => {
+              if (e) return callback(e);
+              client.exchange.$call(callParameters, e => {
+                if (e) return callback(e);
+                client.exchange.$call(callParameters, e => {
+                  if (e) return callback(e);
+                  setTimeout(() => {
+                    callback(null, eventCounter);
+                  }, 2000);
+                });
+              });
+            });
+          }
+        );
+      }
+
+      function callAndListenOffCallback(
+        client,
+        callParameters,
+        listenParameters,
+        negative,
+        callback
+      ) {
+        let eventCounter = 0;
+        let id;
+
+        let finishCallback = () => {
+          client.exchange.$call(callParameters, e => {
+            if (e) return callback(e);
+            setTimeout(() => {
+              callback(null, eventCounter);
+            }, 2000);
+          });
+        };
+
+        client.event.$on(
+          listenParameters,
+          function() {
+            eventCounter++;
+          },
+          (e, eventId) => {
+            if (e) return callback(e);
+            id = eventId;
+            client.event.$on(
+              listenParameters,
+              function() {
+                eventCounter++;
+              },
+              e => {
+                if (e) return callback(e);
+                client.exchange.$call(callParameters, e => {
+                  if (e) return callback(e);
+                  if (negative) return finishCallback();
+                  return client.event.$off(
+                    {
+                      component: listenParameters.component,
+                      mesh: listenParameters.mesh,
+                      id
+                    },
+                    e => {
+                      if (e) return callback(e);
+                      finishCallback();
+                    }
+                  );
+                });
+              }
+            );
+          }
+        );
+      }
+
+      function callAndListenOffPathCallback(
+        client,
+        callParameters,
+        listenParameters,
+        negative,
+        callback
+      ) {
+        let eventCounter = 0;
+        let finishCallback = () => {
+          client.exchange.$call(callParameters, e => {
+            if (e) return callback(e);
+            setTimeout(() => {
+              callback(null, eventCounter);
+            }, 2000);
+          });
+        };
+        client.event.$on(
+          listenParameters,
+          function() {
+            eventCounter++;
+          },
+          e => {
+            if (e) return callback(e);
+            client.event.$on(
+              listenParameters,
+              function() {
+                eventCounter++;
+              },
+              e => {
+                if (e) return callback(e);
+                client.exchange.$call(callParameters, e => {
+                  if (e) return callback(e);
+                  if (negative) return finishCallback();
+                  client.event.$offPath(listenParameters, e => {
+                    if (e) return callback(e);
+                    finishCallback();
+                  });
+                });
+              }
+            );
+          }
+        );
+      }
+
       async function createClient(opts) {
         const createdClient = new LightClient(opts);
         await createdClient.connect(null, { username: '_ADMIN', password: 'xxx' });
