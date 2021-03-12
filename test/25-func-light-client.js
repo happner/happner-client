@@ -211,7 +211,7 @@ describe('25 - func - light-client', function() {
             method: 'methodReturningOneArg',
             arguments: ['arg1']
           });
-          expect(results).to.eql(['arg1']);
+          expect(results).to.eql('arg1');
         });
 
         it('can call a function which returns two arguments', async () => {
@@ -317,7 +317,7 @@ describe('25 - func - light-client', function() {
         });
       });
 
-      context.only('events - promises', function() {
+      context('events - promises', function() {
         it('we are able to call component methods and listen to events', async () => {
           let results = await callAndListen(
             client,
@@ -330,7 +330,7 @@ describe('25 - func - light-client', function() {
           );
           expect(results).to.eql({
             event: { DATA: 1 },
-            exec: []
+            exec: null
           });
         });
 
@@ -416,55 +416,36 @@ describe('25 - func - light-client', function() {
         });
       });
 
-      xcontext('events - callbacks', function() {
+      context('events - callbacks', function() {
         it('we are able to call component methods and listen to events - with callback', function(done) {
           callAndListenCallback(
             client,
             {
-              component: 'component',
-              method: 'exec'
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
             },
             { component: 'component1', path: 'test/event' },
             (e, results) => {
               if (e) return done(e);
               expect(results).to.eql({
-                event: { result: 3 },
-                exec: 3
+                event: { DATA: 1 },
+                exec: null
               });
               done();
             }
           );
         });
 
-        it('we are able to call component methods and listen to events, with mesh name - with callback', function(done) {
-          callAndListenCallback(
-            client,
-            {
-              mesh: 'MESH_NAME',
-              component: 'component',
-              method: 'exec'
-            },
-            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
-            (e, results) => {
-              if (e) return done(e);
-              expect(results).to.eql({
-                event: { result: 3 },
-                exec: 3
-              });
-              done();
-            }
-          );
-        });
-
-        it('we are able to call component methods and listen to events using $once, with mesh name - with callback', function(done) {
+        it('we are able to call component methods and listen to events using $once - with callback', function(done) {
           callAndListenOnceCallback(
             client,
             {
-              mesh: 'MESH_NAME',
-              component: 'component',
-              method: 'exec'
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
             },
-            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            { component: 'component1', path: 'test/event' },
             (e, results) => {
               if (e) return done(e);
               expect(results).to.eql(1);
@@ -473,15 +454,15 @@ describe('25 - func - light-client', function() {
           );
         });
 
-        it('we are able to call component methods and listen to events with an $off, with mesh name - with callback', function(done) {
+        it('we are able to call component methods and listen to events with an $off - with callback', function(done) {
           callAndListenOffCallback(
             client,
             {
-              mesh: 'MESH_NAME',
-              component: 'component',
-              method: 'exec'
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
             },
-            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            { component: 'component1', path: 'test/event' },
             false,
             (e, results) => {
               if (e) return done(e);
@@ -491,15 +472,15 @@ describe('25 - func - light-client', function() {
           );
         });
 
-        it('we are able to call component methods and listen to events with an $off, with mesh name - with callback - negative test', function(done) {
+        it('we are able to call component methods and listen to events with an $off - with callback - negative test', function(done) {
           callAndListenOffCallback(
             client,
             {
-              mesh: 'MESH_NAME',
-              component: 'component',
-              method: 'exec'
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
             },
-            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            { component: 'component1', path: 'test/event' },
             true,
             (e, results) => {
               if (e) return done(e);
@@ -509,15 +490,15 @@ describe('25 - func - light-client', function() {
           );
         });
 
-        it('we are able to call component methods and listen to events with an $offPath, with mesh name - with callback', function(done) {
+        it('we are able to call component methods and listen to events with an $offPath - with callback', function(done) {
           callAndListenOffPathCallback(
             client,
             {
-              mesh: 'MESH_NAME',
-              component: 'component',
-              method: 'exec'
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
             },
-            { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
+            { component: 'component1', path: 'test/event' },
             false,
             (e, results) => {
               if (e) return done(e);
@@ -527,13 +508,13 @@ describe('25 - func - light-client', function() {
           );
         });
 
-        it('we are able to call component methods and listen to events with an $offPath, with mesh name - with callback - negative test', function(done) {
+        it('we are able to call component methods and listen to events with an $offPath - with callback - negative test', function(done) {
           callAndListenOffPathCallback(
             client,
             {
-              mesh: 'MESH_NAME',
-              component: 'component',
-              method: 'exec'
+              component: 'component1',
+              method: 'exec',
+              arguments: ['test/event']
             },
             { mesh: 'MESH_NAME', component: 'component1', path: 'test/event' },
             true,
@@ -687,17 +668,10 @@ describe('25 - func - light-client', function() {
                 client.exchange.$call(callParameters, e => {
                   if (e) return callback(e);
                   if (negative) return finishCallback();
-                  return client.event.$off(
-                    {
-                      component: listenParameters.component,
-                      mesh: listenParameters.mesh,
-                      id
-                    },
-                    e => {
-                      if (e) return callback(e);
-                      finishCallback();
-                    }
-                  );
+                  return client.event.$off(id, e => {
+                    if (e) return callback(e);
+                    finishCallback();
+                  });
                 });
               }
             );
