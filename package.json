@@ -25,7 +25,7 @@
     "prepare": "rm -rf node_modules/happner-2/node_modules/bitcore-lib && rm -rf node_modules/happner-client/node_modules/bitcore-lib && rm -rf node_modules/bitcore-ecies/node_modules/bitcore-lib"
   },
   "dependencies": {
-    "happn-3": "prerelease-11"
+    "happn-3": "^11.10.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
