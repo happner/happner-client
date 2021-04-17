@@ -298,7 +298,7 @@ describe('25 - func - light-client', function() {
         });
 
         it('sets up a client with the request and response timeout that is less then long-running method, the request should time out', async () => {
-          const [timeoutClient, timeoutApi] = await createClientAndAPI({
+          const [timeoutClient, timeoutApi] = await createClient({
             requestTimeout: 5e3,
             responseTimeout: 5e3
           });

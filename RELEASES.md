@@ -199,3 +199,8 @@
   - SMC-917: ImplementorsProvidor: AddAndCheckDependencies now checks for… …
   - SMC-917: Chore: lint-fixed
   - SMC-917: Code review changes (minor)
+
+11.3.0 2021-04-16
+-----------------
+  - SMC-1807 - light client
+  - SMC-1807: updated travis - removed Node 10 support, added node 15 support

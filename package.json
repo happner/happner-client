@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.2.1",
+  "version": "11.3.0",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -25,7 +25,8 @@
     "prepare": "rm -rf node_modules/happner-2/node_modules/bitcore-lib && rm -rf node_modules/happner-client/node_modules/bitcore-lib && rm -rf node_modules/bitcore-ecies/node_modules/bitcore-lib"
   },
   "dependencies": {
-    "happn-3": "^11.10.0"
+    "happn-3": "^11.10.0",
+    "happner-semver": "^1.0.1"
   },
   "devDependencies": {
     "await-delay": "^1.0.0",
@@ -34,6 +35,7 @@
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.1",
     "expect.js": "^0.3.1",
+    "gulp": "^4.0.2",
     "happner-2": "latest",
     "mocha": "^6.2.0",
     "nyc": "^13.3.0",
