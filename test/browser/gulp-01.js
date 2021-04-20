@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var path = require('path');
 var Server = require('karma').Server;
-var Happner = require('../..');
+var Happner = require('happner-2');
 var mesh;
 
 gulp.task('start', function(done) {
@@ -33,32 +33,42 @@ gulp.task('start', function(done) {
   };
 
   var testComponent = new TestComponent();
+  const DOMAIN = 'DOMAIN_NAME';
 
   var meshConfig = {
-    name: 'Server',
+    domain: DOMAIN,
     happn: {
       secure: true,
-      adminPassword: 'xxx',
-      encryptPayloads: true
+      adminPassword: 'xxx'
     },
     modules: {
       test: {
         instance: testComponent
       },
+      component1: {
+        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-1'].join(
+          path.sep
+        )
+      },
+      component2: {
+        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-2'].join(
+          path.sep
+        )
+      },
       testComponent2: {
-        path:
-          path.resolve(__dirname, '../..') +
-          path.sep +
-          ['test', '__fixtures', 'test', 'browser', 'test-component-2'].join(path.sep)
+        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-3'].join(
+          path.sep
+        )
       },
       testComponent3: {
-        path:
-          path.resolve(__dirname, '../..') +
-          path.sep +
-          ['test', '__fixtures', 'test', 'browser', 'test-component-3'].join(path.sep)
+        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-4'].join(
+          path.sep
+        )
       }
     },
     components: {
+      component1: {},
+      component2: {},
       test: {},
       testComponent2: {
         startMethod: 'start',
@@ -84,14 +94,14 @@ gulp.task('start', function(done) {
           name: 'group',
           permissions: {
             events: {
-              '/Server/testComponent2/test/event': { authorized: true },
-              '/Server/testComponent3/test/event': { authorized: true },
-              '/Server/testComponent2/variable-depth/event/*': { authorized: true }
+              [`/${DOMAIN}/testComponent2/test/event`]: { authorized: true },
+              [`/${DOMAIN}/testComponent3/test/event`]: { authorized: true },
+              [`/${DOMAIN}/testComponent2/variable-depth/event/*`]: { authorized: true }
             },
             methods: {
-              '/Server/test/allowedMethod': { authorized: true },
-              '/Server/testComponent2/method1': { authorized: true },
-              '/Server/testComponent2/emitEvent': { authorized: true }
+              [`/${DOMAIN}/test/allowedMethod`]: { authorized: true },
+              [`/${DOMAIN}/testComponent2/method1`]: { authorized: true },
+              [`/${DOMAIN}/testComponent2/emitEvent`]: { authorized: true }
             }
           }
         }),

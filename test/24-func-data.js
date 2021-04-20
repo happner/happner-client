@@ -25,24 +25,10 @@ describe('24 - func - data', function() {
       },
       modules: {
         component1: {
-          path:
-            __dirname +
-            path.sep +
-            'lib' +
-            path.sep +
-            '21-component-1' +
-            path.sep +
-            '21-component-1.js'
+          path: __dirname + path.sep + 'lib' + path.sep + '21-component-1'
         },
         component2: {
-          path:
-            __dirname +
-            path.sep +
-            'lib' +
-            path.sep +
-            '21-component-2' +
-            path.sep +
-            '21-component-2.js'
+          path: __dirname + path.sep + 'lib' + path.sep + '21-component-2'
         }
       },
       components: {

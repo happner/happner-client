@@ -25,24 +25,10 @@ describe('25 - func - light-client', function() {
           },
           modules: {
             component1: {
-              path:
-                __dirname +
-                path.sep +
-                'lib' +
-                path.sep +
-                '21-component-1' +
-                path.sep +
-                '21-component-1.js'
+              path: __dirname + path.sep + 'lib' + path.sep + '21-component-1'
             },
             component2: {
-              path:
-                __dirname +
-                path.sep +
-                'lib' +
-                path.sep +
-                '21-component-2' +
-                path.sep +
-                '21-component-2.js'
+              path: __dirname + path.sep + 'lib' + path.sep + '21-component-2'
             }
           },
           components: {
@@ -291,14 +277,15 @@ describe('25 - func - light-client', function() {
         });
       });
 
-      xcontext('timeouts', function() {
+      context('timeouts', function() {
         it('checks the default request and response timeouts are 120 seconds', function() {
           expect(client.__requestTimeout).to.be(60e3);
           expect(client.__responseTimeout).to.be(120e3);
         });
 
         it('sets up a client with the request and response timeout that is less then long-running method, the request should time out', async () => {
-          const [timeoutClient, timeoutApi] = await createClient({
+          const timeoutClient = await createClient({
+            domain: DOMAIN,
             requestTimeout: 5e3,
             responseTimeout: 5e3
           });
@@ -306,7 +293,10 @@ describe('25 - func - light-client', function() {
           expect(timeoutClient.__responseTimeout).to.be(5e3);
           let errorMessage;
           try {
-            await timeoutApi.exchange.component1.methodThatTimesOut();
+            await timeoutClient.exchange.$call({
+              component: 'component1',
+              method: 'methodThatTimesOut'
+            });
           } catch (e) {
             errorMessage = e.message;
           }

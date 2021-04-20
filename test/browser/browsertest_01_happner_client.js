@@ -2,6 +2,7 @@
 describe('browsertest_01_happner_client', function() {
   // test new client
   let expect = window.expect;
+  const DOMAIN = 'DOMAIN_NAME';
   this.timeout(100000);
 
   it('can connect a new client', function(done) {
@@ -133,7 +134,7 @@ describe('browsertest_01_happner_client', function() {
     });
 
     await client.event.$on(
-      { mesh: 'Server', component: 'testComponent3', path: 'test/event' },
+      { mesh: DOMAIN, component: 'testComponent3', path: 'test/event' },
       data => {
         emittedCount++;
         lastData = data;
