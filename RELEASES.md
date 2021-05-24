@@ -204,3 +204,7 @@
 -----------------
   - SMC-1807 - light client
   - SMC-1807: updated travis - removed Node 10 support, added node 15 support
+
+11.3.1 2021-05-24
+-----------------
+  - SMC-1807 - bumped package-lock to accomodate latest version of happner
