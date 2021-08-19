@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.3.1",
+  "version": "11.4.0",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -21,12 +21,12 @@
     "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover",
     "report": "nyc report --reporter=text --reporter=lcov --reporter=text-summary && nyc report --reporter=text --reporter=text-summary > coverage.txt",
     "test": "npm run lint && mocha --opts mocha.opts",
-    "test-cover": "env LOG_LEVEL=off nyc --reporter=none mocha --opts mocha.opts",
+    "test-cover": "env LOG_LEVEL=off nyc --reporter=lcov --reporter=text-summary mocha --opts mocha.opts",
     "test-browser": "node_modules/.bin/gulp --gulpfile test/browser/gulp-01.js",
     "prepare": "rm -rf node_modules/happner-2/node_modules/bitcore-lib && rm -rf node_modules/happner-client/node_modules/bitcore-lib && rm -rf node_modules/bitcore-ecies/node_modules/bitcore-lib"
   },
   "dependencies": {
-    "happn-3": "^11.10.0",
+    "happn-3": "^11.12.0",
     "happner-semver": "^1.0.1"
   },
   "devDependencies": {

@@ -109,7 +109,32 @@ kitchen.exchange.fridge.getTemperature(['top', 'middle'])
 ```javascript
 kitchen.event.fridge.on('/eventName', function (data) {});
 ```
+### Discover component methods
+*NB: this will only work if you connect before you construct*
+```javascript
+//initialize the client with discover Methods true
+const client = new HappnerClient({ discoverMethods: true });
 
+//set up your model, declaring which components you wish to discover
+var model = {
+  component1: {
+    version: '^1.0.0'
+    //no need for method declarations
+  },
+  component2: {
+    version: '^1.0.0'
+    //no need for method declarations
+  }
+};
+//on connection the remote mesh schema will be pulled
+await client.connect(null, {
+  username: '_ADMIN',
+  password: 'xxx'
+});
+//on construct the components in the model will be updated with the available methods
+const createdApi = createdClient.construct(model);
+await createdApi.component1.discoveredMethod();
+```
 ### Access happn data points directly, via the dataClient
 
 ```javascript

@@ -208,3 +208,8 @@
 11.3.1 2021-05-24
 -----------------
   - SMC-1807 - bumped package-lock to accomodate latest version of happner
+
+11.4.0 2021-08-11
+-----------------
+  - SMC-3689: added $call override for peer dependencies and discoverMethods for peer dependency configurations
+  - SMC-3646: updated github actions
