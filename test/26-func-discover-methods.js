@@ -182,6 +182,7 @@ describe('21 - func - exchange', function() {
           });
         });
       });
+
       context('timeouts', function() {
         it('checks the default request and response timeouts are 120 seconds', function() {
           expect(client.__requestTimeout).to.be(60e3);
@@ -206,6 +207,65 @@ describe('21 - func - exchange', function() {
           timeoutClient.disconnect(() => {
             //do nothing
           });
+        });
+      });
+      context('$call', function() {
+        it('can call a function which returns one argument', async () => {
+          let result = await api.exchange.$call({
+            component: 'component1',
+            method: 'methodReturningOneArg',
+            arguments: ['arg1']
+          });
+          expect(result).to.be('arg1');
+        });
+
+        it('can call a function which returns two arguments', async () => {
+          let [result1, result2] = await api.exchange.$call({
+            component: 'component1',
+            method: 'methodReturningTwoArgs',
+            arguments: ['arg1', 'arg2']
+          });
+          expect(result1).to.be('arg1');
+          expect(result2).to.be('arg2');
+        });
+
+        it('can call a function which returns an error', async () => {
+          let eMessage = '';
+          try {
+            await api.exchange.$call({
+              component: 'component1',
+              method: 'methodReturningError'
+            });
+          } catch (e) {
+            eMessage = e.message;
+          }
+          expect(eMessage).to.equal('Component error');
+        });
+
+        it('cannot call a function that does not exist', async () => {
+          let eMessage = '';
+          try {
+            await api.exchange.$call({
+              component: 'component1',
+              method: 'methodOnApiOnly'
+            });
+          } catch (e) {
+            eMessage = e.message;
+          }
+          expect(eMessage).to.equal('Not implemented component1:^1.0.0:methodOnApiOnly');
+        });
+
+        it('cannot call a function with incorrect version', async () => {
+          let eMessage = '';
+          try {
+            await api.exchange.$call({
+              component: 'component2',
+              method: 'methodReturningOneArg'
+            });
+          } catch (e) {
+            eMessage = e.message;
+          }
+          expect(eMessage).to.equal('Not implemented component2:^1.0.0:methodReturningOneArg');
         });
       });
       async function createClientAndAPI(opts) {
