@@ -1,11 +1,8 @@
-let expect = require('expect.js');
-//intentionally left here for next time
-//var why = require('why-is-node-running');
+const test = require('../__fixtures/test-helper').create();
+var HappnerClient = require('../..');
+var OperationsProvider = require('../../lib/providers/operations-provider');
 
-var HappnerClient = require('..');
-var OperationsProvider = require('../lib/providers/operations-provider');
-
-describe('03 - unit - construct', function() {
+describe(test.name(__filename, 3), function() {
   beforeEach(function() {
     this.originalRequest = OperationsProvider.prototype.request;
     this.originalSubscribe = OperationsProvider.prototype.subscribe;
@@ -19,9 +16,6 @@ describe('03 - unit - construct', function() {
     OperationsProvider.prototype.unsubscribe = this.originalUnsubscribe;
     OperationsProvider.prototype.unsubscribePath = this.originalUnsubscribePath;
   });
-
-  //intentionally left here for next time
-  //after('why is node running?', () => setTimeout(why, 5000));
 
   it('errors on model without version declared', function(done) {
     var model = {
@@ -39,7 +33,7 @@ describe('03 - unit - construct', function() {
     try {
       c.construct(model);
     } catch (e) {
-      expect(e.message).to.be('Missing version');
+      test.expect(e.message).to.be('Missing version');
       c.disconnect(done);
     }
   });
@@ -64,10 +58,10 @@ describe('03 - unit - construct', function() {
         }
       };
       var api = c.construct(model);
-      expect(api.exchange.component1.method1).to.be.a(Function);
-      expect(api.exchange.component1.method2).to.be.a(Function);
-      expect(api.exchange.component2.method1).to.be.a(Function);
-      expect(api.exchange.component2.method2).to.be.a(Function);
+      test.expect(api.exchange.component1.method1).to.be.a(Function);
+      test.expect(api.exchange.component1.method2).to.be.a(Function);
+      test.expect(api.exchange.component2.method1).to.be.a(Function);
+      test.expect(api.exchange.component2.method2).to.be.a(Function);
       c.disconnect(done);
     });
 
@@ -75,9 +69,9 @@ describe('03 - unit - construct', function() {
       var c = new HappnerClient();
       OperationsProvider.prototype.request = function(component, version, method) {
         try {
-          expect(component).to.be('component1');
-          expect(version).to.be('^1.0.0');
-          expect(method).to.be('method1');
+          test.expect(component).to.be('component1');
+          test.expect(version).to.be('^1.0.0');
+          test.expect(method).to.be('method1');
           c.disconnect(done);
         } catch (e) {
           done(e);
@@ -118,7 +112,7 @@ describe('03 - unit - construct', function() {
       api.exchange.component1
         .method1('ARG1')
         .then(function(result) {
-          expect(result).to.eql({ RE: 'SULT' });
+          test.expect(result).to.eql({ RE: 'SULT' });
           c.disconnect(done);
         })
         .catch(done);
@@ -143,7 +137,7 @@ describe('03 - unit - construct', function() {
 
       api.exchange.component1.method1('ARG1', function(e, result) {
         if (e) return done(e);
-        expect(result).to.eql({ RE: 'SULT' });
+        test.expect(result).to.eql({ RE: 'SULT' });
         c.disconnect(done);
       });
     });
@@ -184,11 +178,11 @@ describe('03 - unit - construct', function() {
       c.construct(model, happner);
 
       happner.exchange.component2.method1(function(e, result) {
-        expect(result).to.be('existing component');
+        test.expect(result).to.be('existing component');
 
         happner.exchange.component1.method1('ARG1', function(e, result) {
           if (e) return done(e);
-          expect(result).to.eql({ RE: 'SULT' });
+          test.expect(result).to.eql({ RE: 'SULT' });
           c.disconnect(done);
         });
       });
@@ -230,12 +224,12 @@ describe('03 - unit - construct', function() {
       c.construct(model, happner);
 
       happner.exchange.component2.method1(function(e, result) {
-        expect(result).to.not.be('existing component');
-        expect(result).to.eql({ RE: 'SULT' });
+        test.expect(result).to.not.be('existing component');
+        test.expect(result).to.eql({ RE: 'SULT' });
 
         happner.exchange.component1.method1('ARG1', function(e, result) {
           if (e) return done(e);
-          expect(result).to.eql({ RE: 'SULT' });
+          test.expect(result).to.eql({ RE: 'SULT' });
           c.disconnect(done);
         });
       });
@@ -276,7 +270,7 @@ describe('03 - unit - construct', function() {
       c.construct(model, happner);
 
       happner.exchange.component2.method1(function(e, result) {
-        expect(result).to.be('existing component');
+        test.expect(result).to.be('existing component');
         c.disconnect(done);
       });
     });
@@ -305,12 +299,12 @@ describe('03 - unit - construct', function() {
 
       var api = c.construct(model);
 
-      expect(api.event.component1.on).to.be.a(Function);
-      expect(api.event.component1.off).to.be.a(Function);
-      expect(api.event.component1.offPath).to.be.a(Function);
-      expect(api.event.component2.on).to.be.a(Function);
-      expect(api.event.component2.off).to.be.a(Function);
-      expect(api.event.component2.offPath).to.be.a(Function);
+      test.expect(api.event.component1.on).to.be.a(Function);
+      test.expect(api.event.component1.off).to.be.a(Function);
+      test.expect(api.event.component1.offPath).to.be.a(Function);
+      test.expect(api.event.component2.on).to.be.a(Function);
+      test.expect(api.event.component2.off).to.be.a(Function);
+      test.expect(api.event.component2.offPath).to.be.a(Function);
       c.disconnect(done);
     });
 
@@ -324,10 +318,10 @@ describe('03 - unit - construct', function() {
         handler,
         callback
       ) {
-        expect(component).to.be('component1');
-        expect(version).to.be('^1.0.0');
-        expect(key).to.be('event/xx');
-        expect(handler).to.be(eventHandler);
+        test.expect(component).to.be('component1');
+        test.expect(version).to.be('^1.0.0');
+        test.expect(key).to.be('event/xx');
+        test.expect(handler).to.be(eventHandler);
         callback();
         c.disconnect(done);
       };
@@ -354,10 +348,10 @@ describe('03 - unit - construct', function() {
         handler,
         callback
       ) {
-        expect(component).to.be('component1');
-        expect(version).to.be('^1.0.0');
-        expect(key).to.be('event/xx');
-        expect(handler).to.be(eventHandler);
+        test.expect(component).to.be('component1');
+        test.expect(version).to.be('^1.0.0');
+        test.expect(key).to.be('event/xx');
+        test.expect(handler).to.be(eventHandler);
         callback(new Error('xxxx'));
       };
 
@@ -371,14 +365,14 @@ describe('03 - unit - construct', function() {
       };
       var api = c.construct(model);
       api.event.component1.on('event/xx', eventHandler, function(e) {
-        expect(e.message).to.be('xxxx');
+        test.expect(e.message).to.be('xxxx');
         c.disconnect(done);
       });
     });
 
     it('can unsubscribe (off)', function(done) {
       OperationsProvider.prototype.unsubscribe = function(id, callback) {
-        expect(id).to.be('ID');
+        test.expect(id).to.be('ID');
         callback(new Error('xxxx'));
       };
 
@@ -395,15 +389,15 @@ describe('03 - unit - construct', function() {
       var api = c.construct(model);
 
       api.event.component1.off('ID', function(e) {
-        expect(e.message).to.be('xxxx');
+        test.expect(e.message).to.be('xxxx');
         c.disconnect(done);
       });
     });
 
     it('can unsubscribe (offPath)', function(done) {
       OperationsProvider.prototype.unsubscribePath = function(componentName, key, callback) {
-        expect(componentName).to.be('component1');
-        expect(key).to.be('event/xx');
+        test.expect(componentName).to.be('component1');
+        test.expect(key).to.be('event/xx');
         callback(new Error('xxxx'));
       };
 
@@ -420,7 +414,7 @@ describe('03 - unit - construct', function() {
       var api = c.construct(model);
 
       api.event.component1.offPath('event/xx', function(e) {
-        expect(e.message).to.be('xxxx');
+        test.expect(e.message).to.be('xxxx');
         c.disconnect(done);
       });
     });
@@ -465,7 +459,7 @@ describe('03 - unit - construct', function() {
       happner.event.component1.on('event/xx', function() {});
       happner.event.component2.on('event/yy', function() {});
 
-      expect(count).to.be(2);
+      test.expect(count).to.be(2);
       c.disconnect(done);
     });
   });

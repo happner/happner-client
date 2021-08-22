@@ -46,22 +46,22 @@ gulp.task('start', function(done) {
         instance: testComponent
       },
       component1: {
-        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-1'].join(
+        path: [path.resolve(__dirname, '..'), '__fixtures', 'test', 'browser', 'component-1'].join(
           path.sep
         )
       },
       component2: {
-        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-2'].join(
+        path: [path.resolve(__dirname, '..'), '__fixtures', 'test', 'browser', 'component-2'].join(
           path.sep
         )
       },
       testComponent2: {
-        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-3'].join(
+        path: [path.resolve(__dirname, '..'), '__fixtures', 'test', 'browser', 'component-3'].join(
           path.sep
         )
       },
       testComponent3: {
-        path: [path.resolve(__dirname, '..'), 'lib', 'test', 'browser', 'component-4'].join(
+        path: [path.resolve(__dirname, '..'), '__fixtures', 'test', 'browser', 'component-4'].join(
           path.sep
         )
       }

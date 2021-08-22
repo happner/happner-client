@@ -1,8 +1,7 @@
-var expect = require('expect.js');
+const test = require('../__fixtures/test-helper').create();
+var HappnerClient = require('../..');
 
-var HappnerClient = require('..');
-
-describe('02 - unit - mount', function() {
+describe(test.name(__filename, 3), function() {
   var mockOrchestrator;
   var subscriptions;
 
@@ -20,13 +19,12 @@ describe('02 - unit - mount', function() {
     var c = new HappnerClient();
 
     c.mount(mockOrchestrator);
-    expect(subscriptions).to.eql({
+    test.expect(subscriptions).to.eql({
       'peer/add': 1,
       'peer/remove': 1
     });
-
+    c.__operations.stop();
+    c.__implementors.stop();
     done();
   });
-
-  xit('unsubscribes from peer add and remove');
 });

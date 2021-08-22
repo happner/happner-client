@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.4.0",
+  "version": "11.5.0",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -20,8 +20,8 @@
     "lint-fix": "eslint '**/*.js' --fix",
     "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover",
     "report": "nyc report --reporter=text --reporter=lcov --reporter=text-summary && nyc report --reporter=text --reporter=text-summary > coverage.txt",
-    "test": "npm run lint && mocha --opts mocha.opts",
-    "test-cover": "env LOG_LEVEL=off nyc --reporter=lcov --reporter=text-summary mocha --opts mocha.opts",
+    "test": "npm run lint && mocha test/unit/* test/integration/* --opts mocha.opts",
+    "test-cover": "env LOG_LEVEL=off nyc --reporter=lcov --reporter=text-summary mocha test/unit/* test/integration/* --opts mocha.opts",
     "test-browser": "node_modules/.bin/gulp --gulpfile test/browser/gulp-01.js",
     "prepare": "rm -rf node_modules/happner-2/node_modules/bitcore-lib && rm -rf node_modules/happner-client/node_modules/bitcore-lib && rm -rf node_modules/bitcore-ecies/node_modules/bitcore-lib"
   },

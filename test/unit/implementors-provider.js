@@ -1,13 +1,13 @@
-var expect = require('expect.js');
+const test = require('../__fixtures/test-helper').create();
+var ImplementorsProvider = require('../../lib/providers/implementors-provider');
 
-var ImplementorsProvider = require('../lib/providers/implementors-provider');
-
-describe('05 - unit - implementors provider', function() {
+describe(test.name(__filename, 2), function() {
   var mockClient;
 
   beforeEach(function() {
     mockClient = {
-      on: function() {}
+      on: () => {},
+      emit: () => {}
     };
   });
 
@@ -34,7 +34,7 @@ describe('05 - unit - implementors provider', function() {
     it('gets the description on first call', function(done) {
       mockConnection.client.get = function(path) {
         try {
-          expect(path).to.be('/mesh/schema/description');
+          test.expect(path).to.be('/mesh/schema/description');
           done();
         } catch (e) {
           done(e);
@@ -74,7 +74,7 @@ describe('05 - unit - implementors provider', function() {
       i.getDescriptions();
 
       setTimeout(function() {
-        expect(count).to.be(3);
+        test.expect(count).to.be(3);
         done();
       }, 3100);
     });
@@ -95,7 +95,7 @@ describe('05 - unit - implementors provider', function() {
       i.getDescriptions();
       i.getDescriptions()
         .then(function() {
-          expect(count).to.be(1);
+          test.expect(count).to.be(1);
         })
         .then(done)
         .catch(done);
@@ -127,7 +127,7 @@ describe('05 - unit - implementors provider', function() {
       var i = new ImplementorsProvider(mockClient, mockConnection);
       i.happnerClient.log = {
         info: msg => {
-          expect(msg).to.be('ignoring brokered description for peer: test');
+          test.expect(msg).to.be('ignoring brokered description for peer: test');
           setTimeout(done, 2000);
         }
       };
@@ -148,7 +148,7 @@ describe('05 - unit - implementors provider', function() {
         done(new Error('was not meant to happen'));
       };
       const onIgnore = reason => {
-        expect(reason).to.be('ignoring brokered description for peer: test');
+        test.expect(reason).to.be('ignoring brokered description for peer: test');
         setTimeout(done, 2000);
       };
       const cluster = true;
@@ -228,7 +228,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getDescriptions()
         .then(function() {
-          expect(i.domain).to.be('DOMAIN_NAME');
+          test.expect(i.domain).to.be('DOMAIN_NAME');
         })
         .then(done)
         .catch(done);
@@ -294,7 +294,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getDescriptions()
         .then(function() {
-          expect(i.descriptions).to.eql([
+          test.expect(i.descriptions).to.eql([
             {
               initializing: false,
               name: 'DOMAIN_NAME',
@@ -322,7 +322,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function(e) {
-          expect(e.message).to.match(/^Not implemented/);
+          test.expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -336,7 +336,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component', 'version', 'method')
         .then(function(result) {
-          expect(result).to.eql({ local: true });
+          test.expect(result).to.eql({ local: true });
         })
         .then(done)
         .catch(done);
@@ -354,19 +354,19 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component', 'version', 'method')
         .then(function(result) {
-          expect(result).to.eql({ local: true });
+          test.expect(result).to.eql({ local: true });
           return i.getNextImplementation('component', 'version', 'method');
         })
         .then(function(result) {
-          expect(result).to.eql({ local: false, name: 'peer1' });
+          test.expect(result).to.eql({ local: false, name: 'peer1' });
           return i.getNextImplementation('component', 'version', 'method');
         })
         .then(function(result) {
-          expect(result).to.eql({ local: false, name: 'peer2' });
+          test.expect(result).to.eql({ local: false, name: 'peer2' });
           return i.getNextImplementation('component', 'version', 'method');
         })
         .then(function(result) {
-          expect(result).to.eql({ local: true });
+          test.expect(result).to.eql({ local: true });
         })
         .then(done)
         .catch(done);
@@ -393,7 +393,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component1', '^1.0.0', 'method1')
         .then(function(result) {
-          expect(result).to.eql({
+          test.expect(result).to.eql({
             local: true,
             name: 'SERVER_2'
           });
@@ -410,7 +410,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function(e) {
-          expect(e.message).to.match(/^Not implemented/);
+          test.expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -427,7 +427,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component', 'version', 'method')
         .catch(function(e) {
-          expect(e.message).to.match(/^Not implemented/);
+          test.expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -452,7 +452,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component1', '^1.0.0', 'method1')
         .catch(function(e) {
-          expect(e.message).to.match(/^Not implemented/);
+          test.expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -477,7 +477,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.getNextImplementation('component1', '^1.0.0', 'method2')
         .catch(function(e) {
-          expect(e.message).to.match(/^Not implemented/);
+          test.expect(e.message).to.match(/^Not implemented/);
           done();
         })
         .catch(done);
@@ -488,11 +488,11 @@ describe('05 - unit - implementors provider', function() {
 
       mockClient = {
         on: function(event, handler) {
-          expect(event).to.be('reconnected');
+          test.expect(event).to.be('reconnected');
           setTimeout(function() {
             handler();
 
-            expect(i.maps).to.eql({});
+            test.expect(i.maps).to.eql({});
             done();
           }, 200);
         }
@@ -507,11 +507,11 @@ describe('05 - unit - implementors provider', function() {
 
       mockClient = {
         on: function(event, handler) {
-          expect(event).to.be('reconnected');
+          test.expect(event).to.be('reconnected');
           setTimeout(function() {
             handler();
 
-            expect(i.descriptions).to.eql([]);
+            test.expect(i.descriptions).to.eql([]);
             done();
           }, 200);
         }
@@ -562,7 +562,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.removePeer('MESH_3');
 
-      expect(i.descriptions).to.eql([
+      test.expect(i.descriptions).to.eql([
         {
           meshName: 'MESH_2'
         },
@@ -571,7 +571,7 @@ describe('05 - unit - implementors provider', function() {
         }
       ]);
 
-      expect(i.maps).to.eql({
+      test.expect(i.maps).to.eql({
         'remoteComponent3/^1.0.0/method1': [
           { local: false, name: 'MESH_2' },
           { local: false, name: 'MESH_4' }
@@ -664,7 +664,7 @@ describe('05 - unit - implementors provider', function() {
 
       i.addPeer('NAME');
 
-      expect(i.maps).to.eql({
+      test.expect(i.maps).to.eql({
         'component1/^1.0.0/method1': [
           { local: false, name: 'MESH_2' },
           { local: false, name: 'MESH_3' },
@@ -682,7 +682,7 @@ describe('05 - unit - implementors provider', function() {
           { local: false, name: 'MESH_4' }
         ]
       });
-      expect(i.descriptions.length).to.equal(1);
+      test.expect(i.descriptions.length).to.equal(1);
       done();
     });
   });
