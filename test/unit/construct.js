@@ -464,7 +464,27 @@ describe(test.name(__filename, 3), function() {
     });
   });
 
-  context('data', function() {
-    it('');
+  context('discovery', function() {
+    it('ensures that the system components of remote meshes are not discovered', async () => {
+      var c = new HappnerClient();
+      var newComponents = [];
+      c.newComponent = discovered => {
+        newComponents.push(discovered);
+      };
+      c.newDescription({
+        components: {
+          rest: { name: 'rest' },
+          data: { name: 'data' },
+          security: { name: 'security' },
+          system: { name: 'system' },
+          api: { name: 'api' },
+          allowed: { name: 'allowed' }
+        }
+      });
+      test
+        .expect(newComponents)
+        .to.eql([{ componentName: 'allowed', description: { name: 'allowed' } }]);
+      await test.util.promisify(c.disconnect).bind(c)();
+    });
   });
 });
