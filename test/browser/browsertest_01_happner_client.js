@@ -5,23 +5,17 @@ describe('browsertest_01_happner_client', function() {
   const DOMAIN = 'DOMAIN_NAME';
   this.timeout(100000);
 
-  it('can connect a new client', function(done) {
-    var client = new Happner.HappnerClient();
-
-    client
-      .connect(null, {
+  it('can connect a new client', async () => {
+    const client = new Happner.HappnerClient();
+    try {
+      await client.connect(null, {
         username: 'username',
         password: 'password'
-      })
-
-      .then(function() {
-        done();
-      })
-
-      .catch(function(error) {
-        console.log(error);
-        done(error);
       });
+    } catch (e) {
+      console.log(e.message);
+      throw e;
+    }
   });
 
   it('can call exchange method', function(done) {
