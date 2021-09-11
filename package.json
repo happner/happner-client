@@ -18,7 +18,7 @@
     "coveralls": "npm run test-cover && nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint '**/*.js'",
     "lint-fix": "eslint '**/*.js' --fix",
-    "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover && npm run test-browser" ,
+    "release": "rm -rf node_modules && rm -f package-lock.json && npm install && npm run test-cover && npm run test-browser",
     "report": "nyc report --reporter=text --reporter=lcov --reporter=text-summary && nyc report --reporter=text --reporter=text-summary > coverage.txt",
     "test": "npm run lint && mocha test/unit/* test/integration/* --opts mocha.opts",
     "test-cover": "env LOG_LEVEL=off nyc --reporter=lcov --reporter=text-summary mocha test/unit/* test/integration/* --opts mocha.opts",
