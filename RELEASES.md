@@ -218,3 +218,4 @@
 -----------------
   - SMC-3689: methods are now discovered if a component has not been configured in the dependencies
   - SMC-3689: cleaned up tests
+  - SMC-3689: fixed bad require of utils in connection provider (breaks the browser client)
