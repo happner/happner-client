@@ -1,14 +1,7 @@
-var expect = require('expect.js');
-var OperationsProvider = require('../lib/providers/operations-provider');
-var util = require('util');
-let test = require('./lib/test-helper').create();
+const test = require('../__fixtures/test-helper').create();
+var OperationsProvider = require('../../lib/providers/operations-provider');
 describe(test.name(__filename, 2), function() {
   this.timeout(10000);
-  after('cleanup and checks', async () => {
-    // for possible use later
-    // await test.delay(2000);
-    // test.why();
-  });
   context('request()', function() {
     it('errors if not connected', function(done) {
       var mockConnection = {
@@ -17,7 +10,8 @@ describe(test.name(__filename, 2), function() {
 
       var o = new OperationsProvider({}, mockConnection, {});
       o.request('component', 'version', 'method', [], function(e) {
-        expect(e.message).to.be('Not connected');
+        test.expect(e.message).to.be('Not connected');
+        o.stop();
         done();
       });
     });
@@ -43,6 +37,7 @@ describe(test.name(__filename, 2), function() {
 
       var o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
+      o.stop();
     });
 
     it('calls getImplementation', function(done) {
@@ -69,9 +64,11 @@ describe(test.name(__filename, 2), function() {
 
       var o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
+      o.stop();
     });
 
     it('subscribes to response path per insecure', function(done) {
+      let o;
       var mockConnection = {
         connected: true,
         client: {
@@ -83,9 +80,11 @@ describe(test.name(__filename, 2), function() {
           },
           on: function(path) {
             try {
-              expect(path).to.be('/_exchange/responses/SESSION_ID/*');
+              test.expect(path).to.be('/_exchange/responses/SESSION_ID/*');
+              o.stop();
               done();
             } catch (e) {
+              o.stop();
               done(e);
             }
           }
@@ -102,11 +101,12 @@ describe(test.name(__filename, 2), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
     });
 
     it('subscribes to response path per secure', function(done) {
+      let o;
       var mockConnection = {
         connected: true,
         client: {
@@ -118,9 +118,11 @@ describe(test.name(__filename, 2), function() {
           },
           on: function(path) {
             try {
-              expect(path).to.be('/_exchange/responses/SESSION_ID/*');
+              test.expect(path).to.be('/_exchange/responses/SESSION_ID/*');
+              o.stop();
               done();
             } catch (e) {
+              o.stop();
               done(e);
             }
           }
@@ -137,7 +139,7 @@ describe(test.name(__filename, 2), function() {
         }
       };
 
-      var o = new OperationsProvider({}, mockConnection, mockImplementors);
+      o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function() {});
     });
 
@@ -176,7 +178,8 @@ describe(test.name(__filename, 2), function() {
       o.request('component2', 'version', 'method', [], function() {});
 
       setTimeout(function() {
-        expect(count).to.be(1);
+        test.expect(count).to.be(1);
+        o.stop();
         done();
       }, 100);
     });
@@ -217,7 +220,8 @@ describe(test.name(__filename, 2), function() {
       o.request('component2', 'version', 'method', [], function() {});
 
       setTimeout(function() {
-        expect(count).to.be(2);
+        test.expect(count).to.be(2);
+        o.stop();
         done();
       }, 100);
     });
@@ -250,7 +254,8 @@ describe(test.name(__filename, 2), function() {
       var o = new OperationsProvider({}, mockConnection, mockImplementors);
       o.request('component', 'version', 'method', [], function(e) {
         try {
-          expect(e.message).to.equal('xxxx');
+          test.expect(e.message).to.equal('xxxx');
+          o.stop();
           done();
         } catch (e) {
           done(e);
@@ -280,11 +285,12 @@ describe(test.name(__filename, 2), function() {
 
       o.executeRequest = function(implementation, component, version, method, args) {
         try {
-          expect(implementation).to.eql({ local: true, name: 'MESH_NAME' });
-          expect(component).to.equal('component');
-          expect(version).to.equal('version');
-          expect(method).to.equal('method');
-          expect(args).to.eql([]);
+          test.expect(implementation).to.eql({ local: true, name: 'MESH_NAME' });
+          test.expect(component).to.equal('component');
+          test.expect(version).to.equal('version');
+          test.expect(method).to.equal('method');
+          test.expect(args).to.eql([]);
+          o.stop();
           done();
         } catch (e) {
           done(e);
@@ -340,7 +346,7 @@ describe(test.name(__filename, 2), function() {
 
       setTimeout(function() {
         try {
-          expect(callbacks).to.be(0);
+          test.expect(callbacks).to.be(0);
         } catch (e) {
           clearTimeout(timeout2);
           return done(e);
@@ -349,7 +355,8 @@ describe(test.name(__filename, 2), function() {
 
       var timeout2 = setTimeout(function() {
         try {
-          expect(callbacks).to.be(2);
+          test.expect(callbacks).to.be(2);
+          o.stop();
           done();
         } catch (e) {
           return done(e);
@@ -359,12 +366,6 @@ describe(test.name(__filename, 2), function() {
   });
 
   context('executeRequest()', function() {
-    context('on cluster', function() {
-      it('handles concurrently departed peer');
-
-      it('retries if called peer departed');
-    });
-
     context('on local', function() {
       var mockConnection, mockImplementers;
 
@@ -397,7 +398,8 @@ describe(test.name(__filename, 2), function() {
 
         o.executeRequest({ local: true }, 'component', 'method', ['ARGS'], function() {})
           .catch(function(e) {
-            expect(e.message).to.be('Not connected');
+            test.expect(e.message).to.be('Not connected');
+            o.stop();
             done();
           })
           .catch(done);
@@ -406,8 +408,8 @@ describe(test.name(__filename, 2), function() {
       it('calls set on request path', function(done) {
         var o = new OperationsProvider({}, mockConnection, mockImplementers);
         mockConnection.client.set = function(path) {
+          test.expect(path).to.be('/_exchange/requests/DOMAIN_NAME/component/method');
           o.stop();
-          expect(path).to.be('/_exchange/requests/DOMAIN_NAME/component/method');
           done();
         };
         callbackifyAndBind(o.executeRequest, o)(
@@ -427,7 +429,7 @@ describe(test.name(__filename, 2), function() {
         var o = new OperationsProvider({}, mockConnection, mockImplementers);
         mockConnection.client.set = function(path, data) {
           o.stop();
-          expect(data).to.eql({
+          test.expect(data).to.eql({
             callbackAddress: '/_exchange/responses/DOMAIN_NAME/component/method/SESSION_ID/1',
             args: [{ params: 1 }],
             origin: {
@@ -455,7 +457,7 @@ describe(test.name(__filename, 2), function() {
         let o;
         mockConnection.client.set = function(path, data) {
           o.stop();
-          expect(data).to.eql({
+          test.expect(data).to.eql({
             callbackAddress: '/_exchange/responses/SESSION_ID/DOMAIN_NAME/component/method/1',
             args: [{ params: 1 }],
             origin: {
@@ -491,7 +493,7 @@ describe(test.name(__filename, 2), function() {
         const o = new OperationsProvider(mockHappnerClient, mockConnection, mockImplementers);
         mockConnection.client.set = function(path, data, options) {
           o.stop();
-          expect(options).to.eql({
+          test.expect(options).to.eql({
             timeout: 10 * 1000,
             noStore: true
           });
@@ -519,7 +521,8 @@ describe(test.name(__filename, 2), function() {
 
         o.executeRequest({ local: true }, 'component', 'method', [{ params: 1 }], function() {})
           .catch(function(e) {
-            expect(e.message).to.be('failed to set');
+            test.expect(e.message).to.be('failed to set');
+            o.stop();
             done();
           })
           .catch(done);
@@ -541,6 +544,7 @@ describe(test.name(__filename, 2), function() {
           function() {}
         )
           .then(function() {
+            o.stop();
             done();
           })
           .catch(done);
@@ -567,8 +571,9 @@ describe(test.name(__filename, 2), function() {
           function(e) {
             o.stop();
             if (e) return done(e);
-            expect(o.awaitingResponses).to.have.key('1');
-            expect(o.awaitingResponses[1]).to.have.key('callback');
+            test.expect(o.awaitingResponses).to.have.key('1');
+            test.expect(o.awaitingResponses[1]).to.have.key('callback');
+            o.stop();
             done();
           }
         );
@@ -616,7 +621,7 @@ describe(test.name(__filename, 2), function() {
       var testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
-
+      o.stop();
       done();
     });
 
@@ -637,6 +642,7 @@ describe(test.name(__filename, 2), function() {
       o.response(testData, testMeta);
 
       var passTimeout = setTimeout(function() {
+        o.stop();
         done();
       }, 100);
     });
@@ -653,7 +659,8 @@ describe(test.name(__filename, 2), function() {
       var testMeta = { path: 'abc/def/ghi/18' };
 
       o.response(testData, testMeta);
-      expect(o.awaitingResponses[18]).to.be(undefined);
+      test.expect(o.awaitingResponses[18]).to.be(undefined);
+      o.stop();
       done();
     });
 
@@ -662,8 +669,9 @@ describe(test.name(__filename, 2), function() {
 
       o.awaitingResponses[18] = {
         callback: function(e, param1, param2) {
-          expect(param1).to.eql({ params: 1 });
-          expect(param2).to.eql({ params: 2 });
+          test.expect(param1).to.eql({ params: 1 });
+          test.expect(param2).to.eql({ params: 2 });
+          o.stop();
           done();
         },
         timeout: null
@@ -680,8 +688,9 @@ describe(test.name(__filename, 2), function() {
 
       o.awaitingResponses[18] = {
         callback: function(e) {
-          expect(e.message).to.equal('xxx');
-          expect(e.name).to.equal('TypeError');
+          test.expect(e.message).to.equal('xxx');
+          test.expect(e.name).to.equal('TypeError');
+          o.stop();
           done();
         },
         timeout: null
@@ -720,20 +729,21 @@ describe(test.name(__filename, 2), function() {
 
       mockConnection.client = {
         on: function(path, parameters, handler, callback) {
-          expect(path).to.be('/_events/DOMAIN_NAME/componentName/event/name');
-          expect(parameters).to.eql({
+          test.expect(path).to.be('/_events/DOMAIN_NAME/componentName/event/name');
+          test.expect(parameters).to.eql({
             event_type: 'set',
             meta: {
               componentVersion: '^1.0.0'
             }
           });
-          // expect(handler).to.be(mockHandler); // proxied, impossible test
+          // test.expect(handler).to.be(mockHandler); // proxied, impossible test
           callback();
         }
       };
 
       o.subscribe(component, version, key, mockHandler, function(e) {
         if (e) return done(e);
+        o.stop();
         done();
       });
     });
@@ -751,7 +761,7 @@ describe(test.name(__filename, 2), function() {
     it('unsubscribes with id', function(done) {
       mockConnection.client = {
         off: function(id, callback) {
-          expect(id).to.be('EVENT_ID');
+          test.expect(id).to.be('EVENT_ID');
           callback();
         }
       };
@@ -760,6 +770,7 @@ describe(test.name(__filename, 2), function() {
 
       o.unsubscribe('EVENT_ID', function(e) {
         if (e) return done(e);
+        o.stop();
         done();
       });
     });
@@ -784,7 +795,7 @@ describe(test.name(__filename, 2), function() {
     it('does the unsubscribe on correct path', function(done) {
       mockConnection.client = {
         offPath: function(path, callback) {
-          expect(path).to.be('/_events/DOMAIN_NAME/component/event/name');
+          test.expect(path).to.be('/_events/DOMAIN_NAME/component/event/name');
           callback();
         }
       };
@@ -796,11 +807,12 @@ describe(test.name(__filename, 2), function() {
 
       o.unsubscribePath(component, key, function(e) {
         if (e) return done(e);
+        o.stop();
         done();
       });
     });
   });
   function callbackifyAndBind(func, obj) {
-    return util.callbackify(func).bind(obj || func);
+    return test.util.callbackify(func).bind(obj || func);
   }
 });

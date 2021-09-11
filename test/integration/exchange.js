@@ -1,9 +1,8 @@
+const test = require('../__fixtures/test-helper').create();
 var Happner = require('happner-2');
-var HappnerClient = require('..');
-var expect = require('expect.js');
-var path = require('path');
+var HappnerClient = require('../..');
 
-describe('21 - func - exchange', function() {
+describe(test.name(__filename, 3), function() {
   this.timeout(10000);
   ['insecure', 'secure'].forEach(function(mode) {
     context(mode, function() {
@@ -24,10 +23,10 @@ describe('21 - func - exchange', function() {
           },
           modules: {
             component1: {
-              path: __dirname + path.sep + 'lib' + path.sep + '21-component-1'
+              path: test.fixturesPath() + test.path.sep + '21-component-1'
             },
             component2: {
-              path: __dirname + path.sep + 'lib' + path.sep + '21-component-2'
+              path: test.fixturesPath() + test.path.sep + '21-component-2'
             }
           },
           components: {
@@ -44,7 +43,7 @@ describe('21 - func - exchange', function() {
 
       before('create client', async () => {
         this.timeout(10000);
-        [client, api] = await createClientAndAPI({ discoverMethods: true });
+        [client, api] = await createClientAndAPI({});
       });
 
       after('stop client', function(done) {
@@ -63,7 +62,7 @@ describe('21 - func - exchange', function() {
         it('can call a function which returns one argument', function(done) {
           api.exchange.component1.methodReturningOneArg('arg1', function(e, result) {
             if (e) return done(e);
-            expect(result).to.be('arg1');
+            test.expect(result).to.be('arg1');
             done();
           });
         });
@@ -75,8 +74,8 @@ describe('21 - func - exchange', function() {
             result2
           ) {
             if (e) return done(e);
-            expect(result1).to.be('arg1');
-            expect(result2).to.be('arg2');
+            test.expect(result1).to.be('arg1');
+            test.expect(result2).to.be('arg2');
             done();
           });
         });
@@ -84,9 +83,9 @@ describe('21 - func - exchange', function() {
         it('can call a function which returns an error', function(done) {
           api.exchange.component1.methodReturningError(function(e) {
             try {
-              expect(e).to.be.an(Error);
-              expect(e.name).to.equal('Error');
-              expect(e.message).to.equal('Component error');
+              test.expect(e).to.be.an(Error);
+              test.expect(e.name).to.equal('Error');
+              test.expect(e.message).to.equal('Component error');
               done();
             } catch (e) {
               done(e);
@@ -97,9 +96,9 @@ describe('21 - func - exchange', function() {
         it('cannot call a function that does not exist', function(done) {
           api.exchange.component1.methodOnApiOnly(function(e) {
             try {
-              expect(e).to.be.an(Error);
-              expect(e.name).to.equal('Error');
-              expect(e.message).to.match(/^Not implemented/);
+              test.expect(e).to.be.an(Error);
+              test.expect(e.name).to.equal('Error');
+              test.expect(e.message).to.match(/^Not implemented/);
               done();
             } catch (e) {
               done(e);
@@ -110,9 +109,9 @@ describe('21 - func - exchange', function() {
         it('cannot call a function with incorrect version', function(done) {
           api.exchange.component2.methodReturningOneArg(function(e) {
             try {
-              expect(e).to.be.an(Error);
-              expect(e.name).to.equal('Error');
-              expect(e.message).to.match(/^Not implemented/);
+              test.expect(e).to.be.an(Error);
+              test.expect(e.name).to.equal('Error');
+              test.expect(e.message).to.match(/^Not implemented/);
               done();
             } catch (e) {
               done(e);
@@ -126,7 +125,7 @@ describe('21 - func - exchange', function() {
           api.exchange.component1
             .methodReturningOneArg('arg1')
             .then(function(result) {
-              expect(result).to.be('arg1');
+              test.expect(result).to.be('arg1');
               done();
             })
             .catch(done);
@@ -136,8 +135,8 @@ describe('21 - func - exchange', function() {
           api.exchange.component1
             .methodReturningTwoArgs('arg1', 'arg2')
             .then(function(result) {
-              expect(result[0]).to.be('arg1');
-              expect(result[1]).to.be('arg2');
+              test.expect(result[0]).to.be('arg1');
+              test.expect(result[1]).to.be('arg2');
               done();
             })
             .catch(done);
@@ -146,9 +145,9 @@ describe('21 - func - exchange', function() {
         it('can call a function which returns an error', function(done) {
           api.exchange.component1.methodReturningError().catch(function(e) {
             try {
-              expect(e).to.be.an(Error);
-              expect(e.name).to.equal('Error');
-              expect(e.message).to.equal('Component error');
+              test.expect(e).to.be.an(Error);
+              test.expect(e.name).to.equal('Error');
+              test.expect(e.message).to.equal('Component error');
               done();
             } catch (e) {
               done(e);
@@ -159,9 +158,9 @@ describe('21 - func - exchange', function() {
         it('cannot call a function that does not exist', function(done) {
           api.exchange.component1.methodOnApiOnly().catch(function(e) {
             try {
-              expect(e).to.be.an(Error);
-              expect(e.name).to.equal('Error');
-              expect(e.message).to.match(/^Not implemented/);
+              test.expect(e).to.be.an(Error);
+              test.expect(e.name).to.equal('Error');
+              test.expect(e.message).to.match(/^Not implemented/);
               done();
             } catch (e) {
               done(e);
@@ -172,9 +171,9 @@ describe('21 - func - exchange', function() {
         it('cannot call a function with incorrect version', function(done) {
           api.exchange.component2.methodReturningOneArg().catch(function(e) {
             try {
-              expect(e).to.be.an(Error);
-              expect(e.name).to.equal('Error');
-              expect(e.message).to.match(/^Not implemented/);
+              test.expect(e).to.be.an(Error);
+              test.expect(e.name).to.equal('Error');
+              test.expect(e.message).to.match(/^Not implemented/);
               done();
             } catch (e) {
               done(e);
@@ -182,90 +181,29 @@ describe('21 - func - exchange', function() {
           });
         });
       });
-
       context('timeouts', function() {
         it('checks the default request and response timeouts are 120 seconds', function() {
-          expect(client.__requestTimeout).to.be(60e3);
-          expect(client.__responseTimeout).to.be(120e3);
+          test.expect(client.__requestTimeout).to.be(60e3);
+          test.expect(client.__responseTimeout).to.be(120e3);
         });
 
         it('sets up a client with the request and response timeout that is less then long-running method, the request should time out', async () => {
           const [timeoutClient, timeoutApi] = await createClientAndAPI({
             requestTimeout: 5e3,
-            responseTimeout: 5e3,
-            discoverMethods: true
+            responseTimeout: 5e3
           });
-          expect(timeoutClient.__requestTimeout).to.be(5e3);
-          expect(timeoutClient.__responseTimeout).to.be(5e3);
+          test.expect(timeoutClient.__requestTimeout).to.be(5e3);
+          test.expect(timeoutClient.__responseTimeout).to.be(5e3);
           let errorMessage;
           try {
             await timeoutApi.exchange.component1.methodThatTimesOut();
           } catch (e) {
             errorMessage = e.message;
           }
-          expect(errorMessage).to.be('Timeout awaiting response');
+          test.expect(errorMessage).to.be('Timeout awaiting response');
           timeoutClient.disconnect(() => {
             //do nothing
           });
-        });
-      });
-      context('$call', function() {
-        it('can call a function which returns one argument', async () => {
-          let result = await api.exchange.$call({
-            component: 'component1',
-            method: 'methodReturningOneArg',
-            arguments: ['arg1']
-          });
-          expect(result).to.be('arg1');
-        });
-
-        it('can call a function which returns two arguments', async () => {
-          let [result1, result2] = await api.exchange.$call({
-            component: 'component1',
-            method: 'methodReturningTwoArgs',
-            arguments: ['arg1', 'arg2']
-          });
-          expect(result1).to.be('arg1');
-          expect(result2).to.be('arg2');
-        });
-
-        it('can call a function which returns an error', async () => {
-          let eMessage = '';
-          try {
-            await api.exchange.$call({
-              component: 'component1',
-              method: 'methodReturningError'
-            });
-          } catch (e) {
-            eMessage = e.message;
-          }
-          expect(eMessage).to.equal('Component error');
-        });
-
-        it('cannot call a function that does not exist', async () => {
-          let eMessage = '';
-          try {
-            await api.exchange.$call({
-              component: 'component1',
-              method: 'methodOnApiOnly'
-            });
-          } catch (e) {
-            eMessage = e.message;
-          }
-          expect(eMessage).to.equal('Not implemented component1:^1.0.0:methodOnApiOnly');
-        });
-
-        it('cannot call a function with incorrect version', async () => {
-          let eMessage = '';
-          try {
-            await api.exchange.$call({
-              component: 'component2',
-              method: 'methodReturningOneArg'
-            });
-          } catch (e) {
-            eMessage = e.message;
-          }
-          expect(eMessage).to.equal('Not implemented component2:^1.0.0:methodReturningOneArg');
         });
       });
       async function createClientAndAPI(opts) {
@@ -275,18 +213,26 @@ describe('21 - func - exchange', function() {
           component1: {
             version: '^1.0.0',
             methods: {
-              methodOnApiOnly: {}
+              methodReturningOneArg: {},
+              methodReturningTwoArgs: {},
+              methodReturningError: {},
+              methodOnApiOnly: {},
+              methodThatTimesOut: {}
             }
           },
           component2: {
-            version: '^1.0.0'
+            version: '^1.0.0',
+            methods: {
+              methodReturningOneArg: {},
+              methodReturningTwoArgs: {},
+              methodReturningError: {},
+              methodOnApiOnly: {}
+            }
           }
         };
-        await createdClient.connect(null, {
-          username: '_ADMIN',
-          password: 'xxx'
-        });
+
         const createdApi = createdClient.construct(model);
+        await createdClient.connect(null, { username: '_ADMIN', password: 'xxx' });
         return [createdClient, createdApi];
       }
     });

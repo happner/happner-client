@@ -1,12 +1,11 @@
-var path = require('path');
-var expect = require('expect.js');
+const test = require('../__fixtures/test-helper').create();
 var Happner = require('happner-2');
-var HappnerClient = require('..');
+var HappnerClient = require('../..');
 
-var certPath = path.dirname(__dirname) + path.sep + 'example.com.cert';
-var keyPath = path.dirname(__dirname) + path.sep + 'example.com.key';
+var certPath = test.path.dirname(__dirname) + test.path.sep + 'example.com.cert';
+var keyPath = test.path.dirname(__dirname) + test.path.sep + 'example.com.key';
 
-describe('20 - func - connect', function() {
+describe(test.name(__filename, 3), function() {
   var server;
 
   function startServer(done) {
@@ -96,7 +95,7 @@ describe('20 - func - connect', function() {
       }
     )
       .catch(function(e) {
-        expect(e.code).to.be('ECONNREFUSED');
+        test.expect(e.code).to.be('ECONNREFUSED');
       })
       .then(function() {
         c.disconnect(done);

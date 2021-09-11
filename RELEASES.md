@@ -213,3 +213,9 @@
 -----------------
   - SMC-3689: added $call override for peer dependencies and discoverMethods for peer dependency configurations
   - SMC-3646: updated github actions
+
+11.5.0 2021-08-22
+-----------------
+  - SMC-3689: methods are now discovered if a component has not been configured in the dependencies
+  - SMC-3689: cleaned up tests
+  - SMC-3689: fixed bad require of utils in connection provider (breaks the browser client)

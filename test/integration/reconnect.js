@@ -1,9 +1,8 @@
+const test = require('../__fixtures/test-helper').create();
 var Happner = require('happner-2');
-var HappnerClient = require('..');
-var path = require('path');
-var expect = require('expect.js');
+var HappnerClient = require('../..');
 
-describe('23 - func - exchange reconnect', function() {
+describe(test.name(__filename, 3), function() {
   var server, client, api;
 
   var startServer1 = function(done) {
@@ -18,7 +17,7 @@ describe('23 - func - exchange reconnect', function() {
       },
       modules: {
         component1: {
-          path: __dirname + path.sep + 'lib' + path.sep + '23-component-1'
+          path: test.fixturesPath('23-component-1')
         }
       },
       components: {
@@ -128,7 +127,7 @@ describe('23 - func - exchange reconnect', function() {
           client.once('reconnected', function() {
             setTimeout(function() {
               try {
-                expect(count > counted).to.be(true);
+                test.expect(count > counted).to.be(true);
                 done();
               } catch (e) {
                 done(e);
@@ -163,7 +162,7 @@ describe('23 - func - exchange reconnect', function() {
           client.once('reconnected', function() {
             api.exchange.component1.method1(function(e) {
               try {
-                expect(e.message).to.match(/^Not implemented/);
+                test.expect(e.message).to.match(/^Not implemented/);
                 done();
               } catch (e) {
                 done(e);

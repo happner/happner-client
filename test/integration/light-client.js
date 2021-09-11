@@ -1,11 +1,9 @@
 const Happner = require('happner-2');
-const LightClient = require('..').Light;
-const expect = require('expect.js');
-const path = require('path');
+const LightClient = require('../..').Light;
+const test = require('../__fixtures/test-helper').create();
 const DOMAIN = 'DOMAIN_NAME';
-const delay = require('await-delay');
 
-describe('25 - func - light-client', function() {
+describe(test.name(__filename, 3), function() {
   this.timeout(100000);
   ['insecure', 'secure'].forEach(function(mode) {
     context(mode, function() {
@@ -25,10 +23,10 @@ describe('25 - func - light-client', function() {
           },
           modules: {
             component1: {
-              path: __dirname + path.sep + 'lib' + path.sep + '21-component-1'
+              path: test.fixturesPath('21-component-1')
             },
             component2: {
-              path: __dirname + path.sep + 'lib' + path.sep + '21-component-2'
+              path: test.fixturesPath('21-component-2')
             }
           },
           components: {
@@ -70,7 +68,7 @@ describe('25 - func - light-client', function() {
             },
             function(e, result) {
               if (e) return done(e);
-              expect(result).to.be('arg1');
+              test.expect(result).to.be('arg1');
               done();
             }
           );
@@ -84,9 +82,11 @@ describe('25 - func - light-client', function() {
               arguments: ['arg1']
             },
             function(e) {
-              expect(e.message).to.be(
-                'Call to unconfigured component: [nonExistentComponent.methodReturningOneArg]'
-              );
+              test
+                .expect(e.message)
+                .to.be(
+                  'Call to unconfigured component: [nonExistentComponent.methodReturningOneArg]'
+                );
               done();
             }
           );
@@ -100,9 +100,9 @@ describe('25 - func - light-client', function() {
               arguments: ['arg1']
             },
             function(e) {
-              expect(e.message).to.be(
-                'Call to unconfigured method [component1.nonExistentMethod()]'
-              );
+              test
+                .expect(e.message)
+                .to.be('Call to unconfigured method [component1.nonExistentMethod()]');
               done();
             }
           );
@@ -117,8 +117,8 @@ describe('25 - func - light-client', function() {
             },
             function(e, result1, result2) {
               if (e) return done(e);
-              expect(result1).to.be('arg1');
-              expect(result2).to.be('arg2');
+              test.expect(result1).to.be('arg1');
+              test.expect(result2).to.be('arg2');
               done();
             }
           );
@@ -133,9 +133,9 @@ describe('25 - func - light-client', function() {
             },
             function(e) {
               try {
-                expect(e).to.be.an(Error);
-                expect(e.name).to.equal('Error');
-                expect(e.message).to.equal('Component error');
+                test.expect(e).to.be.an(Error);
+                test.expect(e.name).to.equal('Error');
+                test.expect(e.message).to.equal('Component error');
                 done();
               } catch (e) {
                 done(e);
@@ -153,11 +153,11 @@ describe('25 - func - light-client', function() {
             },
             function(e) {
               try {
-                expect(e).to.be.an(Error);
-                expect(e.name).to.equal('Error');
-                expect(e.message).to.be(
-                  'Call to unconfigured method [component1.methodOnApiOnly()]'
-                );
+                test.expect(e).to.be.an(Error);
+                test.expect(e.name).to.equal('Error');
+                test
+                  .expect(e.message)
+                  .to.be('Call to unconfigured method [component1.methodOnApiOnly()]');
                 done();
               } catch (e) {
                 done(e);
@@ -176,11 +176,13 @@ describe('25 - func - light-client', function() {
             },
             function(e) {
               try {
-                expect(e).to.be.an(Error);
-                expect(e.name).to.equal('Error');
-                expect(e.message).to.be(
-                  `Call to unconfigured method [component2.methodReturningOneArg]: request version [1.0.0] does not match component version [2.0.0]`
-                );
+                test.expect(e).to.be.an(Error);
+                test.expect(e.name).to.equal('Error');
+                test
+                  .expect(e.message)
+                  .to.be(
+                    `Call to unconfigured method [component2.methodReturningOneArg]: request version [1.0.0] does not match component version [2.0.0]`
+                  );
                 done();
               } catch (e) {
                 done(e);
@@ -197,7 +199,7 @@ describe('25 - func - light-client', function() {
             method: 'methodReturningOneArg',
             arguments: ['arg1']
           });
-          expect(results).to.eql('arg1');
+          test.expect(results).to.eql('arg1');
         });
 
         it('can call a function which returns two arguments', async () => {
@@ -206,7 +208,7 @@ describe('25 - func - light-client', function() {
             method: 'methodReturningTwoArgs',
             arguments: ['arg1', 'arg2']
           });
-          expect(results).to.eql(['arg1', 'arg2']);
+          test.expect(results).to.eql(['arg1', 'arg2']);
         });
 
         async function callWithExpectedError(parameters, errorMessage) {
@@ -216,8 +218,8 @@ describe('25 - func - light-client', function() {
           } catch (e) {
             error = e;
           }
-          expect(error).to.be.an(Error);
-          expect(error.message).to.be(errorMessage);
+          test.expect(error).to.be.an(Error);
+          test.expect(error.message).to.be(errorMessage);
         }
 
         it('fails to call a component that does not exist', async () => {
@@ -279,8 +281,8 @@ describe('25 - func - light-client', function() {
 
       context('timeouts', function() {
         it('checks the default request and response timeouts are 120 seconds', function() {
-          expect(client.__requestTimeout).to.be(60e3);
-          expect(client.__responseTimeout).to.be(120e3);
+          test.expect(client.__requestTimeout).to.be(60e3);
+          test.expect(client.__responseTimeout).to.be(120e3);
         });
 
         it('sets up a client with the request and response timeout that is less then long-running method, the request should time out', async () => {
@@ -289,8 +291,8 @@ describe('25 - func - light-client', function() {
             requestTimeout: 5e3,
             responseTimeout: 5e3
           });
-          expect(timeoutClient.__requestTimeout).to.be(5e3);
-          expect(timeoutClient.__responseTimeout).to.be(5e3);
+          test.expect(timeoutClient.__requestTimeout).to.be(5e3);
+          test.expect(timeoutClient.__responseTimeout).to.be(5e3);
           let errorMessage;
           try {
             await timeoutClient.exchange.$call({
@@ -300,7 +302,7 @@ describe('25 - func - light-client', function() {
           } catch (e) {
             errorMessage = e.message;
           }
-          expect(errorMessage).to.be('Timeout awaiting response');
+          test.expect(errorMessage).to.be('Timeout awaiting response');
           timeoutClient.disconnect(() => {
             //do nothing
           });
@@ -318,7 +320,7 @@ describe('25 - func - light-client', function() {
             },
             { component: 'component1', path: 'test/event' }
           );
-          expect(results).to.eql({
+          test.expect(results).to.eql({
             event: { DATA: 1 },
             exec: null
           });
@@ -334,7 +336,7 @@ describe('25 - func - light-client', function() {
             },
             { component: 'component1', path: 'test/event' }
           );
-          expect(eventCounter).to.eql(1);
+          test.expect(eventCounter).to.eql(1);
         });
 
         it('we are able to call component methods and listen to events using $once - negative', async () => {
@@ -348,7 +350,7 @@ describe('25 - func - light-client', function() {
             { component: 'component1', path: 'test/event' },
             true
           );
-          expect(eventCounter).to.eql(3);
+          test.expect(eventCounter).to.eql(3);
         });
 
         it('we are able to call component methods and listen to events with an $off', async () => {
@@ -361,7 +363,7 @@ describe('25 - func - light-client', function() {
             },
             { component: 'component1', path: 'test/event' }
           );
-          expect(eventCounter).to.eql(3);
+          test.expect(eventCounter).to.eql(3);
         });
 
         it('we are able to call component methods and listen to events with an $off - negative test', async () => {
@@ -375,7 +377,7 @@ describe('25 - func - light-client', function() {
             { component: 'component1', path: 'test/event' },
             true
           );
-          expect(eventCounter).to.eql(4);
+          test.expect(eventCounter).to.eql(4);
         });
 
         it('we are able to call component methods and listen to events with an $offPath', async () => {
@@ -388,7 +390,7 @@ describe('25 - func - light-client', function() {
             },
             { component: 'component1', path: 'test/event' }
           );
-          expect(eventCounter).to.eql(2);
+          test.expect(eventCounter).to.eql(2);
         });
 
         it('we are able to call component methods and listen to events with an $offPath - negative test', async () => {
@@ -402,7 +404,7 @@ describe('25 - func - light-client', function() {
             { component: 'component1', path: 'test/event' },
             true
           );
-          expect(eventCounter).to.eql(4);
+          test.expect(eventCounter).to.eql(4);
         });
       });
 
@@ -418,7 +420,7 @@ describe('25 - func - light-client', function() {
             { component: 'component1', path: 'test/event' },
             (e, results) => {
               if (e) return done(e);
-              expect(results).to.eql({
+              test.expect(results).to.eql({
                 event: { DATA: 1 },
                 exec: null
               });
@@ -438,7 +440,7 @@ describe('25 - func - light-client', function() {
             { component: 'component1', path: 'test/event' },
             (e, results) => {
               if (e) return done(e);
-              expect(results).to.eql(1);
+              test.expect(results).to.eql(1);
               done();
             }
           );
@@ -456,7 +458,7 @@ describe('25 - func - light-client', function() {
             false,
             (e, results) => {
               if (e) return done(e);
-              expect(results).to.eql(3);
+              test.expect(results).to.eql(3);
               done();
             }
           );
@@ -474,7 +476,7 @@ describe('25 - func - light-client', function() {
             true,
             (e, results) => {
               if (e) return done(e);
-              expect(results).to.eql(4);
+              test.expect(results).to.eql(4);
               done();
             }
           );
@@ -492,7 +494,7 @@ describe('25 - func - light-client', function() {
             false,
             (e, results) => {
               if (e) return done(e);
-              expect(results).to.eql(2);
+              test.expect(results).to.eql(2);
               done();
             }
           );
@@ -510,7 +512,7 @@ describe('25 - func - light-client', function() {
             true,
             (e, results) => {
               if (e) return done(e);
-              expect(results).to.eql(4);
+              test.expect(results).to.eql(4);
               done();
             }
           );
@@ -523,7 +525,7 @@ describe('25 - func - light-client', function() {
           results.event = data;
         });
         results.exec = await client.exchange.$call(callParameters);
-        await delay(2000);
+        await test.delay(2000);
         return results;
       }
 
@@ -542,7 +544,7 @@ describe('25 - func - light-client', function() {
         await client.exchange.$call(callParameters);
         await client.exchange.$call(callParameters);
         await client.exchange.$call(callParameters);
-        await delay(2000);
+        await test.delay(2000);
         return eventCounter;
       }
 
@@ -557,7 +559,7 @@ describe('25 - func - light-client', function() {
         await client.exchange.$call(callParameters);
         if (!negative) await client.event.$off(id);
         await client.exchange.$call(callParameters);
-        await delay(2000);
+        await test.delay(2000);
         return eventCounter;
       }
 
@@ -572,7 +574,7 @@ describe('25 - func - light-client', function() {
         await client.exchange.$call(callParameters);
         if (!negative) await client.event.$offPath(listenParameters);
         await client.exchange.$call(callParameters);
-        await delay(2000);
+        await test.delay(2000);
         return eventCounter;
       }
 

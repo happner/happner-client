@@ -1,9 +1,8 @@
+const test = require('../__fixtures/test-helper').create();
 var Happner = require('happner-2');
-var HappnerClient = require('..');
-var expect = require('expect.js');
-var path = require('path');
+var HappnerClient = require('../..');
 
-describe('24 - func - data', function() {
+describe(test.name(__filename, 3), function() {
   var server;
   var adminclient;
   var userclient;
@@ -25,10 +24,10 @@ describe('24 - func - data', function() {
       },
       modules: {
         component1: {
-          path: __dirname + path.sep + 'lib' + path.sep + '21-component-1'
+          path: test.fixturesPath('21-component-1')
         },
         component2: {
-          path: __dirname + path.sep + 'lib' + path.sep + '21-component-2'
+          path: test.fixturesPath('21-component-2')
         }
       },
       components: {
@@ -171,7 +170,7 @@ describe('24 - func - data', function() {
     dataClient.on(
       '/allowed/on/*',
       function(data) {
-        expect(data.test).to.be('data');
+        test.expect(data.test).to.be('data');
         done();
       },
       function(e) {
@@ -198,7 +197,7 @@ describe('24 - func - data', function() {
         test: 'data'
       },
       function(e) {
-        expect(e.toString()).to.be('AccessDenied: unauthorized');
+        test.expect(e.toString()).to.be('AccessDenied: unauthorized');
         done();
       }
     );
@@ -213,7 +212,7 @@ describe('24 - func - data', function() {
         test: 'data'
       },
       function(e) {
-        expect(e.toString()).to.be('AccessDenied: unauthorized');
+        test.expect(e.toString()).to.be('AccessDenied: unauthorized');
         var addPermissions = {
           data: {
             '/updated/*': {
@@ -248,7 +247,7 @@ describe('24 - func - data', function() {
         test: 'data'
       },
       function(e) {
-        expect(e.toString()).to.be('AccessDenied: unauthorized');
+        test.expect(e.toString()).to.be('AccessDenied: unauthorized');
         var addPermissions = {
           data: {
             '/toremove/*': {
@@ -279,7 +278,7 @@ describe('24 - func - data', function() {
                 test: 'data'
               },
               function(e) {
-                expect(e.toString()).to.be('AccessDenied: unauthorized');
+                test.expect(e.toString()).to.be('AccessDenied: unauthorized');
                 done();
               }
             );
@@ -298,7 +297,7 @@ describe('24 - func - data', function() {
         test: 'data'
       },
       function(e) {
-        expect(e.toString()).to.be('AccessDenied: unauthorized');
+        test.expect(e.toString()).to.be('AccessDenied: unauthorized');
 
         security
           .upsertGroup({

@@ -1,23 +1,23 @@
+const test = require('../__fixtures/test-helper').create();
 var Happner = require('happner-2');
-var HappnerClient = require('..');
-var path = require('path');
-var expect = require('expect.js');
+var HappnerClient = require('../..');
 
-describe('22 - func - event', function() {
+describe(test.name(__filename, 3), function() {
   var server, client, api;
+  this.timeout(20000);
 
   before('start server', function(done) {
-    this.timeout(10000);
+    this.timeout(20000);
     Happner.create({
       util: {
         logLevel: process.env.LOG_LEVEL || 'warn'
       },
       modules: {
         component1: {
-          path: __dirname + path.sep + 'lib' + path.sep + '22-component-1'
+          path: test.fixturesPath() + test.path.sep + '22-component-1'
         },
         component2: {
-          path: __dirname + path.sep + 'lib' + path.sep + '22-component-2'
+          path: test.fixturesPath() + test.path.sep + '22-component-2'
         }
       },
       components: {
@@ -37,7 +37,7 @@ describe('22 - func - event', function() {
 
   before('start client', function(done) {
     this.timeout(10000);
-    var client = new HappnerClient();
+    client = new HappnerClient();
     var model = {
       component1: {
         version: '^1.0.0',
@@ -71,11 +71,15 @@ describe('22 - func - event', function() {
     server.stop({ reconnect: false }, done);
   });
 
+  // after('open handles', async () => {
+  //   await test.listOpenHandles(10000);
+  // });
+
   it('can subscribe to events', function(done) {
     api.event.component1.on(
       'event/one',
       function(data) {
-        expect(data).to.eql({ DATA: 1 });
+        test.expect(data).to.eql({ DATA: 1 });
         done();
       },
       function(e) {

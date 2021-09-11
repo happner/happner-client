@@ -1,8 +1,8 @@
-var expect = require('expect.js');
+const test = require('../__fixtures/test-helper').create();
 var EventEmitter = require('events').EventEmitter;
-var ImplementorsProvider = require('../lib/providers/implementors-provider');
+var ImplementorsProvider = require('../../lib/providers/implementors-provider');
 
-describe('08 - unit - dependency met event', function() {
+describe(test.name(__filename, 2), function() {
   var mockClient;
 
   beforeEach(function() {
@@ -59,7 +59,7 @@ describe('08 - unit - dependency met event', function() {
     i.gotDescriptions = true;
 
     i.happnerClient.on('peer/arrived/description', function(whatChanged) {
-      expect(whatChanged).to.eql({
+      test.expect(whatChanged).to.eql({
         dependorName: 'test1',
         countMatches: 1,
         componentName: 'component1',
@@ -113,7 +113,7 @@ describe('08 - unit - dependency met event', function() {
         component2: '1.0.0'
       }
     };
-    expect(i.logDependenciesMet(i.descriptions)).to.be(false);
+    test.expect(i.logDependenciesMet(i.descriptions)).to.be(false);
     done();
   });
 
@@ -142,7 +142,7 @@ describe('08 - unit - dependency met event', function() {
         component1: '^1.0.0'
       }
     };
-    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    test.expect(i.logDependenciesMet(i.descriptions)).to.be(true);
     done();
   });
 
@@ -172,10 +172,10 @@ describe('08 - unit - dependency met event', function() {
       }
     };
     i.happnerClient.on('test1/startup/dependencies/satisfied', () => {
-      expect(i.events.once['test1/startup/dependencies/satisfied']).to.be(true);
+      test.expect(i.events.once['test1/startup/dependencies/satisfied']).to.be(true);
       done();
     });
-    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    test.expect(i.logDependenciesMet(i.descriptions)).to.be(true);
   });
 
   it('tests the logdependencies met function when dependencies are undefined', function(done) {
@@ -198,7 +198,7 @@ describe('08 - unit - dependency met event', function() {
 
     i.gotDescriptions = true;
 
-    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    test.expect(i.logDependenciesMet(i.descriptions)).to.be(true);
     done();
   });
 
@@ -222,7 +222,7 @@ describe('08 - unit - dependency met event', function() {
     i.dependencies = {};
     i.gotDescriptions = true;
 
-    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    test.expect(i.logDependenciesMet(i.descriptions)).to.be(true);
     done();
   });
 
@@ -247,7 +247,7 @@ describe('08 - unit - dependency met event', function() {
       test1: {}
     };
     i.gotDescriptions = true;
-    expect(i.logDependenciesMet(i.descriptions)).to.be(true);
+    test.expect(i.logDependenciesMet(i.descriptions)).to.be(true);
     done();
   });
 
@@ -268,11 +268,13 @@ describe('08 - unit - dependency met event', function() {
       }
     };
     i.logDependenciesMet = descriptions => {
-      expect(descriptions).to.be(i.descriptions);
-      expect(i.dependencies).to.eql({ newComponent: { component1: '3.1.1', component2: '*' } });
+      test.expect(descriptions).to.be(i.descriptions);
+      test
+        .expect(i.dependencies)
+        .to.eql({ newComponent: { component1: '3.1.1', component2: '*' } });
       return true;
     };
-    expect(i.addAndCheckDependencies('newComponent', testDependencies)).to.be(true);
+    test.expect(i.addAndCheckDependencies('newComponent', testDependencies)).to.be(true);
     done();
   });
 });
