@@ -220,6 +220,6 @@
   - SMC-3689: cleaned up tests
   - SMC-3689: fixed bad require of utils in connection provider (breaks the browser client)
 
-11.5.0 2021-09-20
+11.5.1 2021-09-20
 -----------------
   - SMC-4161: user permissions cleaned up on user deletion
