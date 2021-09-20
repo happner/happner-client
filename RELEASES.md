@@ -219,3 +219,7 @@
   - SMC-3689: methods are now discovered if a component has not been configured in the dependencies
   - SMC-3689: cleaned up tests
   - SMC-3689: fixed bad require of utils in connection provider (breaks the browser client)
+
+11.5.0 2021-09-20
+-----------------
+  - SMC-4161: user permissions cleaned up on user deletion
