@@ -223,3 +223,9 @@
 11.5.1 2021-09-20
 -----------------
   - SMC-4161: user permissions cleaned up on user deletion
+
+11.5.2 2021-09-28
+-----------------
+  - happn-3 upgrades:
+  - fix: SMC-4209 - concurrency issue, user created logged on deleted, causes security directory update to fatal
+  - fix: SMC-4208 - merge insert now uses upsert, moved constants out of data service
