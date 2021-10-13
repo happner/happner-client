@@ -5,6 +5,7 @@ module.exports = class TestHelper {
     this.path = require('path');
     this.why = require('why-is-node-running');
     this.util = require('util');
+    this.sinon = require('sinon');
   }
   static create() {
     return new TestHelper();

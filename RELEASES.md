@@ -229,3 +229,7 @@
   - happn-3 upgrades:
   - fix: SMC-4209 - concurrency issue, user created logged on deleted, causes security directory update to fatal
   - fix: SMC-4208 - merge insert now uses upsert, moved constants out of data service
+
+11.5.3 2021-10-12
+-----------------
+  - fix: SMC-4349 - inter-mesh $on fails due to argument mismatch
