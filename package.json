@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.5.2",
+  "version": "11.5.3",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -47,6 +47,7 @@
     "mocha": "^6.2.0",
     "nyc": "^13.3.0",
     "prettier": "^1.18.2",
+    "sinon": "^11.1.2",
     "why-is-node-running": "^2.2.0"
   }
 }
