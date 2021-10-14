@@ -302,7 +302,9 @@ describe(test.name(__filename, 3), function() {
           } catch (e) {
             errorMessage = e.message;
           }
-          test.expect(errorMessage).to.be('Timeout awaiting response');
+          test
+            .expect(errorMessage)
+            .to.be('Timeout awaiting response on component1.methodThatTimesOut version: *');
           timeoutClient.disconnect(() => {
             //do nothing
           });

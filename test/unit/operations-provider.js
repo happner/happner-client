@@ -598,7 +598,9 @@ describe(test.name(__filename, 2), function() {
           [{ params: 1 }],
           e => {
             o.stop();
-            test.expect(e.message).to.equal('Timeout awaiting response');
+            test
+              .expect(e.message)
+              .to.equal('Timeout awaiting response on component.method version: version');
             done();
           },
           e => {
