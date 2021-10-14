@@ -233,3 +233,7 @@
 11.5.3 2021-10-12
 -----------------
   - fix: SMC-4349 - inter-mesh $on fails due to argument mismatch
+
+11.5.4 2021-10-14
+-----------------
+  - fix: SMC-4385 - remote method call timeouts now print call details (component, version, method)
