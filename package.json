@@ -1,6 +1,6 @@
 {
   "name": "happner-client",
-  "version": "11.5.4",
+  "version": "11.5.5",
   "description": "The client for happner-2 and happner cluster services",
   "homepage": "https://github.com/happner/happner-client#readme",
   "bugs": {
@@ -26,7 +26,7 @@
     "prepare": "rm -rf node_modules/happner-2/node_modules/bitcore-lib && rm -rf node_modules/happner-client/node_modules/bitcore-lib && rm -rf node_modules/bitcore-ecies/node_modules/bitcore-lib"
   },
   "dependencies": {
-    "happn-3": "^11.13.5",
+    "happn-3": "^11.13.6",
     "happner-semver": "^1.0.1"
   },
   "devDependencies": {

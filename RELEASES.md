@@ -237,3 +237,7 @@
 11.5.4 2021-10-14
 -----------------
   - fix: SMC-4385 - remote method call timeouts now print call details (component, version, method)
+
+11.5.5 2021-11-11
+-----------------
+  - fix: SMC-4512 - happn-3 upgrade, db error causes fatal
