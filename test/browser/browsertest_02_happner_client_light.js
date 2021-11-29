@@ -263,7 +263,9 @@ describe('browsertest_02_happner_client_light', function() {
       } catch (e) {
         errorMessage = e.message;
       }
-      expect(errorMessage).to.equal('Timeout awaiting response');
+      expect(errorMessage).to.equal(
+        'Timeout awaiting response on component1.methodThatTimesOut version: *'
+      );
       timeoutClient.disconnect(() => {
         //do nothing
       });
