@@ -719,7 +719,7 @@ describe(test.name(__filename, 3), function() {
 
       async function createClient(opts) {
         const createdClient = new LightClient(opts);
-        await createdClient.connect(null, { username: '_ADMIN', password: 'xxx' });
+        await createdClient.connect({ username: '_ADMIN', password: 'xxx' });
         return createdClient;
       }
     });

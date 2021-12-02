@@ -253,4 +253,8 @@
   - happn-3 upgrade:
   - feature: SMC-734: Updated happn-util-crypto - removed bitcore, changes to crypto calls, removed payload encryption
   - test: fixed browser test validation
+
+11.6.1 2021-12-02
+-----------------
+  - fix: SMC-4466 - light client times out for secure requests
   
