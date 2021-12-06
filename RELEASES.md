@@ -256,9 +256,13 @@
 
 11.6.1 2021-12-02
 -----------------
-  - fix: SMC-4466 - light client times out for secure requests - logging loading component
+  - fix: SMC-4749 - light client times out for secure requests - logging loading component
 
 11.6.2 2021-12-02
 -----------------
-  - fix: SMC-4466 - light client times out for secure requests - logging loading method
+  - fix: SMC-4749 - light client times out for secure requests - logging loading method
+
+1.6.3 2021-12-02
+-----------------
+  - fix: SMC-4749 - light client times out for secure requests - logging component source member
   

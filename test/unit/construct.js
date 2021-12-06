@@ -483,7 +483,9 @@ describe(test.name(__filename, 3), function() {
       });
       test
         .expect(newComponents)
-        .to.eql([{ componentName: 'allowed', description: { name: 'allowed' } }]);
+        .to.eql([
+          { componentName: 'allowed', description: { name: 'allowed' }, member: undefined }
+        ]);
       await test.util.promisify(c.disconnect).bind(c)();
     });
   });
