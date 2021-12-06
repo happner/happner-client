@@ -254,15 +254,19 @@
   - feature: SMC-734: Updated happn-util-crypto - removed bitcore, changes to crypto calls, removed payload encryption
   - test: fixed browser test validation
 
-11.6.1 2021-12-02
+11.6.1 2021-12-06
 -----------------
   - fix: SMC-4749 - light client times out for secure requests - logging loading component
 
-11.6.2 2021-12-02
+11.6.2 2021-12-06
 -----------------
   - fix: SMC-4749 - light client times out for secure requests - logging loading method
 
-1.6.3 2021-12-02
+11.6.3 2021-12-06
 -----------------
   - fix: SMC-4749 - light client times out for secure requests - logging component source member
+
+11.6.4 2021-12-06
+-----------------
+  - fix: SMC-4749 - light client times out for secure requests - logging api id
   
