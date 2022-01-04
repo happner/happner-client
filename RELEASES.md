@@ -269,4 +269,8 @@
 11.6.4 2021-12-06
 -----------------
   - fix: SMC-4749 - light client times out for secure requests - logging api id
+
+11.6.5 2022-01-04
+-----------------
+  - fix: SMC-4901 - bad cookieName set on session
   
