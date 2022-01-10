@@ -273,4 +273,8 @@
 11.6.5 2022-01-04
 -----------------
   - fix: SMC-4901 - bad cookieName set on session
+
+11.6.6 2022-01-10
+-----------------
+  - SMC-4938: lookup tables fail for rest request
   
