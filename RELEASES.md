@@ -277,4 +277,11 @@
 11.6.6 2022-01-10
 -----------------
   - SMC-4938: lookup tables fail for rest request
+
+11.6.7 2022-01-19
+-----------------
+  - SMC-4550: Fix -correctly calling securityDirectoryChanged on permission removal and group/permission table unlinking - happn-3
+
+
+
   
